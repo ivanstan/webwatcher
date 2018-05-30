@@ -12,17 +12,15 @@ Encore
     // .enableVersioning(Encore.isProduction())
 
     // uncomment to define the assets of the project
-    .addEntry('js/main', './assets/js/main.js').
-    addEntry('js/monaco',
-        './node_modules/monaco-editor/esm/vs/editor/editor.main.js').
-    addStyleEntry('css/main', './assets/scss/main.scss')
+    .addEntry('js/main', './assets/js/main.js')
+    .addEntry('js/monaco', './node_modules/monaco-editor/esm/vs/editor/editor.main.js')
+    .addStyleEntry('css/main', './assets/scss/main.scss')
 
     // uncomment if you use Sass/SCSS files
     .enableSassLoader(function(sassOptions) {
     }, {
       resolveUrlLoader: false,
-    }).
-    enableTypeScriptLoader()
+    }).enableTypeScriptLoader()
 
     // uncomment for legacy applications that require $/jQuery as a global variable
     .autoProvidejQuery()

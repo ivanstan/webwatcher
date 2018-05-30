@@ -7,11 +7,17 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        {% include 'nav.html.twig' %}
 
-        {% block body %}{% endblock %}
+        <div class="container-fluid mt-2">
+            <div class="row">
+                <div class="col">
+                    {% block body %}{% endblock %}
+                </div>
+            </div>
+        </div>
 
         <script src="{{ asset('build/js/main.js') }}"></script>
-        <script src="{{ asset('build/js/monaco.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

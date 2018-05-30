@@ -3,12 +3,13 @@
 {% block title %}Project index{% endblock %}
 
 {% block body %}
-    <h1>Project index</h1>
+    <h1>Projects</h1>
 
-    <table class="table">
+    <a class="btn btn-primary mb-3" href="{{ path('project_new') }}">New Project</a>
+
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>actions</th>
             </tr>
@@ -16,8 +17,7 @@
         <tbody>
         {% for project in projects %}
             <tr>
-                <td>{{ project.id }}</td>
-                <td>{{ project.name }}</td>
+                <td><a href="{{ path('project_show', {'id': project.id}) }}">{{ project.name }}</a></td>
                 <td>
                     <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
                     <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
@@ -31,5 +31,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('project_new') }}">Create new</a>
 {% endblock %}

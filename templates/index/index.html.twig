@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello !{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h1>✅</h1>
+
+        <ul>
+            <li><a href="{{ path('project_index') }}">Projects</a></li>
+            <li><a href="{{ path('page_index') }}">Pages</a></li>
+            <li><a href="{{ path('page_snapshot_index') }}">Snapshots</a></li>
+        </ul>
+
+        This friendly message is coming from:
+        <ul>
+            <li>Your controller at <code><a href="{{ 'src/Controller/IndexController.php'|file_link(0) }}">src/Controller/IndexController.php</a></code>
+            </li>
+            <li>Your template at <code><a href="{{ 'templates/index/index.html.twig'|file_link(0) }}">templates/index/index.html.twig</a></code>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

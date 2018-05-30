@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PageSnapshot{% endblock %}
+
+{% block body %}
+    <h1>PageSnapshot</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ page_snapshot.id }}</td>
+            </tr>
+            <tr>
+                <th>Timestamp</th>
+                <td>{{ page_snapshot.timestamp }}</td>
+            </tr>
+            <tr>
+                <th>Body</th>
+                <td>{{ page_snapshot.body }}</td>
+            </tr>
+            <tr>
+                <th>ResponseCode</th>
+                <td>{{ page_snapshot.responseCode }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td><img src="{{ asset(page_snapshot.image) }}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('page_snapshot_index') }}">back to list</a>
+
+    <a href="{{ path('page_snapshot_edit', {'id': page_snapshot.id}) }}">edit</a>
+
+    {{ include('page_snapshot/_delete_form.html.twig') }}
+{% endblock %}

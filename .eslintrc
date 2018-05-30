@@ -1,0 +1,17 @@
+{
+  "extends": "semistandard",
+  "env": {
+    "jquery": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "linebreak-style": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.config.js"
+      }
+    }
+  }
+}

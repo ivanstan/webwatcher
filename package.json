@@ -1,0 +1,23 @@
+{
+    "devDependencies": {
+        "@symfony/webpack-encore": "^0.20.1",
+        "bootstrap-sass": "^3.3.7",
+        "jquery": "^3.3.1",
+        "node-sass": "^4.9.0",
+        "sass-loader": "^7.0.1",
+        "ts-loader": "^4.3.0",
+        "typescript": "^2.8.3"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production"
+    },
+    "dependencies": {
+        "babel-eslint": "^8.2.3",
+        "monaco-editor": "^0.13.1"
+    }
+}

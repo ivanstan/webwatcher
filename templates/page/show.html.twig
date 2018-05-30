@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page{% endblock %}
+
+{% block body %}
+    <h1>Page</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ page.id }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ page.url }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('page_index') }}">back to list</a>
+
+    <a href="{{ path('page_edit', {'id': page.id}) }}">edit</a>
+
+    <a href="{{ path('page_new_snapshot', {'id': page.id}) }}">new snapshot</a>
+
+    {{ include('page/_delete_form.html.twig') }}
+{% endblock %}

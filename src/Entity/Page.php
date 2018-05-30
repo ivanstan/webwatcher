@@ -2,31 +2,25 @@
 
 namespace App\Entity;
 
+use App\Property\Id;
+use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  */
 class Page
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer")
-     */
-    private $id;
+    use Name;
+    use Id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", nullable=false)
-     * @Assert\Url()
+     * @ORM\Column(name="path", type="string", nullable=false)
      */
-    private $url;
+    private $path;
 
     /**
      * @var Project
@@ -43,24 +37,19 @@ class Page
      */
     private $snapshots;
 
-    public function getId(): int
+    public function getPath(): string
     {
-        return $this->id;
+        return $this->path;
     }
 
-    public function setId(int $id)
+    public function setPath(string $path)
     {
-        $this->id = $id;
+        $this->path = $path;
     }
 
     public function getUrl(): string
     {
-        return $this->url;
-    }
-
-    public function setUrl(string $url)
-    {
-        $this->url = $url;
+        return $this->project->getBaseUrl() . $this->getPath();
     }
 
     public function getProject(): Project
@@ -91,6 +80,6 @@ class Page
 
     public function __toString(): string
     {
-        return $this->url;
+        return $this->path;
     }
 }

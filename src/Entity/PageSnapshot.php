@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Property\Id;
+use App\Property\Timestamp;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,20 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PageSnapshot
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer")
-     */
-    private $id;
-
-    /**
-     * @var string $timestamp
-     * @ORM\Column(name="timestamp", type="bigint", nullable=false)
-     */
-    private $timestamp;
+    use Id;
+    use Timestamp;
 
     /**
      * @var string $body
@@ -56,29 +46,9 @@ class PageSnapshot
      */
     private $page;
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id)
-    {
-        $this->id = $id;
-    }
-
-    public function getTimestamp(): int
-    {
-        return $this->timestamp;
-    }
-
-    public function setTimestamp(int $timestamp)
-    {
-        $this->timestamp = $timestamp;
-    }
-
     public function getBody(): string
     {
-        return $this->body;
+        return \Mihaeu\HtmlFormatter::format($this->body);
     }
 
     public function setBody(string $body)

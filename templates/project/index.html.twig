@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Project index{% endblock %}
+{% block title %}Projects{% endblock %}
 
 {% block body %}
     <h1>Projects</h1>
@@ -17,9 +17,8 @@
         <tbody>
         {% for project in projects %}
             <tr>
-                <td><a href="{{ path('project_show', {'id': project.id}) }}">{{ project.name }}</a></td>
+                <td><a href="{{ path('project_show', {'id': project.id}) }}">show{{ project.name }}</a></td>
                 <td>
-                    <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
                     <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
                 </td>
             </tr>

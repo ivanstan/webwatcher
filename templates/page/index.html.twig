@@ -17,10 +17,10 @@
         {% for page in pages %}
             <tr>
                 <td>{{ page.id }}</td>
-                <td>{{ page.url }}</td>
+                <td>{{ page.path }}</td>
                 <td>
-                    <a href="{{ path('page_show', {'id': page.id}) }}">show</a>
-                    <a href="{{ path('page_edit', {'id': page.id}) }}">edit</a>
+                    <a href="{{ path('page_show', {'project': page.project.id, 'id': page.id}) }}">show</a>
+                    <a href="{{ path('page_edit', {'project': page.project.id, 'id': page.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

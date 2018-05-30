@@ -9,9 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/project")
- */
 class ProjectController extends Controller
 {
     /**
@@ -27,7 +24,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/new", name="project_new", methods="GET|POST")
+     * @Route("project/new", name="project_new", methods="GET|POST")
      */
     public function new(Request $request): Response
     {
@@ -50,7 +47,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="project_show", methods="GET")
+     * @Route("project/{id}", name="project_show", methods="GET")
      */
     public function show(Project $project): Response
     {
@@ -58,7 +55,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{id}/edit", name="project_edit", methods="GET|POST")
+     * @Route("project/{id}/edit", name="project_edit", methods="GET|POST")
      */
     public function edit(Request $request, Project $project): Response
     {
@@ -78,7 +75,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="project_delete", methods="DELETE")
+     * @Route("project/{id}", name="project_delete", methods="DELETE")
      */
     public function delete(Request $request, Project $project): Response
     {

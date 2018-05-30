@@ -2,29 +2,27 @@
 
 namespace App\Entity;
 
+use App\Property\Id;
+use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  */
 class Project
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(name="id", type="integer")
-     */
-    private $id;
+    use Name;
+    use Id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", nullable=false)
+     * @ORM\Column(name="base_url", type="string", nullable=false)
+     * @Assert\Url()
      */
-    private $name;
+    private $baseUrl;
 
     /**
      * @var Page[]|Collection
@@ -32,26 +30,6 @@ class Project
      * @ORM\OneToMany(targetEntity="App\Entity\Page", mappedBy="project", cascade={"persist"})
      */
     private $pages;
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id)
-    {
-        $this->id = $id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name)
-    {
-        $this->name = $name;
-    }
 
     /**
      * @return Page[]|Collection
@@ -67,6 +45,16 @@ class Project
     public function setPages($pages)
     {
         $this->pages = $pages;
+    }
+
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
+    }
+
+    public function setBaseUrl(?string $baseUrl): void
+    {
+        $this->baseUrl = $baseUrl;
     }
 
     public function __toString(): string

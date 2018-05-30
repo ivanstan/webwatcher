@@ -1,32 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Project{% endblock %}
+{% block title %}Project {{ project.name }} | {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Project</h1>
-
-    <table class="table table-striped table-bordered">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ project.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ project.name }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <h1>Project {{ project.name }}</h1>
 
     <h2>Pages</h2>
     <table class="table table-striped table-bordered">
         <tbody>
         {% for page in project.pages %}
             <tr>
-                <td><a href="{{ path('page_show', {'id': page.id}) }}">{{ page.url }}</a></td>
+                <td><a href="{{ path('page_show', {'project': project, 'id': page.id}) }}">{{ page.url }}</a></td>
                 <td>
-                    <a href="{{ path('page_show', {'id': page.id}) }}">show</a>
-                    <a href="{{ path('page_edit', {'id': page.id}) }}">edit</a>
+                    <a href="{{ path('page_edit', {'project': project, 'id': page.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

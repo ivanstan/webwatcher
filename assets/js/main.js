@@ -6,4 +6,12 @@ require('bootstrap');
 
 $(document).ready(function() {
   $('[data-toggle="popover"]').popover();
+
+  $('.monaco-editor').each(function(index, element) {
+        let $element = $(element);
+        monaco.editor.create(element, {
+          value: $element.data('code'),
+          language: $element.data('language')
+        });
+  });
 });

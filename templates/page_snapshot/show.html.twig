@@ -3,40 +3,32 @@
 {% block title %}PageSnapshot{% endblock %}
 
 {% block javascripts %}
-<script src="{{ asset('build/js/monaco.js') }}"></script>
+<script src="{{ asset('build/monaco/editor.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/monaco/editor.css') }}">
 {% endblock %}
 
 {% block body %}
     <h1>PageSnapshot</h1>
 
-    <table class="table table-striped table-bordered">
+    <table>
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ page_snapshot.id }}</td>
-            </tr>
-            <tr>
-                <th>Timestamp</th>
-                <td>{{ page_snapshot.timestamp }}</td>
-            </tr>
-            <tr>
-                <th>Body</th>
-                <td>{{ page_snapshot.body }}</td>
-            </tr>
-            <tr>
-                <th>ResponseCode</th>
-                <td>{{ page_snapshot.responseCode }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td><img src="{{ asset(page_snapshot.image) }}"></td>
-            </tr>
+        <tr>
+            <th>Timestamp</th>
+            <td>{{ page_snapshot.timestamp|date('d/m/Y h:m:s') }}</td>
+        </tr>
+        <tr>
+            <th>Response code</th>
+            <td><span class="badge badge-secondary">{{ page_snapshot.responseCode }}</span></td>
+        </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('page_snapshot_index') }}">back to list</a>
+    <div class="monaco-editor" data-code="{{ page_snapshot.body }}" data-language="html" style="height: 300px"></div>
 
-    <a href="{{ path('page_snapshot_edit', {'id': page_snapshot.id}) }}">edit</a>
+    <td><img src="{{ asset(page_snapshot.image) }}"></td>
 
     {{ include('page_snapshot/_delete_form.html.twig') }}
 {% endblock %}

@@ -13,7 +13,7 @@ Encore
 
     // uncomment to define the assets of the project
     .addEntry('js/main', './assets/js/main.js')
-    .addEntry('js/monaco', './node_modules/monaco-editor/esm/vs/editor/editor.main.js')
+    .addEntry('monaco/editor', './node_modules/monaco-editor/esm/vs/editor/editor.main.js')
     .addStyleEntry('css/main', './assets/scss/main.scss')
 
     // uncomment if you use Sass/SCSS files

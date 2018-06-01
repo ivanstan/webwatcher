@@ -72,7 +72,10 @@ class PageController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('page_edit', ['id' => $page->getId()]);
+            return $this->redirectToRoute('page_edit', [
+                'project' => $page->getProject()->getId(),
+                'id' => $page->getId()
+            ]);
         }
 
         return $this->render(

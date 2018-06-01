@@ -10,17 +10,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table("project")
  */
 class Project
 {
-    use Name;
     use Id;
+    use Name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="base_url", type="string", nullable=false)
      * @Assert\Url()
+     * @Assert\Regex(
+     *     pattern="/.*(?<!\/)$/",
+     *     match=true,
+     *     message="Url must not end with '/'"
+     * )
      */
     private $baseUrl;
 
@@ -28,6 +34,7 @@ class Project
      * @var Page[]|Collection
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Page", mappedBy="project", cascade={"persist"})
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $pages;
 

@@ -16,6 +16,8 @@ Encore
     .addEntry('monaco/editor', './node_modules/monaco-editor/esm/vs/editor/editor.main.js')
     .addStyleEntry('css/main', './assets/scss/main.scss')
 
+    .enableReactPreset()
+
     // uncomment if you use Sass/SCSS files
     .enableSassLoader(function(sassOptions) {
     }, {

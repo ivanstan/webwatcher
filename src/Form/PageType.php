@@ -12,7 +12,7 @@ class PageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url')
+            ->add('path')
             ->add('project')
         ;
     }

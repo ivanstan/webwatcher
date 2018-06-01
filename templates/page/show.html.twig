@@ -18,6 +18,24 @@
         </tbody>
     </table>
 
+    <h2>Compare</h2>
+
+    <div class="compare-selector" data-path="{{ path('compare_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
+        <select class="custom-select" name="snapshot1">
+            {% for snapshot in page.snapshots %}
+                <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }} {{ snapshot.hash }}</option>
+            {% endfor %}
+        </select>
+
+        <select class="custom-select" name="snapshot2">
+            {% for snapshot in page.snapshots %}
+                <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }} {{ snapshot.hash }}</option>
+            {% endfor %}
+        </select>
+
+        <button class="btn btn-primary" type="button">Compare</button>
+    </div>
+
     <h2>Snapshots</h2>
 
     <a class="btn btn-primary mb-3" href="{{ path('page_new_snapshot', {'project': page.project.id, 'id': page.id}) }}">new snapshot</a>

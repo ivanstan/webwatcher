@@ -1,0 +1,22 @@
+version: "2"
+services:
+    mysql:
+        image: mysql:5.7
+        container_name: mysqldb
+        ports:
+            - "4000:3306"
+        expose:
+            - 3306
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+    site:
+        build: .
+        container_name: webwatcher
+        ports:
+            - "8080:80"
+        expose:
+            - 80
+        depends_on:
+            - mysql
+        volumes:
+          - .:/app

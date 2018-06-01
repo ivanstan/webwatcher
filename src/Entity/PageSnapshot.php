@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table("page_snapshot")
  */
 class PageSnapshot
 {

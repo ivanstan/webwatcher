@@ -6,9 +6,11 @@ use App\Property\Id;
 use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table("page")
  */
 class Page
 {
@@ -18,7 +20,12 @@ class Page
     /**
      * @var string
      *
-     * @ORM\Column(name="path", type="string", nullable=false)
+     * @ORM\Column(name="path", type="string", nullable=true)
+     * @Assert\Regex(
+     *     pattern="/^\/+?/",
+     *     match=true,
+     *     message="Path must begin with '/'"
+     * )
      */
     private $path;
 
@@ -34,6 +41,7 @@ class Page
      * @var PageSnapshot[]|Collection
      *
      * @ORM\OneToMany(targetEntity="App\Entity\PageSnapshot", mappedBy="page", cascade={"persist"})
+     * @ORM\OrderBy({"timestamp" = "DESC"})
      */
     private $snapshots;
 

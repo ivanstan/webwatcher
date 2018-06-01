@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello!{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('build/monaco/editor.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/monaco/editor.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <h1>Compare</h1>
+
+    <div class="row">
+        <div class="col-6">
+            {% include 'components/hash.html.twig' with {hash: snapshot1.hash} only %}
+        </div>
+        <div class="col-6">
+            {% include 'components/hash.html.twig' with {hash: snapshot2.hash} only %}
+        </div>
+    </div>
+
+    <div class="monaco-compare mt-3"
+         data-snapshot1="{{ snapshot1.body }}"
+         data-snapshot2="{{ snapshot2.body }}"
+         data-language="html"
+         style="height: 300px">
+    </div>
+
+</div>
+{% endblock %}

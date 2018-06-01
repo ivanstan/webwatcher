@@ -6,19 +6,19 @@ use App\Entity\PageSnapshot;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class DiffController extends Controller
+class CompareController extends Controller
 {
     /**
-     * @Route("/diff/{sha1}/{sha2}", name="diff")
+     * @Route("/compare/{snapshot1}/{snapshot2}", name="compare_snapshot")
      */
-    public function index(string $sha1, string $sha2)
+    public function compareSnapshot(string $snapshot1, string $snapshot2)
     {
         $repository = $this->getDoctrine()->getManager()->getRepository(PageSnapshot::class);
 
-        $snapshot1 = $repository->findOneBy(['hash' => $sha1]);
-        $snapshot2 = $repository->findOneBy(['hash' => $sha2]);
+        $snapshot1 = $repository->find($snapshot1);
+        $snapshot2 = $repository->find($snapshot2);
 
-        return $this->render('diff/index.html.twig', [
+        return $this->render('compare/snapshot.html.twig', [
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
         ]);

@@ -40,6 +40,12 @@ class PageSnapshot
     private $responseCode;
 
     /**
+     * @var float $responseTime
+     * @ORM\Column(name="response_time", type="float", nullable=false)
+     */
+    private $responseTime;
+
+    /**
      * @var Page
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="snapshots", cascade={"persist"})
@@ -76,6 +82,16 @@ class PageSnapshot
     public function setResponseCode(int $responseCode)
     {
         $this->responseCode = $responseCode;
+    }
+
+    public function getResponseTime(): float
+    {
+        return $this->responseTime;
+    }
+
+    public function setResponseTime(float $responseTime): void
+    {
+        $this->responseTime = $responseTime;
     }
 
     public function getPage(): Page

@@ -54,7 +54,7 @@ class PageController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="page_show", methods="GET")
+     * @Route("/{page}", name="page_show", methods="GET")
      */
     public function show(Page $page): Response
     {
@@ -62,7 +62,7 @@ class PageController extends Controller
     }
 
     /**
-     * @Route("/{id}/edit", name="page_edit", methods="GET|POST")
+     * @Route("/{page}/edit", name="page_edit", methods="GET|POST")
      */
     public function edit(Request $request, Page $page): Response
     {
@@ -88,7 +88,7 @@ class PageController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="page_delete", methods="DELETE")
+     * @Route("/{page}", name="page_delete", methods="DELETE")
      */
     public function delete(Request $request, Page $page): Response
     {
@@ -102,7 +102,7 @@ class PageController extends Controller
     }
 
     /**
-     * @Route("/{id}/snapshot", name="page_new_snapshot", methods="GET|POST")
+     * @Route("/{page}/snapshot", name="page_new_snapshot", methods="GET|POST")
      */
     public function newSnapshot(Page $page, SnapshotService $service)
     {

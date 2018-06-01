@@ -47,7 +47,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("project/{id}", name="project_show", methods="GET")
+     * @Route("project/{project}", name="project_show", methods="GET")
      */
     public function show(Project $project): Response
     {
@@ -55,7 +55,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("project/{id}/edit", name="project_edit", methods="GET|POST")
+     * @Route("project/{project}/edit", name="project_edit", methods="GET|POST")
      */
     public function edit(Request $request, Project $project): Response
     {
@@ -75,7 +75,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("project/{id}", name="project_delete", methods="DELETE")
+     * @Route("project/{project}", name="project_delete", methods="DELETE")
      */
     public function delete(Request $request, Project $project): Response
     {

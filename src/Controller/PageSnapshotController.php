@@ -15,21 +15,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class PageSnapshotController extends Controller
 {
     /**
-     * @Route("/{id}", name="page_snapshot_show", methods="GET")
+     * @Route("/{snapshot}", name="page_snapshot_show", methods="GET")
      */
-    public function show(PageSnapshot $pageSnapshot): Response
+    public function show(PageSnapshot $snapshot): Response
     {
-        return $this->render('page_snapshot/show.html.twig', ['page_snapshot' => $pageSnapshot]);
+        return $this->render('page_snapshot/show.html.twig', ['page_snapshot' => $snapshot]);
     }
 
     /**
-     * @Route("/{id}", name="page_snapshot_delete", methods="DELETE")
+     * @Route("/{snapshot}", name="page_snapshot_delete", methods="DELETE")
      */
-    public function delete(Request $request, PageSnapshot $pageSnapshot): Response
+    public function delete(Request $request, PageSnapshot $snapshot): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$pageSnapshot->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$snapshot->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($pageSnapshot);
+            $em->remove($snapshot);
             $em->flush();
         }
 

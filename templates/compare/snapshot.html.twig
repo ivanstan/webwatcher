@@ -15,6 +15,8 @@
 <div class="example-wrapper">
     <h1>Compare</h1>
 
+    {{ breadcrumbs()|raw }}
+
     <div class="row">
         <div class="col-6">
             {% include 'components/hash.html.twig' with {hash: snapshot1.hash} only %}

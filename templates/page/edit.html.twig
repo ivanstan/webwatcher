@@ -5,6 +5,8 @@
 {% block body %}
     <h1>Edit Page</h1>
 
+    {{ breadcrumbs()|raw }}
+
     {{ include('page/_form.html.twig', {'button_label': 'Update'}) }}
 
     {{ include('page/_delete_form.html.twig') }}

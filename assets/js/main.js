@@ -3,7 +3,6 @@ var $ = require('jquery');
 // no need to set this to a letiable, just require it
 require('popper.js');
 require('bootstrap');
-require('react-dom');
 
 $(document).ready(function() {
   $('[data-toggle="popover"]').popover();

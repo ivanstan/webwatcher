@@ -5,7 +5,8 @@
 {% block body %}
     <h1>Create new Project</h1>
 
+    {{ breadcrumbs()|raw }}
+
     {{ include('project/_form.html.twig') }}
 
-    <a href="{{ path('project_index') }}">back to list</a>
 {% endblock %}

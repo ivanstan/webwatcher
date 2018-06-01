@@ -20,6 +20,7 @@
         "build": "encore production"
     },
     "dependencies": {
+        "font-awesome": "^4.7.0",
         "popper.js": "^1.14.3",
         "prop-types": "^15.6.1",
         "react": "^16.4.0",

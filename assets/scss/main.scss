@@ -1,2 +1,17 @@
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
 @import "monaco";
+
+.compare-selector {
+
+  .custom-select {
+    width:calc(100% / 2 - 56px);
+    display: inline-block;
+  }
+
+  button {
+    width: 100px;
+    display: inline-block;
+  }
+}

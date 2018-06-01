@@ -25,11 +25,15 @@ class SnapshotService
         $client = new Client(
             [
                 'verify' => false,
+                'base_url' => $page->getProject()->getBaseUrl()
             ]
         );
 
-        $request = new Request('GET', $page->getUrl());
+        $request = new Request('GET', $page->getPath());
+
+        $start = microtime();
         $response = $client->send($request, ['timeout' => 2]);
+        $responseTime = microtime() - $start;
 
         $image = $this->image($page, $dateTime);
 
@@ -38,6 +42,7 @@ class SnapshotService
         $snapshot->setTimestamp($dateTime->getTimestamp());
         $snapshot->setPage($page);
         $snapshot->setResponseCode($response->getStatusCode());
+        $snapshot->setResponseTime($responseTime);
         if ($image) {
             $snapshot->setImage($image);
         }

@@ -16,13 +16,15 @@ Encore
     .addEntry('monaco/editor', './node_modules/monaco-editor/esm/vs/editor/editor.main.js')
     .addStyleEntry('css/main', './assets/scss/main.scss')
 
-    .enableReactPreset()
+    // .enableReactPreset()
 
     // uncomment if you use Sass/SCSS files
     .enableSassLoader(function(sassOptions) {
     }, {
       resolveUrlLoader: false,
-    }).enableTypeScriptLoader()
+    })
+
+    // .enableTypeScriptLoader()
 
     // uncomment for legacy applications that require $/jQuery as a global variable
     .autoProvidejQuery()

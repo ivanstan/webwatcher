@@ -5,6 +5,8 @@
 {% block body %}
     <h1>Create new Page</h1>
 
+    {{ breadcrumbs()|raw }}
+
     {{ include('page/_form.html.twig') }}
 
 {% endblock %}

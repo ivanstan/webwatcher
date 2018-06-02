@@ -25,15 +25,15 @@ class SnapshotService
         $client = new Client(
             [
                 'verify' => false,
-                'base_url' => $page->getProject()->getBaseUrl()
             ]
         );
 
-        $request = new Request('GET', $page->getPath());
+        $request = new Request('GET', $page->getUrl());
 
-        $start = microtime();
-        $response = $client->send($request, ['timeout' => 2]);
-        $responseTime = microtime() - $start;
+        $start = microtime(true);
+        $response = $client->send($request, ['timeout' => 10]);
+        $end =
+        $responseTime = microtime(true) - $start;
 
         $image = $this->image($page, $dateTime);
 

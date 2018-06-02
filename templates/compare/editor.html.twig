@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compare snapshots | {{ parent() }}{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('build/monaco/editor.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/monaco/editor.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    {% if snapshot2 %}
+        <div class="monaco-compare"
+             data-snapshot1="{{ snapshot1.body }}"
+             data-snapshot2="{{ snapshot2.body }}"
+             data-language="html"
+             style="height: 600px">
+        </div>
+    {% else %}
+        <div class="monaco-editor"
+             data-code="{{ snapshot1.body }}"
+             data-language="html"
+             style="height: 600px">
+        </div>
+
+    {% endif %}
+
+{% endblock %}

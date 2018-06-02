@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Page;
+use App\Entity\Project;
 use App\Form\PageType;
 use App\Service\SnapshotService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,23 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class PageController extends Controller
 {
     /**
-     * @Route("/", name="page_index", methods="GET")
-     */
-    public function index(): Response
-    {
-        $pages = $this->getDoctrine()
-            ->getRepository(Page::class)
-            ->findAll();
-
-        return $this->render('page/index.html.twig', ['pages' => $pages]);
-    }
-
-    /**
      * @Route("/new", name="page_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Project $project): Response
     {
         $page = new Page();
+        $page->setProject($project);
+        $page->setPath('/');
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
 
@@ -41,7 +32,7 @@ class PageController extends Controller
             $em->persist($page);
             $em->flush();
 
-            return $this->redirectToRoute('page_index');
+            return $this->redirectToRoute('project_show', ['project' => $project->getId()]);
         }
 
         return $this->render(
@@ -74,7 +65,7 @@ class PageController extends Controller
 
             return $this->redirectToRoute('page_edit', [
                 'project' => $page->getProject()->getId(),
-                'id' => $page->getId()
+                'page' => $page->getId()
             ]);
         }
 
@@ -99,18 +90,5 @@ class PageController extends Controller
         }
 
         return $this->redirectToRoute('page_index');
-    }
-
-    /**
-     * @Route("/{page}/snapshot", name="page_new_snapshot", methods="GET|POST")
-     */
-    public function newSnapshot(Page $page, SnapshotService $service)
-    {
-        $dateTime = new \DateTime("now", new \DateTimeZone("UTC"));
-        $snapshot = $service->new($page, $dateTime);
-
-        //@todo check if success, return error if $snapshot is null
-
-        return $this->redirectToRoute('page_snapshot_show', ['id' => $snapshot->getId()]);
     }
 }

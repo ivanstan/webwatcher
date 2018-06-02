@@ -22,11 +22,6 @@ class Project
      *
      * @ORM\Column(name="base_url", type="string", nullable=false)
      * @Assert\Url()
-     * @Assert\Regex(
-     *     pattern="/.*(?<!\/)$/",
-     *     match=true,
-     *     message="Url must not end with '/'"
-     * )
      */
     private $baseUrl;
 
@@ -54,8 +49,12 @@ class Project
         $this->pages = $pages;
     }
 
-    public function getBaseUrl(): string
+    public function getBaseUrl(): ?string
     {
+        if (strpos($this->baseUrl, -1) === '/') {
+            return substr($this->baseUrl, 0, -1);
+        }
+
         return $this->baseUrl;
     }
 

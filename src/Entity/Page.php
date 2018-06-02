@@ -45,7 +45,7 @@ class Page
      */
     private $snapshots;
 
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }
@@ -60,7 +60,7 @@ class Page
         return $this->project->getBaseUrl() . $this->getPath();
     }
 
-    public function getProject(): Project
+    public function getProject(): ?Project
     {
         return $this->project;
     }

@@ -1,18 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Page{% endblock %}
+{% block title %}Page {{ page.name }} | {{ parent() }}{% endblock %}
 
 {% block body %}
-    <h1>Page</h1>
+    <h1>Page {{ page.name }}</h1>
 
     {{ breadcrumbs(page)|raw }}
 
     <table class="table table-striped table-bordered">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ page.id }}</td>
-            </tr>
             <tr>
                 <th>URL</th>
                 <td>{{ page.path }}</td>
@@ -30,8 +26,8 @@
         </select>
 
         <select class="custom-select" name="snapshot2">
-            {% for snapshot in page.snapshots %}
-                <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }} {{ snapshot.hash }}</option>
+            {% for index, snapshot in page.snapshots %}
+                <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date('d/m/Y h:m:s') }} {{ snapshot.hash }}</option>
             {% endfor %}
         </select>
 
@@ -40,7 +36,7 @@
 
     <h2>Snapshots</h2>
 
-    <a class="btn btn-primary mb-3" href="{{ path('page_new_snapshot', {'project': page.project.id, 'page': page.id}) }}">new snapshot</a>
+    <a class="btn btn-primary mb-3" href="{{ path('snapshot_page_new', {'project': page.project.id, 'page': page.id}) }}">New Snapshot</a>
 
     <table class="table table-striped table-bordered">
         <tbody>

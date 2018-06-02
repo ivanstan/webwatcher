@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Page{% endblock %}
+{% block title %}Edit Page {{ page.name }}| {{ parent() }}{% endblock %}
 
 {% block body %}
     <h1>Edit Page</h1>

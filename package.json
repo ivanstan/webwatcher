@@ -2,7 +2,6 @@
     "devDependencies": {
         "@symfony/webpack-encore": "^0.20.1",
         "babel-eslint": "^8.2.3",
-        "babel-preset-react": "^6.24.1",
         "bootstrap": "^4.1.1",
         "jquery": "^3.3.1",
         "monaco-editor": "^0.13.1",
@@ -20,10 +19,9 @@
         "build": "encore production"
     },
     "dependencies": {
-        "font-awesome": "^4.7.0",
+        "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
         "popper.js": "^1.14.3",
         "prop-types": "^15.6.1",
-        "react": "^16.4.0",
-        "react-dom": "^16.4.0"
+        "resemblejs": "^2.10.3"
     }
 }

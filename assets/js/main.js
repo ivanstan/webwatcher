@@ -11,15 +11,17 @@ $(document).ready(function() {
         let $element = $(element);
         monaco.editor.create(element, {
           value: $element.data('code'),
-          language: $element.data('language')
+          language: $element.data('language'),
+          automaticLayout: true,
+          readOnly: true,
         });
   });
 
   $('.monaco-compare').each((index, element) => {
     let $element = $(element);
 
-    let snapshot1 = monaco.editor.createModel($element.data('snapshot1'), "text/html");
-    let snapshot2 = monaco.editor.createModel($element.data('snapshot2'), "text/html");
+    let snapshot1 = monaco.editor.createModel($element.data('snapshot1'), "html");
+    let snapshot2 = monaco.editor.createModel($element.data('snapshot2'), "html");
 
     let diffEditor = monaco.editor.createDiffEditor(element);
     diffEditor.setModel({
@@ -45,5 +47,16 @@ $(document).ready(function() {
 
         window.location.assign(path);
     });
+  });
+
+    $('#container').resize(function(){
+        editor.layout();
+    });
+
+  $('.hash-component button').on('click', (element) => {
+    let input = $(element).closest('input');
+    input.focus();
+    input.select();
+    document.execCommand('Copy', false, null);
   });
 });

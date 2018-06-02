@@ -13,7 +13,7 @@ class ProjectType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('baseUrl')
+            ->add('baseUrl', null, ['label' => 'Base URL'])
         ;
     }
 

@@ -86,6 +86,22 @@ class Page
         $this->snapshots = $snapshots;
     }
 
+    public function getAverageResponseTime()
+    {
+        $snapshots = $this->getSnapshots();
+
+        if (empty($snapshots)) {
+            return null;
+        }
+
+        $sum = 0;
+        foreach ($snapshots as $snapshot) {
+            $sum += $snapshot->getResponseTime();
+        }
+
+        return $sum / count($snapshots);
+    }
+
     public function __toString(): string
     {
         return $this->path;

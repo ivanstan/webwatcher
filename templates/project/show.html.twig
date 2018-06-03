@@ -12,12 +12,15 @@
             <a class="btn btn-primary mt-2 mr-2 float-right" href="{{ path('project_edit', {'project': project.id}) }}">
                 <i class="fa fa-edit"></i>
             </a>
+            <a class="btn btn-primary mt-2 mr-2 float-right" href="{{ path('process_snapshot_project', {"project": project.id}) }}">
+                <i class="fa fa-camera"></i>
+            </a>
         </div>
     </div>
 
     {{  breadcrumbs(project)|raw }}
 
-    <table class="table table-striped table-bordered">
+    <table class="table">
         <tbody>
         <tr>
             <td>Base URL</td>

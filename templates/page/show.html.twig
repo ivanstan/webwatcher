@@ -23,6 +23,10 @@
                 <th>URL</th>
                 <td>{{ page.path }}</td>
             </tr>
+            <tr>
+                <th>Average Response Time</th>
+                <td>{{ page.averageResponseTime|number_format(2) }} sec</td>
+            </tr>
         </tbody>
     </table>
 
@@ -56,10 +60,19 @@
     </div>
 
     <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <td>Timestamp</td>
+                <td>Hash</td>
+                <td>HTTP Response</td>
+            </tr>
+        </thead>
         <tbody>
         {% for snapshot in page.snapshots %}
             <tr>
+                <td>{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</td>
                 <td><a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.hash }}</a></td>
+                <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
             </tr>
         {% else %}
             <tr>

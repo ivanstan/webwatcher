@@ -32,7 +32,6 @@ class SnapshotService
 
         $start = microtime(true);
         $response = $client->send($request, ['timeout' => 10]);
-        $end =
         $responseTime = microtime(true) - $start;
 
         $image = $this->image($page, $dateTime);
@@ -53,7 +52,7 @@ class SnapshotService
         return $snapshot;
     }
 
-    public function image(Page $page, \DateTime $dateTime): ?string
+    protected function image(Page $page, \DateTime $dateTime): ?string
     {
         $projectId = $page->getProject()->getId();
         $pageId = $page->getProject()->getId();

@@ -95,6 +95,9 @@
     "ocramius/proxy-manager": {
         "version": "2.1.1"
     },
+    "opis/closure": {
+        "version": "3.0.12"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
@@ -130,6 +133,9 @@
             "version": "4.0",
             "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
         }
+    },
+    "spatie/async": {
+        "version": "0.0.4"
     },
     "swiftmailer/swiftmailer": {
         "version": "v6.0.2"

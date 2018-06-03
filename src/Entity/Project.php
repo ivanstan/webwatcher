@@ -34,6 +34,14 @@ class Project
     private $pages;
 
     /**
+     * @var Page[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\ProjectSnapshot", mappedBy="project", cascade={"persist"})
+     * @ORM\OrderBy({"timestamp" = "DESC"})
+     */
+    private $snapshots;
+
+    /**
      * @return Page[]|Collection
      */
     public function getPages()
@@ -47,6 +55,22 @@ class Project
     public function setPages($pages)
     {
         $this->pages = $pages;
+    }
+
+    /**
+     * @param ProjectSnapshot[]|Collection $snapshots
+     */
+    public function setSnapshots($snapshots)
+    {
+        $this->snapshots = $snapshots;
+    }
+
+    /**
+     * @return ProjectSnapshot[]|Collection
+     */
+    public function getSnapshots()
+    {
+        return $this->snapshots;
     }
 
     public function getBaseUrl(): ?string

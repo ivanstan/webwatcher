@@ -53,6 +53,14 @@ class PageSnapshot
      */
     private $page;
 
+    /**
+     * @var ProjectSnapshot
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\ProjectSnapshot", inversedBy="pageSnapshots", cascade={"persist"})
+     * @ORM\JoinColumn(name="project_snapshot_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     */
+    private $projectSnapshot;
+
     public function getBody(): string
     {
         return \Mihaeu\HtmlFormatter::format($this->body);

@@ -56,6 +56,11 @@ class BreadcrumbExtension extends AbstractExtension
 
         if (isset($project)) {
             $breadcrumbs[] = [
+                'title' => 'Projects',
+                'href' => $this->router->generate('project_index')
+            ];
+
+            $breadcrumbs[] = [
               'title' => $project->getName(),
               'href' => $this->router->generate('project_show', ['project' => $project->getId()])
             ];

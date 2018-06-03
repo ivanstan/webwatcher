@@ -1,6 +1,4 @@
 {{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.baseUrl) }}
-    <p class="text-muted">* Fully formatted base URL with protocol, without '/' at the end.</p>
+{{ form_widget(form) }}
     <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

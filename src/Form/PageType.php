@@ -11,11 +11,18 @@ class PageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Page $page */
+        $page = $builder->getData();
+
         $builder
             ->add('name')
             ->add('project')
             ->add('path')
         ;
+
+        if (count($page->getSnapshots()) > 0) {
+            $builder->add('path', null, ['disabled' => true]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

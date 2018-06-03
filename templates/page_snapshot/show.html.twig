@@ -11,7 +11,14 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Snapshot</h1>
+    <div class="row">
+        <div class="col-10">
+            <h1>Snapshot</h1>
+        </div>
+        <div class="col-2">
+            {{ include('page_snapshot/_delete_form.html.twig') }}
+        </div>
+    </div>
 
     {{ breadcrumbs(page_snapshot)|raw }}
 
@@ -31,6 +38,4 @@
     <div class="monaco-editor mb-3" data-code="{{ page_snapshot.body }}" data-language="html" style="height: 300px"></div>
 
     <td><img class="img-fluid" alt="{{ page_snapshot.hash }}" src="{{ asset(page_snapshot.image) }}"></td>
-
-    {{ include('page_snapshot/_delete_form.html.twig') }}
 {% endblock %}

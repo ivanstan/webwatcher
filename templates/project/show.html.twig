@@ -3,19 +3,15 @@
 {% block title %}Project {{ project.name }} | {{ parent() }}{% endblock %}
 
 {% block body %}
-
     <div class="row">
         <div class="col-10">
             <h1>Project {{ project.name }}</h1>
         </div>
         <div class="col-2">
-
-            <i class="fas fa-edit"></i>
-
-            <i class="fas fa-trash"></i>
-
-            <a class="btn btn-primary" href="{{ path('project_edit', {'project': project.id}) }}">Edit</a>
             {{ include('project/_delete_form.html.twig') }}
+            <a class="btn btn-primary mt-2 mr-2 float-right" href="{{ path('project_edit', {'project': project.id}) }}">
+                <i class="fa fa-edit"></i>
+            </a>
         </div>
     </div>
 
@@ -30,11 +26,16 @@
         </tbody>
     </table>
 
-    <h2>Pages</h2>
-
-    <a class="btn btn-primary mb-3" href="{{ path('page_new', {'project': project.id}) }}">
-        <i class="fa fa-plus-square" aria-hidden="true"></i> New Page
-    </a>
+    <div class="row mb-3">
+        <div class="col-10">
+            <h2>Pages</h2>
+        </div>
+        <div class="col-2">
+            <a class="btn btn-primary float-right mt-1" href="{{ path('page_new', {'project': project.id}) }}">
+                <i class="fa fa-plus-square"></i>
+            </a>
+        </div>
+    </div>
 
     <table class="table table-striped table-bordered">
         <thead>
@@ -50,7 +51,9 @@
                 <td><a href="{{ path('page_show', {'project': project.id, 'page': page.id}) }}">{{ page.name }}</a></td>
                 <td>{{ page.path }}</td>
                 <td>
-                    <a href="{{ path('page_edit', {'project': project.id, 'page': page.id}) }}">edit</a>
+                    <a href="{{ path('page_edit', {'project': project.id, 'page': page.id}) }}">
+                        <i class="fa fa-edit"></i>
+                    </a>
                 </td>
             </tr>
         {% else %}

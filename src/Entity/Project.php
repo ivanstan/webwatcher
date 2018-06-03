@@ -29,7 +29,7 @@ class Project
      * @var Page[]|Collection
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Page", mappedBy="project", cascade={"persist"})
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\OrderBy({"path" = "ASC"})
      */
     private $pages;
 

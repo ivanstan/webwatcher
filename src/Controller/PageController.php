@@ -89,6 +89,6 @@ class PageController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('page_index');
+        return $this->redirectToRoute('project_show', ['project' => $page->getProject()->getId()]);
     }
 }

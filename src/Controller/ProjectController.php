@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\ProjectSnapshot;
 use App\Form\ProjectType;
+use App\Service\SnapshotService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -86,5 +88,29 @@ class ProjectController extends Controller
         }
 
         return $this->redirectToRoute('project_index');
+    }
+
+    /**
+     * @Route("project/{project}/snapshot", name="project_snapshot_new", methods="GET|POST")
+     */
+    public function newSnapshot(Project $project, SnapshotService $service)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $dateTime = new \DateTime("now", new \DateTimeZone("UTC"));
+
+        $projectSnapshot = new ProjectSnapshot();
+        $projectSnapshot->setTimestamp($dateTime->getTimestamp());
+        $projectSnapshot->setProject($project);
+        $em->persist($projectSnapshot);
+
+        foreach ($project->getPages() as $page) {
+            $snapshot = $service->new($page);
+            $snapshot->setTimestamp($dateTime->getTimestamp());
+            $snapshot->setProjectSnapshot($projectSnapshot);
+
+            $em->persist($snapshot);
+        }
+
+        $em->flush();
     }
 }

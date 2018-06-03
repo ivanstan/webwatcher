@@ -20,7 +20,7 @@ class SnapshotService
         $this->snapshotDir = $projectDir.'/public/snapshots/';
     }
 
-    public function new(Page $page, \DateTime $dateTime): PageSnapshot
+    public function new(Page $page): PageSnapshot
     {
         $client = new Client(
             [
@@ -34,6 +34,7 @@ class SnapshotService
         $response = $client->send($request, ['timeout' => 10]);
         $responseTime = microtime(true) - $start;
 
+        $dateTime = new \DateTime("now", new \DateTimeZone("UTC"));
         $image = $this->image($page, $dateTime);
 
         $snapshot = new PageSnapshot();
@@ -45,9 +46,6 @@ class SnapshotService
         if ($image) {
             $snapshot->setImage($image);
         }
-
-        $this->entityManager->persist($snapshot);
-        $this->entityManager->flush();
 
         return $snapshot;
     }

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProjectSnapshot{% endblock %}
+
+{% block body %}
+    <h1>ProjectSnapshot</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ project_snapshot.id }}</td>
+            </tr>
+            <tr>
+                <th>Timestamp</th>
+                <td>{{ project_snapshot.timestamp }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('project_snapshot_index') }}">back to list</a>
+
+    <a href="{{ path('project_snapshot_edit', {'id': project_snapshot.id}) }}">edit</a>
+
+    {{ include('project_snapshot/_delete_form.html.twig') }}
+{% endblock %}

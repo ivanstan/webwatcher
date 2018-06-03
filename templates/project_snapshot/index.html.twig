@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProjectSnapshot index{% endblock %}
+
+{% block body %}
+    <h1>ProjectSnapshot index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Timestamp</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for project_snapshot in project_snapshots %}
+            <tr>
+                <td>{{ project_snapshot.id }}</td>
+                <td>{{ project_snapshot.timestamp }}</td>
+                <td>
+                    <a href="{{ path('project_snapshot_show', {'id': project_snapshot.id}) }}">show</a>
+                    <a href="{{ path('project_snapshot_edit', {'id': project_snapshot.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('project_snapshot_new') }}">Create new</a>
+{% endblock %}

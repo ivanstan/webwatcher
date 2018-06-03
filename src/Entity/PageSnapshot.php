@@ -117,6 +117,16 @@ class PageSnapshot
         return $this->hash;
     }
 
+    public function getProjectSnapshot(): ?ProjectSnapshot
+    {
+        return $this->projectSnapshot;
+    }
+
+    public function setProjectSnapshot(?ProjectSnapshot $projectSnapshot): void
+    {
+        $this->projectSnapshot = $projectSnapshot;
+    }
+
     public function __toString(): string
     {
         return $this->hash;

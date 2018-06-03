@@ -28,8 +28,12 @@ class PageSnapshotController extends Controller
      */
     public function new(Page $page, SnapshotService $service)
     {
-        $dateTime = new \DateTime("now", new \DateTimeZone("UTC"));
-        $snapshot = $service->new($page, $dateTime);
+        $snapshot = $service->new($page);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->persist($snapshot);
+        $em->flush();
 
         //@todo check if success, return error if $snapshot is null
 

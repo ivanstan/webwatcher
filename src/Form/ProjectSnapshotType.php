@@ -11,10 +11,7 @@ class ProjectSnapshotType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('timestamp')
-            ->add('project')
-        ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

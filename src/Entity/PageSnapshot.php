@@ -17,19 +17,19 @@ class PageSnapshot
 
     /**
      * @var string $body
-     * @ORM\Column(name="body", type="text")
+     * @ORM\Column(name="body", type="text", nullable=true)
      */
     private $body;
 
     /**
      * @var string $hash
-     * @ORM\Column(name="hash", type="string")
+     * @ORM\Column(name="hash", type="string", nullable=true)
      */
     private $hash;
 
     /**
      * @var string $image
-     * @ORM\Column(name="image", type="string")
+     * @ORM\Column(name="image", type="string", nullable=true)
      */
     private $image;
 
@@ -72,7 +72,7 @@ class PageSnapshot
         $this->body = $body;
     }
 
-    public function getImage(): string
+    public function getImage()
     {
         return $this->image;
     }
@@ -112,9 +112,13 @@ class PageSnapshot
         $this->page = $page;
     }
 
-    public function getHash(): string
+    public function getHash(): ?string
     {
-        return $this->hash;
+        if ($this->hash) {
+            return $this->hash;
+        }
+
+        return 'null';
     }
 
     public function getProjectSnapshot(): ?ProjectSnapshot

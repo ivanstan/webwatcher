@@ -20,7 +20,7 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -28,8 +28,11 @@
             <tr>
                 <td><a href="{{ path('project_show', {'project': project.id}) }}">{{ project.name }}</a></td>
                 <td>
-                    <a href="{{ path('project_edit', {'project': project.id}) }}">
+                    <a class="mr-1 ml-1" href="{{ path('project_edit', {'project': project.id}) }}">
                         <i class="fa fa-edit"></i>
+                    </a>
+                    <a class="mr-1 ml-1" target="_blank" href="{{ project.baseUrl }}">
+                        <i class="fa fa-external-link-alt"></i>
                     </a>
                 </td>
             </tr>

@@ -35,7 +35,12 @@
         </tbody>
     </table>
 
-    <div class="monaco-editor mb-3" data-code="{{ page_snapshot.body }}" data-language="html" style="height: 300px"></div>
+    {% if page_snapshot.body %}
+        <div class="monaco-editor mb-3" data-code="{{ page_snapshot.body }}" data-language="html" style="height: 300px"></div>
+    {% endif %}
 
-    <td><img class="img-fluid" alt="{{ page_snapshot.hash }}" src="{{ asset(page_snapshot.image) }}"></td>
+    {% if page_snapshot.image %}
+        <td><img class="img-fluid" alt="{{ page_snapshot.hash }}" src="{{ asset(page_snapshot.image) }}"></td>
+    {% endif %}
+
 {% endblock %}

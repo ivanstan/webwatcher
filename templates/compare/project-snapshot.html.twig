@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compare | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-10">
+            <h1>Edit Page</h1>
+        </div>
+    </div>
+
+    {{ breadcrumbs()|raw }}
+
+    {% for item in compare %}
+        {% set page1 = item.snapshot1.page %}
+        {% set page2 = item.snapshot2.page %}
+        <div class="row">
+            <h4><a href="{{ path('page_show', {'project': page1.project.id,'page': page1.id}) }}">{{ page1.name }}</a></h4>
+
+            {#<a href="{{ path('compare_page_snapshot', {'snapshot1': page1.snapshot.id}) }}">Details</a>#}
+        </div>
+        <div class="row">
+            <div class="col-6">
+                {{ item.snapshot1.id }}
+            </div>
+
+            <div class="col-6">
+                {{ item.snapshot2.id }}
+            </div>
+
+        </div>
+    {% else %}
+
+    {% endfor %}
+
+{% endblock %}

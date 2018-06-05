@@ -6,7 +6,10 @@ use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 
 class SnapshotService
 {
@@ -31,17 +34,27 @@ class SnapshotService
         $request = new Request('GET', $page->getUrl());
 
         $start = microtime(true);
-        $response = $client->send($request, ['timeout' => 10]);
-        $responseTime = microtime(true) - $start;
-
-        $dateTime = new \DateTime("now", new \DateTimeZone("UTC"));
-        $image = $this->image($page, $dateTime);
 
         $snapshot = new PageSnapshot();
-        $snapshot->setBody($response->getBody());
+
+        try {
+            $response = $client->send($request, ['timeout' => 10]);
+
+            $snapshot->setResponseCode($response->getStatusCode());
+            $snapshot->setBody($response->getBody());
+        } catch (ConnectException $exception) {
+            $snapshot->setResponseCode($exception->getCode());
+        } catch (ClientException $exception) {
+            $snapshot->setResponseCode($exception->getCode());
+        }
+
+        $responseTime = microtime(true) - $start;
+
+        $dateTime = new \DateTime();
+        $image = $this->image($page, $dateTime);
         $snapshot->setTimestamp($dateTime->getTimestamp());
         $snapshot->setPage($page);
-        $snapshot->setResponseCode($response->getStatusCode());
+
         $snapshot->setResponseTime($responseTime);
         if ($image) {
             $snapshot->setImage($image);

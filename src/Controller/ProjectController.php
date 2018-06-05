@@ -96,7 +96,7 @@ class ProjectController extends Controller
     public function newSnapshot(Project $project, SnapshotService $service)
     {
         $em = $this->getDoctrine()->getManager();
-        $dateTime = new \DateTime("now", new \DateTimeZone("UTC"));
+        $dateTime = new \DateTime();
 
         $projectSnapshot = new ProjectSnapshot();
         $projectSnapshot->setTimestamp($dateTime->getTimestamp());
@@ -112,5 +112,7 @@ class ProjectController extends Controller
         }
 
         $em->flush();
+
+        return $this->redirectToRoute('project_show', ['project' => $project->getId()]);
     }
 }

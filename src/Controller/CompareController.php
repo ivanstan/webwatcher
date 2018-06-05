@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\PageSnapshot;
+use App\Entity\ProjectSnapshot;
 use App\Service\ImageDeltaService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +22,7 @@ class CompareController extends Controller
     }
 
     /**
-     * @Route("/compare/{snapshot1}/{snapshot2}", name="compare_snapshot")
+     * @Route("/compare-page/{snapshot1}/{snapshot2}", name="compare_page_snapshot")
      */
     public function snapshot(string $snapshot1, string $snapshot2)
     {
@@ -30,13 +31,35 @@ class CompareController extends Controller
         $snapshot1 = $repository->find($snapshot1);
         $snapshot2 = $repository->find($snapshot2);
 
-        return $this->render('compare/snapshot.html.twig', [
+        return $this->render('compare/page-snapshot.html.twig', [
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
             'delta' => $this->imageDelta->compare(
                 $this->getImagePath($snapshot1->getImage()),
                 $this->getImagePath($snapshot2->getImage())
             )
+        ]);
+    }
+
+    /**
+     * @Route("/compare-project/{snapshot1}/{snapshot2}", name="compare_project_snapshot")
+     */
+    public function compareProjectSnapshot(ProjectSnapshot $snapshot1, ProjectSnapshot $snapshot2) {
+        $compare = [];
+
+        /** @var PageSnapshot $pageSnapshot */
+        foreach ($snapshot1->getSnapshots() as $pageSnapshot) {
+            $compare[$pageSnapshot->getPage()->getId()]['snapshot1'] = $pageSnapshot;
+        }
+
+        foreach ($snapshot2->getSnapshots() as $pageSnapshot) {
+            $compare[$pageSnapshot->getPage()->getId()]['snapshot2'] = $pageSnapshot;
+        }
+
+        return $this->render('compare/project-snapshot.html.twig', [
+            'snapshot1' => $snapshot1,
+            'snapshot2' => $snapshot2,
+            'compare' => $compare
         ]);
     }
 

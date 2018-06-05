@@ -75,7 +75,7 @@ class Project
 
     public function getBaseUrl(): ?string
     {
-        if (strpos($this->baseUrl, -1) === '/') {
+        if (substr($this->baseUrl, -1) === '/') {
             return substr($this->baseUrl, 0, -1);
         }
 

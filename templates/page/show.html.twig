@@ -32,7 +32,7 @@
 
     <h2>Compare</h2>
 
-    <div class="compare-selector mb-3" data-path="{{ path('compare_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
+    <div class="compare-selector compare-page-snapshots-selector mb-3" data-path="{{ path('compare_page_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
         <select class="custom-select" name="snapshot1">
             {% for snapshot in page.snapshots %}
                 <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }} {{ snapshot.hash }}</option>
@@ -62,17 +62,17 @@
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <td>Timestamp</td>
                 <td>Hash</td>
-                <td>HTTP Response</td>
+                <td>HTTP Status</td>
+                <td>Timestamp</td>
             </tr>
         </thead>
         <tbody>
         {% for snapshot in page.snapshots %}
             <tr>
-                <td>{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</td>
                 <td><a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.hash }}</a></td>
                 <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
+                <td>{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</td>
             </tr>
         {% else %}
             <tr>

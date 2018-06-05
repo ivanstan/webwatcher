@@ -12,7 +12,8 @@
             <a class="btn btn-primary mt-2 mr-2 float-right" href="{{ path('project_edit', {'project': project.id}) }}">
                 <i class="fa fa-edit"></i>
             </a>
-            <a class="btn btn-primary mt-2 mr-2 float-right" href="{{ path('process_snapshot_project', {"project": project.id}) }}">
+            <a class="btn btn-primary mt-2 mr-2 float-right"
+               href="{{ path('project_snapshot_new', {"project": project.id}) }}">
                 <i class="fa fa-camera"></i>
             </a>
         </div>
@@ -54,14 +55,54 @@
                 <td><a href="{{ path('page_show', {'project': project.id, 'page': page.id}) }}">{{ page.name }}</a></td>
                 <td>{{ page.path }}</td>
                 <td>
-                    <a href="{{ path('page_edit', {'project': project.id, 'page': page.id}) }}">
+                    <a class="mr-1 ml-1" href="{{ path('page_edit', {'project': project.id, 'page': page.id}) }}">
                         <i class="fa fa-edit"></i>
+                    </a>
+                    <a class="mr-1 ml-1" target="_blank" href="{{ page.url }}">
+                        <i class="fa fa-external-link-alt"></i>
                     </a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">No pages found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 class="mb-3">Snapshots</h2>
+
+    <div class="compare-selector compare-project-snapshots-selector mb-3" data-path="{{ path('compare_project_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
+        <select class="custom-select" name="snapshot1">
+            {% for snapshot in project.snapshots %}
+                <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</option>
+            {% endfor %}
+        </select>
+
+        <select class="custom-select" name="snapshot2">
+            {% for index, snapshot in project.snapshots %}
+                <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</option>
+            {% endfor %}
+        </select>
+
+        <button class="btn btn-primary" type="button">Compare</button>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <td>Timestamp</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for snapshot in project.snapshots %}
+            <tr>
+                <td><a href="{{ path('project_snapshot_show', {"project": project.id, "snapshot": snapshot.id}) }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">No pages found</td>
             </tr>
         {% endfor %}
         </tbody>

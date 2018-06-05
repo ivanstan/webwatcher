@@ -35,7 +35,7 @@ $(document).ready(function() {
     });
   });
 
-  $('.compare-selector').each((index, element) => {
+  $('.compare-page-snapshots-selector').each((index, element) => {
     let $element = $(element);
     let path = $element.data('path');
 
@@ -48,6 +48,20 @@ $(document).ready(function() {
         window.location.assign(path);
     });
   });
+
+    $('.compare-project-snapshots-selector').each((index, element) => {
+        let $element = $(element);
+        let path = $element.data('path');
+
+        $element.find('button').on('click', () => {
+            let snapshot1 = $element.find('[name="snapshot1"]').val();
+            let snapshot2 = $element.find('[name="snapshot2"]').val();
+            path = path.replace('snapshot1', snapshot1);
+            path = path.replace('snapshot2', snapshot2);
+
+            window.location.assign(path);
+        });
+    });
 
     $('#container').resize(function(){
         editor.layout();

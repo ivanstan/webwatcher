@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Entity\Project;
+use App\Entity\ProjectSnapshot;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -52,6 +53,11 @@ class BreadcrumbExtension extends AbstractExtension
             $snapshot = $entity;
         }
 
+        if ($entity instanceof ProjectSnapshot) {
+            $project = $entity->getProject();
+            $projectSnapshot = $entity;
+        }
+
         $breadcrumbs = [];
 
         if (isset($project)) {
@@ -83,6 +89,16 @@ class BreadcrumbExtension extends AbstractExtension
                     'project' => $project->getId(),
                     'page' => $page->getId(),
                     'snapshot' => $snapshot->getId()
+                ])
+            ];
+        }
+
+        if (isset($project) && isset($projectSnapshot)) {
+            $breadcrumbs[] = [
+                'title' => 'Snapshot ' . date('d/m/Y h:m:s', $projectSnapshot->getTimestamp()),
+                'href' => $this->router->generate('project_snapshot_show', [
+                    'project' => $project->getId(),
+                    'snapshot' => $projectSnapshot->getId()
                 ])
             ];
         }

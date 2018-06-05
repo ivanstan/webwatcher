@@ -10,81 +10,49 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/project/snapshot")
+ * @Route("/project/{project}/snapshot")
  */
 class ProjectSnapshotController extends Controller
 {
     /**
-     * @Route("/", name="project_snapshot_index", methods="GET")
+     * @Route("/{snapshot}", name="project_snapshot_show", methods="GET")
      */
-    public function index(): Response
+    public function show(ProjectSnapshot $snapshot): Response
     {
-        $projectSnapshots = $this->getDoctrine()
-            ->getRepository(ProjectSnapshot::class)
-            ->findAll();
-
-        return $this->render('project_snapshot/index.html.twig', ['project_snapshots' => $projectSnapshots]);
+        return $this->render('project_snapshot/show.html.twig', ['project_snapshot' => $snapshot]);
     }
 
     /**
-     * @Route("/new", name="project_snapshot_new", methods="GET|POST")
+     * @Route("/{snapshot}/edit", name="project_snapshot_edit", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function edit(Request $request, ProjectSnapshot $snapshot): Response
     {
-        $projectSnapshot = new ProjectSnapshot();
-        $form = $this->createForm(ProjectSnapshotType::class, $projectSnapshot);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($projectSnapshot);
-            $em->flush();
-
-            return $this->redirectToRoute('project_snapshot_index');
-        }
-
-        return $this->render('project_snapshot/new.html.twig', [
-            'project_snapshot' => $projectSnapshot,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="project_snapshot_show", methods="GET")
-     */
-    public function show(ProjectSnapshot $projectSnapshot): Response
-    {
-        return $this->render('project_snapshot/show.html.twig', ['project_snapshot' => $projectSnapshot]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="project_snapshot_edit", methods="GET|POST")
-     */
-    public function edit(Request $request, ProjectSnapshot $projectSnapshot): Response
-    {
-        $form = $this->createForm(ProjectSnapshotType::class, $projectSnapshot);
+        $form = $this->createForm(ProjectSnapshotType::class, $snapshot);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('project_snapshot_edit', ['id' => $projectSnapshot->getId()]);
+            return $this->redirectToRoute('project_snapshot_edit', [
+                'project' => $snapshot->getProject()->getId(),
+                'snapshot' => $snapshot->getId(),
+            ]);
         }
 
         return $this->render('project_snapshot/edit.html.twig', [
-            'project_snapshot' => $projectSnapshot,
+            'project_snapshot' => $snapshot,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="project_snapshot_delete", methods="DELETE")
+     * @Route("/{snapshot}", name="project_snapshot_delete", methods="DELETE")
      */
-    public function delete(Request $request, ProjectSnapshot $projectSnapshot): Response
+    public function delete(Request $request, ProjectSnapshot $snapshot): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$projectSnapshot->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$snapshot->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($projectSnapshot);
+            $em->remove($snapshot);
             $em->flush();
         }
 

@@ -3,24 +3,59 @@
 {% block title %}ProjectSnapshot{% endblock %}
 
 {% block body %}
-    <h1>ProjectSnapshot</h1>
+    <div class="row">
+        <div class="col-10">
+            <h1>Project snapshot</h1>
+        </div>
+        <div class="col-2">
+            {{ include('project_snapshot/_delete_form.html.twig') }}
+            <a class="float-right btn btn-primary mt-2 mr-2" href="{{ path('project_snapshot_edit', {'project': project_snapshot.project.id ,'snapshot': project_snapshot.id}) }}">
+                <i class="fa fa-edit"></i>
+            </a>
+        </div>
+    </div>
+
+    {{ breadcrumbs(project_snapshot)|raw }}
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ project_snapshot.id }}</td>
-            </tr>
-            <tr>
                 <th>Timestamp</th>
-                <td>{{ project_snapshot.timestamp }}</td>
+                <td>{{ project_snapshot.timestamp|date('d/m/Y h:m:s') }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('project_snapshot_index') }}">back to list</a>
-
-    <a href="{{ path('project_snapshot_edit', {'id': project_snapshot.id}) }}">edit</a>
-
-    {{ include('project_snapshot/_delete_form.html.twig') }}
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <td>Page snapshot</td>
+            <td>Page</td>
+            <td>HTTP Status</td>
+            <td>Actions</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for page_snapshot in project_snapshot.snapshots %}
+            <tr>
+                <td>
+                    <a href="{{ path('page_snapshot_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}">{{ page_snapshot.hash }}</a>
+                </td>
+                <td>
+                    <a href="{{ path('page_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id} ) }}">{{ page_snapshot.page.name }}</a>
+                </td>
+                <td>{% include 'components/response-code.html.twig' with {code: page_snapshot.responseCode} only %}</td>
+                <td>
+                    <a target="_blank" href="{{ page_snapshot.page.url }}">
+                        <i class="fa fa-external-link-alt"></i>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">No pages found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

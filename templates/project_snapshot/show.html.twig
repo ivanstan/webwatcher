@@ -9,9 +9,6 @@
         </div>
         <div class="col-2">
             {{ include('project_snapshot/_delete_form.html.twig') }}
-            <a class="float-right btn btn-primary mt-2 mr-2" href="{{ path('project_snapshot_edit', {'project': project_snapshot.project.id ,'snapshot': project_snapshot.id}) }}">
-                <i class="fa fa-edit"></i>
-            </a>
         </div>
     </div>
 

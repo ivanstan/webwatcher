@@ -55,12 +55,8 @@
                 <td><a href="{{ path('page_show', {'project': project.id, 'page': page.id}) }}">{{ page.name }}</a></td>
                 <td>{{ page.path }}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{ path('page_edit', {'project': project.id, 'page': page.id}) }}">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                    <a class="mr-1 ml-1" target="_blank" href="{{ page.url }}">
-                        <i class="fa fa-external-link-alt"></i>
-                    </a>
+                    <a class="mr-1 ml-1" href="{{ path('page_edit', {'project': project.id, 'page': page.id}) }}"><i class="fa fa-edit"></i></a>
+                    <a class="mr-1 ml-1" target="_blank" href="{{ page.url }}"><i class="fa fa-external-link-alt"></i></a>
                 </td>
             </tr>
         {% else %}
@@ -99,6 +95,7 @@
         {% for snapshot in project.snapshots %}
             <tr>
                 <td><a href="{{ path('project_snapshot_show', {"project": project.id, "snapshot": snapshot.id}) }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</a></td>
+                {#<td><td>{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</td></td>#}
             </tr>
         {% else %}
             <tr>

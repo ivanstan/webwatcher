@@ -8,6 +8,9 @@ use App\Service\ImageDeltaService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/tools")
+ */
 class CompareController extends Controller
 {
     private $imageDelta;
@@ -22,7 +25,7 @@ class CompareController extends Controller
     }
 
     /**
-     * @Route("/compare-page/{snapshot1}/{snapshot2}", name="compare_page_snapshot")
+     * @Route("/compare-page-snapshots/{snapshot1}/{snapshot2}", name="compare_page_snapshot")
      */
     public function snapshot(string $snapshot1, string $snapshot2)
     {
@@ -42,7 +45,7 @@ class CompareController extends Controller
     }
 
     /**
-     * @Route("/compare-project/{snapshot1}/{snapshot2}", name="compare_project_snapshot")
+     * @Route("/compare-project-snapshots/{snapshot1}/{snapshot2}", name="compare_project_snapshot")
      */
     public function compareProjectSnapshot(ProjectSnapshot $snapshot1, ProjectSnapshot $snapshot2) {
         $compare = [];
@@ -67,6 +70,16 @@ class CompareController extends Controller
      * @Route("/editor/{snapshot1}/{snapshot2}", name="editor", defaults={"snapshot2": null})
      */
     public function editor(PageSnapshot $snapshot1, ?PageSnapshot $snapshot2) {
+        return $this->render('compare/editor.html.twig', [
+            'snapshot1' => $snapshot1,
+            'snapshot2' => $snapshot2,
+        ]);
+    }
+
+    /**
+     * @Route("/image/{snapshot1}/{snapshot2}", name="image", defaults={"snapshot2": null})
+     */
+    public function imageDiff(PageSnapshot $snapshot1, ?PageSnapshot $snapshot2) {
         return $this->render('compare/editor.html.twig', [
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,

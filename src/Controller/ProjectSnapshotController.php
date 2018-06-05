@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\ProjectSnapshot;
-use App\Form\ProjectSnapshotType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,29 +22,6 @@ class ProjectSnapshotController extends Controller
     }
 
     /**
-     * @Route("/{snapshot}/edit", name="project_snapshot_edit", methods="GET|POST")
-     */
-    public function edit(Request $request, ProjectSnapshot $snapshot): Response
-    {
-        $form = $this->createForm(ProjectSnapshotType::class, $snapshot);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('project_snapshot_edit', [
-                'project' => $snapshot->getProject()->getId(),
-                'snapshot' => $snapshot->getId(),
-            ]);
-        }
-
-        return $this->render('project_snapshot/edit.html.twig', [
-            'project_snapshot' => $snapshot,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{snapshot}", name="project_snapshot_delete", methods="DELETE")
      */
     public function delete(Request $request, ProjectSnapshot $snapshot): Response
@@ -56,6 +32,6 @@ class ProjectSnapshotController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('project_snapshot_index');
+        return $this->redirectToRoute('project_show', ['project' => $snapshot->getProject()->getId()]);
     }
 }

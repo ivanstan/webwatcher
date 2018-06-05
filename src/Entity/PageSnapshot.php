@@ -56,7 +56,7 @@ class PageSnapshot
     /**
      * @var ProjectSnapshot
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\ProjectSnapshot", inversedBy="pageSnapshots", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\ProjectSnapshot", inversedBy="snapshots", cascade={"persist"})
      * @ORM\JoinColumn(name="project_snapshot_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
      */
     private $projectSnapshot;

@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
+        "chart.js": "^2.7.2",
         "popper.js": "^1.14.3",
         "prop-types": "^15.6.1",
         "resemblejs": "^2.10.3"

@@ -3,9 +3,12 @@ var $ = require('jquery');
 // no need to set this to a letiable, just require it
 require('popper.js');
 require('bootstrap');
+require('chart.js');
+// require('resemblejs');
 
 $(document).ready(function() {
   $('[data-toggle="popover"]').popover();
+  $('[data-toggle="tooltip"]').tooltip();
 
   $('.monaco-editor').each((index, element) => {
         let $element = $(element);

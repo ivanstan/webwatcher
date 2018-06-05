@@ -5,29 +5,56 @@
 {% block body %}
     <div class="row">
         <div class="col-10">
-            <h1>Edit Page</h1>
+            <h1>Compare project snapshots</h1>
         </div>
     </div>
 
-    {{ breadcrumbs()|raw }}
+    <div class="row">
+        <div class="col-6">
+            {{ breadcrumbs(snapshot1)|raw }}
+        </div>
+        <div class="col-6">
+            {{ breadcrumbs(snapshot2)|raw }}
+        </div>
+    </div>
 
     {% for item in compare %}
         {% set page1 = item.snapshot1.page %}
         {% set page2 = item.snapshot2.page %}
         <div class="row">
-            <h4><a href="{{ path('page_show', {'project': page1.project.id,'page': page1.id}) }}">{{ page1.name }}</a></h4>
-
-            {#<a href="{{ path('compare_page_snapshot', {'snapshot1': page1.snapshot.id}) }}">Details</a>#}
+            <div class="col-12">
+                <h4><a href="{{ path('page_show', {'project': page1.project.id,'page': page1.id}) }}">{{ page1.name }}</a></h4>
+            </div>
         </div>
         <div class="row">
-            <div class="col-6">
-                {{ item.snapshot1.id }}
+            <div class="col-3">
+                <img class="img-fluid" src="{{ asset(item.snapshot1.image) }}">
             </div>
 
-            <div class="col-6">
-                {{ item.snapshot2.id }}
+            <div class="col-3">
+                {% include 'components/response-code.html.twig' with {code: item.snapshot1.responseCode} only %}
+                {% include 'components/hash.html.twig' with {hash: item.snapshot1.hash} only %}
+                <a target="_blank" href="{{ path('page_snapshot_show', {'project': page1.project.id, 'page': page1.id, 'snapshot': item.snapshot1.id}) }}">View snapshot</a>
             </div>
 
+            <div class="col-3">
+                <img class="img-fluid" src="{{ asset(item.snapshot2.image) }}">
+            </div>
+
+            <div class="col-3">
+                {% include 'components/response-code.html.twig' with {code: item.snapshot2.responseCode} only %}
+                {% include 'components/hash.html.twig' with {hash: item.snapshot2.hash} only %}
+                <a target="_blank" href="{{ path('page_snapshot_show', {'project': page2.project.id, 'page': page2.id, 'snapshot': item.snapshot2.id})  }}">View snapshot</a>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <a target="_blank"
+                   href="{{ path('compare_page_snapshot', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">Details</a>
+                <a target="_blank"
+                   href="{{ path('editor', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">Diff</a>
+            </div>
         </div>
     {% else %}
 

@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
+        "canvas-prebuilt": "^1.6.5-prerelease.1",
         "chart.js": "^2.7.2",
         "popper.js": "^1.14.3",
         "prop-types": "^15.6.1",

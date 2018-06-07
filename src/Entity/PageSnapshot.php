@@ -22,6 +22,12 @@ class PageSnapshot
     private $body;
 
     /**
+     * @var array $headers
+     * @ORM\Column(name="headers", type="json_array", nullable=true)
+     */
+    private $headers;
+
+    /**
      * @var string $hash
      * @ORM\Column(name="hash", type="string", nullable=true)
      */
@@ -41,7 +47,7 @@ class PageSnapshot
 
     /**
      * @var float $responseTime
-     * @ORM\Column(name="response_time", type="float", nullable=false)
+     * @ORM\Column(name="response_time", type="float", nullable=true)
      */
     private $responseTime;
 
@@ -70,6 +76,16 @@ class PageSnapshot
     {
         $this->hash = sha1($body);
         $this->body = $body;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    public function setHeaders(array $headers): void
+    {
+        $this->headers = $headers;
     }
 
     public function getImage()

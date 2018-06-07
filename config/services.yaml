@@ -2,6 +2,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    selenium_server_url: 'http://localhost:4444/wd/hub'
 
 services:
     # default configuration for services in *this* file
@@ -33,3 +34,7 @@ services:
         arguments: ['%kernel.project_dir%']
         tags:
             - { name: doctrine.event_listener, event: postRemove }
+
+
+    App\Service\SeleniumService:
+        arguments: ['%selenium_server_url%', '%kernel.project_dir%']

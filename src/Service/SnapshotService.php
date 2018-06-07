@@ -6,25 +6,31 @@ use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 
 class SnapshotService
 {
     private $entityManager;
 
     private $snapshotDir;
+    /**
+     * @var SeleniumService
+     */
+    private $seleniumService;
 
-    public function __construct(EntityManagerInterface $entityManager, string $projectDir)
+    public function __construct(EntityManagerInterface $entityManager, string $projectDir, SeleniumService $seleniumService)
     {
         $this->entityManager = $entityManager;
         $this->snapshotDir = $projectDir.'/public/snapshots/';
+        $this->seleniumService = $seleniumService;
     }
 
     public function new(Page $page): PageSnapshot
     {
+        $dateTime = new \DateTime();
         $client = new Client(
             [
                 'verify' => false,
@@ -40,48 +46,23 @@ class SnapshotService
         try {
             $response = $client->send($request, ['timeout' => 10]);
 
-            $snapshot->setResponseCode($response->getStatusCode());
+            $snapshot->setHeaders($response->getHeaders());
             $snapshot->setBody($response->getBody());
+            $snapshot->setResponseCode($response->getStatusCode());
+        } catch (BadResponseException $exception) {
+            $snapshot->setResponseCode($exception->getCode());
+            $snapshot->setBody($exception->getRequest()->getBody());
+            $snapshot->setHeaders($exception->getRequest()->getHeaders());
         } catch (ConnectException $exception) {
-            $snapshot->setResponseCode($exception->getCode());
-        } catch (ClientException $exception) {
-            $snapshot->setResponseCode($exception->getCode());
+
         }
 
-        $responseTime = microtime(true) - $start;
-
-        $dateTime = new \DateTime();
-        $image = $this->image($page, $dateTime);
+        $snapshot->setResponseTime(microtime(true) - $start);
         $snapshot->setTimestamp($dateTime->getTimestamp());
         $snapshot->setPage($page);
 
-        $snapshot->setResponseTime($responseTime);
-        if ($image) {
-            $snapshot->setImage($image);
-        }
+        $this->seleniumService->setPageSnapshot($snapshot);
 
         return $snapshot;
-    }
-
-    protected function image(Page $page, \DateTime $dateTime): ?string
-    {
-        $projectId = $page->getProject()->getId();
-        $pageId = $page->getProject()->getId();
-
-        $filename = "project-$projectId-page-$pageId-timestamp-{$dateTime->getTimestamp()}.png";
-
-        $destination = $this->snapshotDir.$filename;
-
-        //@todo fix this code, optimize file
-
-        $command = "/usr/local/bin/wkhtmltoimage {$page->getUrl()} $destination";
-
-        passthru($command, $status);
-
-        if ($status === 0) {
-            return 'snapshots/'.$filename;
-        }
-
-        return null;
     }
 }

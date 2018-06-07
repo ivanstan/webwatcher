@@ -68,6 +68,9 @@
     "egulias/email-validator": {
         "version": "2.1.4"
     },
+    "facebook/webdriver": {
+        "version": "1.6.0"
+    },
     "fig/link-util": {
         "version": "1.0.0"
     },

@@ -5,29 +5,40 @@ require('popper.js');
 require('bootstrap');
 var Chart = require('chart.js');
 
+// var dt = require( 'datatables.net' )();
+
 // var canvas = require('canvas-prebuilt');
 // requirex('resemblejs');
 
 $(document).ready(function() {
   $('[data-toggle="popover"]').popover();
   $('[data-toggle="tooltip"]').tooltip();
+    // $('.data-table').DataTable();
 
     $('.response-time-chart').each((index, element) => {
         let $element = $(element);
+        let json = $element.data('chart');
+
+        let labels = $.map(json, function(value, key) {
+            return key;
+        });
+
+        let data = $.map(json, function(value, key) {
+            return value;
+        });
 
         let ctx = document.getElementById($element.attr('id')).getContext('2d');
         let chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: labels,
                 datasets: [{
                     label: 'Page response time',
-                    backgroundColor: 'transparent',
-                    borderColor: '',
-                    data: [
-                        1, 2, 3, 4
-                    ],
-                    fill: true,
+                    lineTension: 0,
+                    type: 'line',
+                    borderColor: '#537bc4',
+                    data: data,
+                    fill: false,
                 }]
             },
             options: {
@@ -49,7 +60,7 @@ $(document).ready(function() {
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Time'
+                            labelString: 'Timestamp'
                         }
                     }],
                     yAxes: [{

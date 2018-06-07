@@ -1,9 +1,9 @@
 <form method="post"
       class="float-right mt-2"
-      action="{{ path('page_snapshot_delete', {'project': page_snapshot.page.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}"
+      action="{{ path('page_snapshot_delete', {'project': snapshot.page.project.id, 'page': snapshot.page.id, 'snapshot': snapshot.id}) }}"
       onsubmit="return confirm('Are you sure you want to delete this item?');">
     <input type="hidden" name="_method" value="DELETE">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ page_snapshot.id) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ snapshot.id) }}">
     <button class="btn btn-danger">
         <i class="fa fa-trash-alt"></i>
     </button>

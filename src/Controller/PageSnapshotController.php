@@ -20,7 +20,7 @@ class PageSnapshotController extends Controller
      */
     public function show(PageSnapshot $snapshot): Response
     {
-        return $this->render('page_snapshot/show.html.twig', ['page_snapshot' => $snapshot]);
+        return $this->render('pages/page_snapshot/show.html.twig', ['snapshot' => $snapshot]);
     }
 
     /**

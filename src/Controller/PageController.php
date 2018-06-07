@@ -36,7 +36,7 @@ class PageController extends Controller
         }
 
         return $this->render(
-            'page/new.html.twig',
+            'pages/page/new.html.twig',
             [
                 'page' => $page,
                 'form' => $form->createView(),
@@ -49,7 +49,7 @@ class PageController extends Controller
      */
     public function show(Page $page): Response
     {
-        return $this->render('page/show.html.twig', ['page' => $page]);
+        return $this->render('pages/page/show.html.twig', ['page' => $page]);
     }
 
     /**
@@ -70,7 +70,7 @@ class PageController extends Controller
         }
 
         return $this->render(
-            'page/edit.html.twig',
+            'pages/page/edit.html.twig',
             [
                 'page' => $page,
                 'form' => $form->createView(),

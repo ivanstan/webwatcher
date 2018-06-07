@@ -1,0 +1,30 @@
+<table class="table">
+    <tr>
+        <th>Project</th>
+        <td>
+            <a href="{{ path('project_show', {'project': snapshot.page.project.id }) }}">{{ snapshot.page.project.name }}</a>
+        </td>
+    </tr>
+    <tr>
+        <th>Page</th>
+        <td>
+            <a href="{{ path('page_show', {'project': snapshot.page.project.id, 'page': snapshot.page.id }) }}">{{ snapshot.page.name }}</a>
+        </td>
+    </tr>
+    <tr>
+        <th>Timestamp</th>
+        <td>
+            {{ snapshot.timestamp|date('d/m/Y h:m:s') }}
+        </td>
+    </tr>
+    <tr>
+        <th>Request time</th>
+        <td>
+            {{ snapshot.responseTime|number_format(2) }} sec
+        </td>
+    </tr>
+    <tr>
+        <th>HTTP Status</th>
+        <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
+    </tr>
+</table>

@@ -22,7 +22,7 @@ class ProjectController extends Controller
             ->getRepository(Project::class)
             ->findAll();
 
-        return $this->render('project/index.html.twig', ['projects' => $projects]);
+        return $this->render('pages/project/index.html.twig', ['projects' => $projects]);
     }
 
     /**
@@ -42,7 +42,7 @@ class ProjectController extends Controller
             return $this->redirectToRoute('project_index');
         }
 
-        return $this->render('project/new.html.twig', [
+        return $this->render('pages/project/new.html.twig', [
             'project' => $project,
             'form' => $form->createView(),
         ]);
@@ -53,7 +53,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project): Response
     {
-        return $this->render('project/show.html.twig', ['project' => $project]);
+        return $this->render('pages/project/show.html.twig', ['project' => $project]);
     }
 
     /**
@@ -70,7 +70,7 @@ class ProjectController extends Controller
             return $this->redirectToRoute('project_edit', ['project' => $project->getId()]);
         }
 
-        return $this->render('project/edit.html.twig', [
+        return $this->render('pages/project/edit.html.twig', [
             'project' => $project,
             'form' => $form->createView(),
         ]);

@@ -4,38 +4,27 @@ namespace App\Service;
 
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
-use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 
 class SnapshotService
 {
-    private $entityManager;
+    public const MAX_TIMEOUT_SEC = 10;
 
-    private $snapshotDir;
-    /**
-     * @var SeleniumService
-     */
     private $seleniumService;
 
-    public function __construct(EntityManagerInterface $entityManager, string $projectDir, SeleniumService $seleniumService)
+    public function __construct(SeleniumService $seleniumService)
     {
-        $this->entityManager = $entityManager;
-        $this->snapshotDir = $projectDir.'/public/snapshots/';
         $this->seleniumService = $seleniumService;
     }
 
     public function new(Page $page): PageSnapshot
     {
-        $dateTime = new \DateTime();
-        $client = new Client(
-            [
-                'verify' => false,
-            ]
-        );
+        $client = new Client([
+            'verify' => false,
+        ]);
 
         $request = new Request('GET', $page->getUrl());
 
@@ -44,7 +33,7 @@ class SnapshotService
         $snapshot = new PageSnapshot();
 
         try {
-            $response = $client->send($request, ['timeout' => 10]);
+            $response = $client->send($request, ['timeout' => self::MAX_TIMEOUT_SEC]);
 
             $snapshot->setHeaders($response->getHeaders());
             $snapshot->setBody($response->getBody());
@@ -58,10 +47,9 @@ class SnapshotService
         }
 
         $snapshot->setResponseTime(microtime(true) - $start);
-        $snapshot->setTimestamp($dateTime->getTimestamp());
-        $snapshot->setPage($page);
-
+        $snapshot->setTimestamp(time());
         $this->seleniumService->setPageSnapshot($snapshot);
+        $snapshot->setPage($page);
 
         return $snapshot;
     }

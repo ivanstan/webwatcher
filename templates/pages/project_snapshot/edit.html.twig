@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Project snapshot{% endblock %}
+{% block title %}Edit project {{ project.project_snapshot.project.name }} snapshot | {{ parent() }}{% endblock %}
 
 {% block body %}
     <div class="row">
         <div class="col-10">
-            <h1>Edit Project snapshot</h1>
+            <h1>Edit project snapshot</h1>
         </div>
         <div class="col-2">
-            {{ include('project_snapshot/_delete_form.html.twig') }}
+            {{ include('pages/project_snapshot/_delete_form.html.twig') }}
         </div>
     </div>
 

@@ -34,7 +34,7 @@ class CompareController extends Controller
         $snapshot1 = $repository->find($snapshot1);
         $snapshot2 = $repository->find($snapshot2);
 
-        return $this->render('compare/page-snapshot.html.twig', [
+        return $this->render('pages/compare/page-snapshot.html.twig', [
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
             'delta' => $this->imageDelta->compare(
@@ -59,7 +59,7 @@ class CompareController extends Controller
             $compare[$pageSnapshot->getPage()->getId()]['snapshot2'] = $pageSnapshot;
         }
 
-        return $this->render('compare/project-snapshot.html.twig', [
+        return $this->render('pages/compare/project-snapshot.html.twig', [
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
             'compare' => $compare
@@ -70,7 +70,7 @@ class CompareController extends Controller
      * @Route("/editor/{snapshot1}/{snapshot2}", name="editor", defaults={"snapshot2": null})
      */
     public function editor(PageSnapshot $snapshot1, ?PageSnapshot $snapshot2) {
-        return $this->render('compare/editor.html.twig', [
+        return $this->render('pages/compare/editor.html.twig', [
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
         ]);
@@ -80,7 +80,7 @@ class CompareController extends Controller
      * @Route("/image/{snapshot1}/{snapshot2}", name="image", defaults={"snapshot2": null})
      */
     public function imageDiff(PageSnapshot $snapshot1, ?PageSnapshot $snapshot2) {
-        return $this->render('compare/editor.html.twig', [
+        return $this->render('pages/compare/editor.html.twig', [
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
         ]);

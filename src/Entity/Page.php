@@ -102,6 +102,19 @@ class Page
         return $sum / count($snapshots);
     }
 
+    public function getResponseTimeData()
+    {
+        $result = [];
+
+        foreach ($this->getSnapshots() as $snapshot) {
+            $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp())->format('d/m/Y h:m:s');
+
+            $result[$dateTime] = number_format($snapshot->getResponseTime(), 2);
+        }
+
+        return array_reverse($result);
+    }
+
     public function __toString(): string
     {
         return $this->path;

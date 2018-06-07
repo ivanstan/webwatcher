@@ -18,7 +18,7 @@ class ProjectSnapshotController extends Controller
      */
     public function show(ProjectSnapshot $snapshot): Response
     {
-        return $this->render('project_snapshot/show.html.twig', ['project_snapshot' => $snapshot]);
+        return $this->render('pages/project_snapshot/show.html.twig', ['project_snapshot' => $snapshot]);
     }
 
     /**

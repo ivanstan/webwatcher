@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ProjectSnapshot{% endblock %}
+{% block title %}Project {{ project.project_snapshot.project.name }} snapshot | {{ parent() }}{% endblock %}
 
 {% block body %}
     <div class="row">
@@ -8,7 +8,7 @@
             <h1>Project snapshot</h1>
         </div>
         <div class="col-2">
-            {{ include('project_snapshot/_delete_form.html.twig') }}
+            {{ include('pages/project_snapshot/_delete_form.html.twig') }}
         </div>
     </div>
 

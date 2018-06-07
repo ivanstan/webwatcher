@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compare snapshots | {{ parent() }}{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('build/monaco/editor.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/monaco/editor.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <h1>Compare</h1>
+
+    {{ breadcrumbs()|raw }}
+
+    <div class="row mb-3">
+        <div class="col-6">
+            {% include 'components/hash.html.twig' with {hash: snapshot1.hash} only %}
+        </div>
+        <div class="col-6">
+            {% include 'components/hash.html.twig' with {hash: snapshot2.hash} only %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            {% include 'components/page-snapshot-details.html.twig' with {snapshot: snapshot1} only %}
+        </div>
+        <div class="col-6">
+            {% include 'components/page-snapshot-details.html.twig' with {snapshot: snapshot2} only %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <a target="_blank" class="btn btn-primary"
+               href="{{ path('editor', {'snapshot1': snapshot1.id, 'snapshot2': snapshot2.id}) }}">Editor</a>
+        </div>
+        <div class="col-6">
+            <a target="_blank" class="btn btn-primary"
+               href="{{ path('editor', {'snapshot1': snapshot1.id, 'snapshot2': snapshot2.id}) }}">Editor</a>
+        </div>
+    </div>
+
+    <div class="monaco-compare mb-3"
+         data-snapshot1="{{ snapshot1.body }}"
+         data-snapshot2="{{ snapshot2.body }}"
+         data-language="html"
+         style="height: 300px">
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <img class="img-fluid" alt="{{ snapshot1.hash }}" src="{{ asset(snapshot1.image) }}">
+        </div>
+        <div class="col-6">
+            <img class="img-fluid" alt="{{ snapshot2.hash }}" src="{{ asset(snapshot2.image) }}">
+        </div>
+    </div>
+
+</div>
+{% endblock %}

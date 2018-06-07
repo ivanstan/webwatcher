@@ -8,7 +8,7 @@
             <h1>Page {{ page.name }}</h1>
         </div>
         <div class="col-2">
-            {{ include('page/_delete_form.html.twig') }}
+            {{ include('pages/page/_delete_form.html.twig') }}
             <a class="float-right btn btn-primary mt-2 mr-2" href="{{ path('page_edit', {'project': page.project.id, 'page': page.id}) }}">
                 <i class="fa fa-edit"></i>
             </a>
@@ -29,7 +29,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <canvas class="response-time-chart" id="response-time-chart-1" height="50"></canvas>
+                    <canvas class="response-time-chart" id="response-time-chart-1" data-chart="{{ page.responseTimeData|json_encode }}" height="50"></canvas>
                 </td>
             </tr>
         </tbody>

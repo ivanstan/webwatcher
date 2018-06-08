@@ -6,6 +6,7 @@ use App\Entity\Page;
 use App\Entity\Project;
 use App\Form\PageType;
 use App\Service\SnapshotService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,7 @@ class PageController extends Controller
 {
     /**
      * @Route("/new", name="page_new", methods="GET|POST")
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function new(Request $request, Project $project): Response
     {
@@ -54,6 +56,7 @@ class PageController extends Controller
 
     /**
      * @Route("/{page}/edit", name="page_edit", methods="GET|POST")
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function edit(Request $request, Page $page): Response
     {
@@ -80,6 +83,7 @@ class PageController extends Controller
 
     /**
      * @Route("/{page}", name="page_delete", methods="DELETE")
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function delete(Request $request, Page $page): Response
     {

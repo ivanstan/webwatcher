@@ -74,6 +74,9 @@
     "fig/link-util": {
         "version": "1.0.0"
     },
+    "friendsofsymfony/user-bundle": {
+        "version": "v2.1.2"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"
     },
@@ -100,6 +103,9 @@
     },
     "opis/closure": {
         "version": "3.0.12"
+    },
+    "paragonie/random_compat": {
+        "version": "v2.0.15"
     },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
@@ -349,6 +355,9 @@
             "version": "2.5",
             "ref": "3db029c03e452b4a23f7fc45cec7c922c2247eb8"
         }
+    },
+    "symfony/templating": {
+        "version": "v4.1.0"
     },
     "symfony/test-pack": {
         "version": "v1.0.2"

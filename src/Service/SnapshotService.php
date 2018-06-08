@@ -27,13 +27,12 @@ class SnapshotService
         ]);
 
         $request = new Request('GET', $page->getUrl());
-
-        $start = microtime(true);
-
         $snapshot = new PageSnapshot();
 
         try {
+            $start = microtime(true);
             $response = $client->send($request, ['timeout' => self::MAX_TIMEOUT_SEC]);
+            $snapshot->setResponseTime(microtime(true) - $start);
 
             $snapshot->setHeaders($response->getHeaders());
             $snapshot->setBody($response->getBody());
@@ -46,10 +45,9 @@ class SnapshotService
 
         }
 
-        $snapshot->setResponseTime(microtime(true) - $start);
         $snapshot->setTimestamp(time());
-        $this->seleniumService->setPageSnapshot($snapshot);
         $snapshot->setPage($page);
+        $this->seleniumService->setPageSnapshot($snapshot);
 
         return $snapshot;
     }

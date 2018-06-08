@@ -50,6 +50,13 @@ class CompareController extends Controller
     public function compareProjectSnapshot(ProjectSnapshot $snapshot1, ProjectSnapshot $snapshot2) {
         $compare = [];
 
+        if ($snapshot1->getId() === $snapshot2->getId()) {
+            $this->addFlash(
+                'warning',
+                'You are comparing the snapshot with itself.'
+            );
+        }
+
         /** @var PageSnapshot $pageSnapshot */
         foreach ($snapshot1->getSnapshots() as $pageSnapshot) {
             $compare[$pageSnapshot->getPage()->getId()]['snapshot1'] = $pageSnapshot;
@@ -86,10 +93,10 @@ class CompareController extends Controller
         ]);
     }
 
-    public function getImagePath(string $image): string
+    public function getImagePath(?string $image): string
     {
 //        return $this->projectDir . DIRECTORY_SEPARATOR . 'public/snapshots/'. $image;
 
-        return $image;
+        return '';
     }
 }

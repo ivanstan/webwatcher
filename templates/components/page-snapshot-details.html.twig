@@ -27,4 +27,13 @@
         <th>HTTP Status</th>
         <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
     </tr>
+    <tr>
+        <th colspan="2">Response headers</th>
+    </tr>
+    {% for name, value in snapshot.headers %}
+        <tr>
+            <td>{{ name }}</td>
+            <td>{{ value[0] }}</td>
+        </tr>
+    {% endfor %}
 </table>

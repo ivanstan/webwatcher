@@ -5,10 +5,15 @@ namespace App\Entity;
 use App\Property\Id;
 use App\Property\Timestamp;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 /**
  * @ORM\Entity()
- * @ORM\Table("page_snapshot")
+ * @ORM\Table("page_snapshot",
+ *     indexes={
+ *     @Index(columns={"body"}, flags={"fulltext"}),
+ *     @Index(columns={"headers"}, flags={"fulltext"})
+ * })
  */
 class PageSnapshot
 {
@@ -118,7 +123,7 @@ class PageSnapshot
         $this->responseTime = $responseTime;
     }
 
-    public function getPage(): Page
+    public function getPage(): ?Page
     {
         return $this->page;
     }

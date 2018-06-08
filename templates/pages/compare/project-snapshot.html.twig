@@ -9,11 +9,14 @@
         </div>
     </div>
 
+    {% include 'components/flash-messages.html.twig' %}
+
     <div class="row">
-        <div class="col-6">
+        <div class="col-5">
             {{ breadcrumbs(snapshot1)|raw }}
         </div>
-        <div class="col-6">
+        <div class="col-2"></div>
+        <div class="col-5">
             {{ breadcrumbs(snapshot2)|raw }}
         </div>
     </div>
@@ -22,40 +25,116 @@
         {% set page1 = item.snapshot1.page %}
         {% set page2 = item.snapshot2.page %}
         <div class="row">
-            <div class="col-12">
-                <h4><a href="{{ path('page_show', {'project': page1.project.id,'page': page1.id}) }}">{{ page1.name }}</a></h4>
+            <div class="col-5">
+                <table class="mb-0">
+                    <tr>
+                        <td>
+                            <h4 class="mt-2"><a
+                                        href="{{ path('page_show', {'project': page1.project.id,'page': page1.id}) }}">{{ page1.name }}</a>
+                            </h4>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-2">
+                <table class="mb-0">
+                    <tr>
+                        <td class="pt-2">
+                            <a data-toggle="tooltip"
+                               data-placement="bottom"
+                               title="Visit page"
+                               target="_blank" href="{{ page1.url }}">
+                                <i class="fa fa-external-link-alt"></i>
+                            </a>
+                            <a data-toggle="tooltip"
+                               data-placement="bottom"
+                               title="Compare page"
+                               target="_blank"
+                               href="{{ path('compare_page_snapshot', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}"><i class="fa fa-balance-scale"></i></a>
+                            <a data-toggle="tooltip"
+                               data-placement="bottom"
+                               title="View diff"
+                               target="_blank"
+                               href="{{ path('editor', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">
+                                <i class="fas fa-file-code"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
         <div class="row">
-            <div class="col-3">
-                <img class="img-fluid" src="{{ asset(item.snapshot1.image) }}">
+            <div class="col-5 mb-0">
+                <table class="table">
+                    <tr>
+                        <th>HTTP Response</th>
+                        <td>{% include 'components/response-code.html.twig' with {code: item.snapshot1.responseCode} only %}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <img class="img-fluid" data-mh="img-equal-{{ loop.index }}"
+                                 src="{{ asset(item.snapshot1.image) }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a target="_blank"
+                               href="{{ path('page_snapshot_show', {'project': page1.project.id, 'page': page1.id, 'snapshot': item.snapshot1.id}) }}">View
+                                snapshot</a>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
-            <div class="col-3">
-                {% include 'components/response-code.html.twig' with {code: item.snapshot1.responseCode} only %}
-                {% include 'components/hash.html.twig' with {hash: item.snapshot1.hash} only %}
-                <a target="_blank" href="{{ path('page_snapshot_show', {'project': page1.project.id, 'page': page1.id, 'snapshot': item.snapshot1.id}) }}">View snapshot</a>
+            <div class="col-2 mb-0">
+                <table class="table text-center">
+                    <tr>
+                        <td>
+                            {% if item.snapshot1.responseCode == item.snapshot2.responseCode %}
+                                <span class="badge badge-success">OK</span>
+                            {% else %}
+                                <span class="badge badge-warning">NOT</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if item.snapshot1.hash == item.snapshot2.hash %}
+                                <span class="badge badge-success">OK</span>
+                            {% else %}
+                                <a target="_blank"
+                                   href="{{ path('editor', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">
+                                    <span class="badge badge-warning"><i class="fa fa-file-code"></i> NOT</span>
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
             </div>
 
-            <div class="col-3">
-                <img class="img-fluid" src="{{ asset(item.snapshot2.image) }}">
-            </div>
-
-            <div class="col-3">
-                {% include 'components/response-code.html.twig' with {code: item.snapshot2.responseCode} only %}
-                {% include 'components/hash.html.twig' with {hash: item.snapshot2.hash} only %}
-                <a target="_blank" href="{{ path('page_snapshot_show', {'project': page2.project.id, 'page': page2.id, 'snapshot': item.snapshot2.id})  }}">View snapshot</a>
+            <div class="col-5">
+                <table class="table mb-0">
+                    <tr>
+                        <th>HTTP Response</th>
+                        <td>{% include 'components/response-code.html.twig' with {code: item.snapshot2.responseCode} only %}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <img class="img-fluid" data-mh="img-equal-{{ loop.index }}"
+                                 src="{{ asset(item.snapshot2.image) }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a target="_blank"
+                               href="{{ path('page_snapshot_show', {'project': page2.project.id, 'page': page2.id, 'snapshot': item.snapshot2.id}) }}">View
+                                snapshot</a>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
-
-        <div class="row mb-3">
-            <div class="col-12">
-                <a target="_blank"
-                   href="{{ path('compare_page_snapshot', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">Details</a>
-                <a target="_blank"
-                   href="{{ path('editor', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">Diff</a>
-            </div>
-        </div>
+<hr>
     {% else %}
 
     {% endfor %}

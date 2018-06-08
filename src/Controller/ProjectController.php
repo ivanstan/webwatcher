@@ -6,17 +6,19 @@ use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Form\ProjectType;
 use App\Service\SnapshotService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class ProjectController extends Controller
 {
     /**
      * @Route("/", name="project_index", methods="GET")
      */
-    public function index(): Response
+    public function index(AuthorizationCheckerInterface $authChecker): Response
     {
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
@@ -27,6 +29,7 @@ class ProjectController extends Controller
 
     /**
      * @Route("project/new", name="project_new", methods="GET|POST")
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function new(Request $request): Response
     {
@@ -58,6 +61,7 @@ class ProjectController extends Controller
 
     /**
      * @Route("project/{project}/edit", name="project_edit", methods="GET|POST")
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function edit(Request $request, Project $project): Response
     {
@@ -78,6 +82,7 @@ class ProjectController extends Controller
 
     /**
      * @Route("project/{project}", name="project_delete", methods="DELETE")
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function delete(Request $request, Project $project): Response
     {
@@ -88,31 +93,5 @@ class ProjectController extends Controller
         }
 
         return $this->redirectToRoute('project_index');
-    }
-
-    /**
-     * @Route("project/{project}/snapshot", name="project_snapshot_new", methods="GET|POST")
-     */
-    public function newSnapshot(Project $project, SnapshotService $service)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $dateTime = new \DateTime();
-
-        $projectSnapshot = new ProjectSnapshot();
-        $projectSnapshot->setTimestamp($dateTime->getTimestamp());
-        $projectSnapshot->setProject($project);
-        $em->persist($projectSnapshot);
-
-        foreach ($project->getPages() as $page) {
-            $snapshot = $service->new($page);
-            $snapshot->setTimestamp($dateTime->getTimestamp());
-            $snapshot->setProjectSnapshot($projectSnapshot);
-
-            $em->persist($snapshot);
-        }
-
-        $em->flush();
-
-        return $this->redirectToRoute('project_show', ['project' => $project->getId()]);
     }
 }

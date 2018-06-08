@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Service\SnapshotService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,7 @@ class PageSnapshotController extends Controller
 
     /**
      * @Route("/new", name="snapshot_page_new", methods="GET|POST")
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function new(Page $page, SnapshotService $service)
     {
@@ -46,6 +48,7 @@ class PageSnapshotController extends Controller
 
     /**
      * @Route("/{snapshot}", name="page_snapshot_delete", methods="DELETE", requirements={"snapshot"="\d+"})
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function delete(Request $request, PageSnapshot $snapshot): Response
     {

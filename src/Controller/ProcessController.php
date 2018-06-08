@@ -7,6 +7,7 @@ use App\Entity\Project;
 use App\Repository\JobQueueRepository;
 use App\Service\SnapshotService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Spatie\Async\Pool;
@@ -16,6 +17,7 @@ class ProcessController extends Controller
 {
     /**
      * @Route("/snapshot/project/{project}", name="process_snapshot_project", methods="GET")
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function snapshotProject(JobQueueRepository $repository, Project $project, SnapshotService $service) {
         $em = $this->getDoctrine()->getManager();
@@ -64,6 +66,7 @@ class ProcessController extends Controller
 
     /**
      * @Route("/snapshot/status/{project}", name="process_snapshot_status", methods="GET")
+     * @Security("has_role('ROLE_MANAGER')")
      */
     public function snapshotStatus(JobQueueRepository $repository, Project $project) {
         return new JsonResponse($repository->findByProject($project));

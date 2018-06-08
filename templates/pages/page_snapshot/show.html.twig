@@ -17,19 +17,43 @@
         </div>
         <div class="col-2">
             {{ include('pages/page_snapshot/_delete_form.html.twig') }}
+            <a data-toggle="tooltip"
+               data-placement="bottom"
+               title="Show code"
+               target="_blank"
+               class="btn btn-primary mt-2 mr-2 float-right"
+               href="{{ path('editor', {'snapshot1': snapshot.id}) }}">
+                <i class="fa fa-file-code"></i>
+            </a>
         </div>
     </div>
 
     {{ breadcrumbs(snapshot)|raw }}
 
-    {% include 'components/page-snapshot-details.html.twig' with {snapshot: snapshot} only %}
+    {% include 'components/flash-messages.html.twig' %}
+
+    <div class="row">
+        <div class="col-6">
+            {% include 'components/page-snapshot-details.html.twig' with {snapshot: snapshot} only %}
+        </div>
+        <div class="col-6">
+            {% if snapshot.image %}
+                <td>
+                    <a target="_blank" class="cursor-zoom-in" href="{{ asset(snapshot.image) }}">
+                        <img class="img-fluid" alt="{{ snapshot.hash }}" src="{{ asset(snapshot.image) }}">
+                    </a>
+                </td>
+            {% endif %}
+        </div>
+    </div>
 
     {% if snapshot.body %}
-        <div class="monaco-editor mb-3" data-code="{{ snapshot.body }}" data-language="html" style="height: 300px"></div>
-    {% endif %}
-
-    {% if snapshot.image %}
-        <td><img class="img-fluid" alt="{{ snapshot.hash }}" src="{{ asset(snapshot.image) }}"></td>
+        <div class="row">
+            <div class="col-12">
+                <div class="monaco-editor mb-3" data-code="{{ snapshot.body }}" data-language="html"
+                     style="height: 800px"></div>
+            </div>
+        </div>
     {% endif %}
 
 {% endblock %}

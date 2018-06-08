@@ -8,7 +8,11 @@
             <h1>Projects</h1>
         </div>
         <div class="col-2">
-            <a class="btn btn-primary mt-2 float-right" href="{{ path('project_new') }}">
+            <a data-toggle="tooltip"
+               data-placement="left"
+               title="Create new project"
+               class="btn btn-primary mt-2 float-right"
+               href="{{ path('project_new') }}">
                 <i class="fa fa-plus-square"></i>
             </a>
         </div>
@@ -16,10 +20,13 @@
 
     {{ breadcrumbs()|raw }}
 
+    {% include 'components/flash-messages.html.twig' %}
+
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Base URL</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -27,18 +34,28 @@
         {% for project in projects %}
             <tr>
                 <td><a href="{{ path('project_show', {'project': project.id}) }}">{{ project.name }}</a></td>
+                <td>{{ project.baseUrl }}</td>
                 <td>
-                    <a class="mr-1 ml-1" href="{{ path('project_edit', {'project': project.id}) }}">
+                    <a data-toggle="tooltip"
+                       data-placement="top"
+                       title="Edit project"
+                       class="mr-1 ml-1"
+                       href="{{ path('project_edit', {'project': project.id}) }}">
                         <i class="fa fa-edit"></i>
                     </a>
-                    <a class="mr-1 ml-1" target="_blank" href="{{ project.baseUrl }}">
+                    <a data-toggle="tooltip"
+                       data-placement="top"
+                       title="Visit project home page"
+                       class="mr-1 ml-1"
+                       target="_blank"
+                       href="{{ project.baseUrl }}">
                         <i class="fa fa-external-link-alt"></i>
                     </a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3" class="text-center">Create a project for starters.</td>
             </tr>
         {% endfor %}
         </tbody>

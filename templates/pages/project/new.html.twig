@@ -7,6 +7,8 @@
 
     {{ breadcrumbs()|raw }}
 
-    {{ include('project/_form.html.twig') }}
+    {% include 'components/flash-messages.html.twig' %}
+
+    {{ include('pages/project/_form.html.twig') }}
 
 {% endblock %}

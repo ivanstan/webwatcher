@@ -9,6 +9,9 @@ framework:
     session:
         handler_id: ~
 
+    templating:
+        engines: ['twig', 'php']
+
     #esi: true
     #fragments: true
     php_errors:

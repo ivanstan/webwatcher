@@ -90,6 +90,10 @@ class Page
     {
         $snapshots = $this->getSnapshots();
 
+        if (!count($snapshots)) {
+            return null;
+        }
+
         if (empty($snapshots)) {
             return null;
         }

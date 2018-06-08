@@ -1,12 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Page | {{ parent() }}{% endblock %}
+{% block title %}Create new page | {{ parent() }}{% endblock %}
 
 {% block body %}
     <h1>Create new page</h1>
 
     {{ breadcrumbs()|raw }}
 
-    {{ include('page/_form.html.twig') }}
+    {% include 'components/flash-messages.html.twig' %}
+
+    {{ include('pages/page/_form.html.twig') }}
 
 {% endblock %}

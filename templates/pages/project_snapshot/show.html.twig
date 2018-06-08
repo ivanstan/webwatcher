@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Project {{ project.project_snapshot.project.name }} snapshot | {{ parent() }}{% endblock %}
+{% block title %}Project {{ project_snapshot.project.name }} snapshot | {{ parent() }}{% endblock %}
 
 {% block body %}
     <div class="row">
@@ -13,6 +13,8 @@
     </div>
 
     {{ breadcrumbs(project_snapshot)|raw }}
+
+    {% include 'components/flash-messages.html.twig' %}
 
     <table class="table">
         <tbody>
@@ -43,14 +45,18 @@
                 </td>
                 <td>{% include 'components/response-code.html.twig' with {code: page_snapshot.responseCode} only %}</td>
                 <td>
-                    <a target="_blank" href="{{ page_snapshot.page.url }}">
+                    <a data-toggle="tooltip"
+                       data-placement="bottom"
+                       title="Visit page"
+                       target="_blank"
+                       href="{{ page_snapshot.page.url }}">
                         <i class="fa fa-external-link-alt"></i>
                     </a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">No pages found</td>
+                <td colspan="4" class="text-center">No page screenshots here.</td>
             </tr>
         {% endfor %}
         </tbody>

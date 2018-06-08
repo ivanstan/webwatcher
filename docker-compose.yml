@@ -1,41 +1,43 @@
-version: '3'
+version: '2'
 services:
-    mysql:
-        image: 'mysql:5.7'
-        container_name: mysqldb
+    db:
+        image: mysql
         ports:
-            - '4000:3306'
-        expose:
-            - 3306
+            - "3306:3303"
         environment:
-            MYSQL_ROOT_PASSWORD: password
-    site:
-        build: .
-        container_name: webwatcher
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: symfony
+            MYSQL_USER: symfony
+            MYSQL_PASSWORD: symfony
+    php:
+        build: ./php-fpm
         ports:
-            - '8080:80'
-        expose:
-            - 80
-        depends_on:
-            - mysql
+            - "9000:9000"
         volumes:
-            - '.:/app'
-    selenium-hub:
-        image: 'selenium/hub:3.12.0-boron'
-        container_name: selenium-hub
+            - ./symfony:/var/www/symfony:cached
+            - ./logs/symfony:/var/www/symfony/var/logs:cached
+        links:
+            - db
+    nginx:
+        build: ./nginx
         ports:
-            - '4444:4444'
-    chrome:
-        image: 'selenium/node-chrome:3.12.0-boron'
-        depends_on:
-            - selenium-hub
-        environment:
-            - HUB_HOST=selenium-hub
-            - HUB_PORT=4444
-    firefox:
-        image: 'selenium/node-firefox:3.12.0-boron'
-        depends_on:
-            - selenium-hub
-        environment:
-            - HUB_HOST=selenium-hub
-            - HUB_PORT=4444
+            - "80:80"
+        links:
+            - php
+        volumes_from:
+            - php
+        volumes:
+            - ./logs/nginx/:/var/log/nginx:cached
+
+#    selenium-hub:
+#        image: 'selenium/hub:3.12.0-boron'
+#        container_name: selenium-hub
+#        ports:
+#            - '4444:4444'
+#    chrome:
+#        image: 'selenium/node-chrome:3.12.0-boron'
+#        depends_on:
+#            - selenium-hub
+#        environment:
+#            - HUB_HOST=selenium-hub
+#            - HUB_PORT=4444

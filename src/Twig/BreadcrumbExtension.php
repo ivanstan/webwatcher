@@ -63,11 +63,13 @@ class BreadcrumbExtension extends AbstractExtension
         if (isset($project)) {
             $breadcrumbs[] = [
                 'title' => 'Projects',
+                'tooltip' => 'Home',
                 'href' => $this->router->generate('project_index')
             ];
 
             $breadcrumbs[] = [
               'title' => $project->getName(),
+                'tooltip' => 'Project',
               'href' => $this->router->generate('project_show', ['project' => $project->getId()])
             ];
         }
@@ -75,6 +77,7 @@ class BreadcrumbExtension extends AbstractExtension
         if (isset($project) && isset($page)) {
             $breadcrumbs[] = [
                 'title' => $page->getName(),
+                'tooltip' => 'Page',
                 'href' => $this->router->generate('page_show', [
                     'project' => $project->getId(),
                     'page' => $page->getId()
@@ -83,8 +86,10 @@ class BreadcrumbExtension extends AbstractExtension
         }
 
         if (isset($project) && isset($page) && isset($snapshot)) {
+            $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp());
             $breadcrumbs[] = [
-                'title' => $snapshot->getHash(),
+                'title' => $dateTime->format('d/m/Y h:m:s'),
+                'tooltip' => 'Page snapshot',
                 'href' => $this->router->generate('page_snapshot_show', [
                     'project' => $project->getId(),
                     'page' => $page->getId(),
@@ -96,6 +101,7 @@ class BreadcrumbExtension extends AbstractExtension
         if (isset($project) && isset($projectSnapshot)) {
             $breadcrumbs[] = [
                 'title' => 'Snapshot ' . date('d/m/Y h:m:s', $projectSnapshot->getTimestamp()),
+                'tooltip' => 'Project snapshot',
                 'href' => $this->router->generate('project_snapshot_show', [
                     'project' => $project->getId(),
                     'snapshot' => $projectSnapshot->getId()

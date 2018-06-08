@@ -4,6 +4,7 @@ var $ = require('jquery');
 require('popper.js');
 require('bootstrap');
 var Chart = require('chart.js');
+require('jquery-match-height');
 
 // var dt = require( 'datatables.net' )();
 

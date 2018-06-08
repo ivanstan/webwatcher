@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\PageSnapshot;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Psr\Log\LoggerInterface;
 
 class SeleniumService
 {
@@ -13,22 +14,31 @@ class SeleniumService
 
     private $seleniumServerUrl;
     private $projectDir;
+    private $logger;
 
-    public function __construct(string $seleniumServerUrl, string $projectDir)
+    public function __construct(string $seleniumServerUrl, string $projectDir, LoggerInterface $logger)
     {
         $this->projectDir = $projectDir;
         $this->seleniumServerUrl = $seleniumServerUrl;
+        $this->logger = $logger;
     }
 
     public function setPageSnapshot(PageSnapshot $snapshot)
     {
-        $driver = RemoteWebDriver::create($this->seleniumServerUrl, DesiredCapabilities::chrome());
-
-        $driver->get($snapshot->getPage()->getUrl());
-
         $filename = $this->getSnapshotFilename($snapshot);
         $destination = $this->getPublicFolder() . '/' . self::SNAPSHOT_FOLDER_NAME . '/' . $filename;
-        $driver->takeScreenshot($destination);
+
+        try {
+            $driver = RemoteWebDriver::create($this->seleniumServerUrl, DesiredCapabilities::chrome());
+            $driver->get($snapshot->getPage()->getUrl())
+                ->takeScreenshot($destination)
+            ;
+            $driver->quit();
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage());
+
+            return;
+        }
 
         $snapshot->setImage(self::SNAPSHOT_FOLDER_NAME . '/' . $filename);
     }

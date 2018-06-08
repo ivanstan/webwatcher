@@ -14,5 +14,7 @@
 
     {{ breadcrumbs()|raw }}
 
-    {{ include('page/_form.html.twig', {'button_label': 'Update'}) }}
+    {% include 'components/flash-messages.html.twig' %}
+
+    {{ include('pages/page/_form.html.twig', {'button_label': 'Update'}) }}
 {% endblock %}

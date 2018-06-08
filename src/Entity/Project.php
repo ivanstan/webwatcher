@@ -23,7 +23,7 @@ class Project
      * @ORM\Column(name="base_url", type="string", nullable=false)
      * @Assert\Url()
      */
-    private $baseUrl;
+    protected $baseUrl;
 
     /**
      * @var Page[]|Collection
@@ -31,7 +31,7 @@ class Project
      * @ORM\OneToMany(targetEntity="App\Entity\Page", mappedBy="project", cascade={"persist"})
      * @ORM\OrderBy({"path" = "ASC"})
      */
-    private $pages;
+    protected $pages;
 
     /**
      * @var Page[]|Collection
@@ -39,7 +39,7 @@ class Project
      * @ORM\OneToMany(targetEntity="App\Entity\ProjectSnapshot", mappedBy="project", cascade={"persist"})
      * @ORM\OrderBy({"timestamp" = "DESC"})
      */
-    private $snapshots;
+    protected $snapshots;
 
     /**
      * @return Page[]|Collection

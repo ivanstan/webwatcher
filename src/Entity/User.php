@@ -19,4 +19,20 @@ class User extends BaseUser
      * @ORM\Column(name="id", type="integer")
      */
     protected $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\UserPreference", cascade={"persist"})
+     * @ORM\JoinColumn(name="preference_id", referencedColumnName="id")
+     */
+    protected $preference;
+
+    public function getPreference(): UserPreference
+    {
+        return $this->preference;
+    }
+
+    public function setPreference(UserPreference $preference): void
+    {
+        $this->preference = $preference;
+    }
 }

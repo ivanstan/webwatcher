@@ -22,7 +22,7 @@ class ProjectSnapshot
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="snapshots", cascade={"persist"})
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
-    private $project;
+    protected $project;
 
     /**
      * @var PageSnapshot[]|Collection
@@ -30,7 +30,7 @@ class ProjectSnapshot
      * @ORM\OneToMany(targetEntity="App\Entity\PageSnapshot", mappedBy="projectSnapshot", cascade={"persist"})
      * @ORM\OrderBy({"timestamp" = "DESC"})
      */
-    private $snapshots;
+    protected $snapshots;
 
     public function getProject(): Project
     {

@@ -27,7 +27,7 @@ class Page
      *     message="Path must begin with '/'"
      * )
      */
-    private $path;
+    protected $path;
 
     /**
      * @var Project
@@ -35,7 +35,7 @@ class Page
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="pages", cascade={"persist"})
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
-    private $project;
+    protected $project;
 
     /**
      * @var PageSnapshot[]|Collection
@@ -43,7 +43,7 @@ class Page
      * @ORM\OneToMany(targetEntity="App\Entity\PageSnapshot", mappedBy="page", cascade={"persist"})
      * @ORM\OrderBy({"timestamp" = "DESC"})
      */
-    private $snapshots;
+    protected $snapshots;
 
     public function getPath(): ?string
     {

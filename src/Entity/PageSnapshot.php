@@ -24,37 +24,37 @@ class PageSnapshot
      * @var string $body
      * @ORM\Column(name="body", type="text", nullable=true)
      */
-    private $body;
+    protected $body;
 
     /**
      * @var array $headers
      * @ORM\Column(name="headers", type="json_array", nullable=true)
      */
-    private $headers;
+    protected $headers;
 
     /**
      * @var string $hash
      * @ORM\Column(name="hash", type="string", nullable=true)
      */
-    private $hash;
+    protected $hash;
 
     /**
      * @var string $image
      * @ORM\Column(name="image", type="string", nullable=true)
      */
-    private $image;
+    protected $image;
 
     /**
      * @var integer $responseCode
      * @ORM\Column(name="response_code", type="integer")
      */
-    private $responseCode;
+    protected $responseCode;
 
     /**
      * @var float $responseTime
      * @ORM\Column(name="response_time", type="float", nullable=true)
      */
-    private $responseTime;
+    protected $responseTime;
 
     /**
      * @var Page
@@ -62,7 +62,7 @@ class PageSnapshot
      * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="snapshots", cascade={"persist"})
      * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
-    private $page;
+    protected $page;
 
     /**
      * @var ProjectSnapshot
@@ -70,7 +70,7 @@ class PageSnapshot
      * @ORM\ManyToOne(targetEntity="App\Entity\ProjectSnapshot", inversedBy="snapshots", cascade={"persist"})
      * @ORM\JoinColumn(name="project_snapshot_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
      */
-    private $projectSnapshot;
+    protected $projectSnapshot;
 
     public function getBody(): string
     {

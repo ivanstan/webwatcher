@@ -12,13 +12,14 @@
             <a data-toggle="tooltip"
                data-placement="bottom"
                title="Edit project"
-               class="btn btn-primary mt-2 mr-2 float-right" href="{{ path('project_edit', {'project': project.id}) }}">
+               class="btn btn-primary mt-2 mr-2 float-right  {% if demo %}disabled{% endif %}"
+               href="{{ path('project_edit', {'project': project.id}) }}">
                 <i class="fa fa-edit"></i>
             </a>
             <a data-toggle="tooltip"
                data-placement="bottom"
                title="Create project snapshot"
-               class="btn btn-primary mt-2 mr-2 float-right"
+               class="btn btn-primary mt-2 mr-2 float-right {% if demo %}disabled{% endif %}"
                href="{{ path('project_snapshot_new', {"project": project.id}) }}">
                 <i class="fa fa-camera"></i>
             </a>
@@ -46,7 +47,7 @@
             <a data-toggle="tooltip"
                data-placement="left"
                title="Create new page"
-               class="btn btn-primary float-right mt-1"
+               class="btn btn-primary float-right mt-1 {% if demo %}disabled{% endif %}"
                href="{{ path('page_new', {'project': project.id}) }}">
                 <i class="fa fa-plus-square"></i>
             </a>

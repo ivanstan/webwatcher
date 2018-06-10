@@ -13,6 +13,10 @@
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
                 {% endif %}
 
+                {% if demo %}
+                    <div class="alert alert-info mt-3">Use account name 'demo' with passsword 'demo' access demo application.</div>
+                {% endif %}
+
                 {% if error %}
                     <div class="alert alert-danger mt-3">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}

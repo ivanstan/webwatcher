@@ -11,7 +11,7 @@
             <a data-toggle="tooltip"
                data-placement="left"
                title="Create new project"
-               class="btn btn-primary mt-2 float-right"
+               class="btn btn-primary mt-2 float-right {% if demo %}disabled{% endif %}"
                href="{{ path('project_new') }}">
                 <i class="fa fa-plus-square"></i>
             </a>
@@ -22,7 +22,7 @@
 
     {% include 'components/flash-messages.html.twig' %}
 
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bord">
         <thead>
             <tr>
                 <th>Name</th>

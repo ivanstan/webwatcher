@@ -19,7 +19,7 @@
             <a data-toggle="tooltip"
                data-placement="bottom"
                title="Create page snapshot"
-               class="btn btn-primary float-right mt-2 mr-2"
+               class="btn btn-primary float-right mt-2 mr-2 {% if demo %}disabled{% endif %}"
                href="{{ path('snapshot_page_new', {'project': page.project.id, 'page': page.id}) }}">
                 <i class="fa fa-camera"></i>
             </a>

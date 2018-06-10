@@ -48,6 +48,11 @@ class CompareController extends Controller
      * @Route("/compare-project-snapshots/{snapshot1}/{snapshot2}", name="compare_project_snapshot")
      */
     public function compareProjectSnapshot(ProjectSnapshot $snapshot1, ProjectSnapshot $snapshot2) {
+
+        if ($snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
+            list($snapshot1, $snapshot2) = [$snapshot2, $snapshot1];
+        }
+
         $compare = [];
 
         if ($snapshot1->getId() === $snapshot2->getId()) {

@@ -1,0 +1,20 @@
+{% extends 'content.html.twig' %}
+
+{% block title %}Preference | {{ parent() }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <h1>Edit Page</h1>
+        </div>
+    </div>
+
+    {{ breadcrumbs()|raw }}
+
+    {% include 'components/flash-messages.html.twig' %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+{% endblock %}

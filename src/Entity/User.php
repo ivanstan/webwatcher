@@ -26,7 +26,7 @@ class User extends BaseUser
      */
     protected $preference;
 
-    public function getPreference(): UserPreference
+    public function getPreference(): ?UserPreference
     {
         return $this->preference;
     }

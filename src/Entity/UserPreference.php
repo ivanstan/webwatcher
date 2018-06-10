@@ -14,14 +14,25 @@ class UserPreference
     use Id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Timezone")
-     * @ORM\JoinColumn(name="timezone_id", referencedColumnName="id")
+     * @var string
+     *
+     * @ORM\Column(name="timezone", type="string", nullable=true)
      */
-    protected $timezone;
+    private $timezone;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Timezone")
+     * @ORM\OneToOne(targetEntity="App\Entity\DateTimeFormat")
      * @ORM\JoinColumn(name="date_time_format_id", referencedColumnName="id")
      */
     protected $dateTimeFormat;
+
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone(string $timezone): void
+    {
+        $this->timezone = $timezone;
+    }
 }

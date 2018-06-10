@@ -5,7 +5,7 @@ security:
 
     role_hierarchy:
         ROLE_VIEWER:      ROLE_USER
-        ROLE_MANAGER:     ROLE_VIEWER
+        ROLE_MANAGER:     ROLE_USER
         ROLE_ADMIN:       ROLE_MANAGER
 
     providers:
@@ -26,7 +26,11 @@ security:
             access_denied_handler: App\Security\AccessDeniedHandler
 
     access_control:
+        # disabled paths for ROLE_VIEWER
+        - {path: "^/resetting$", allow_if: "!has_role('ROLE_VIEWER')" }
+        - {path: "^/profile", allow_if: "!has_role('ROLE_VIEWER')" }
+
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: ROLE_ADMIN }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, role: ROLE_VIEWER }
+        - { path: ^/, role: ROLE_USER }

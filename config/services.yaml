@@ -29,8 +29,8 @@ services:
         tags:
             - { name: doctrine.event_listener, event: postRemove }
 
-    App\EventListener\DemoGuardEvenListener:
-        arguments: ['%demo%']
+    App\EventListener\KernelEvenListener:
+        arguments: ['@twig', '@security.token_storage']
         tags:
             - { name: kernel.event_listener, event: kernel.request }
 

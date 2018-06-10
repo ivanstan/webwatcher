@@ -74,7 +74,7 @@ class PageSnapshot
 
     public function getBody(): string
     {
-        return \Mihaeu\HtmlFormatter::format($this->body);
+        return @\Mihaeu\HtmlFormatter::format($this->body);
     }
 
     public function setBody(string $body)
@@ -91,6 +91,10 @@ class PageSnapshot
     public function setHeaders(array $headers): void
     {
         $this->headers = $headers;
+    }
+
+    public function getHeader(string $header) {
+        return $this->headers[$header] ? $this->headers[$header] : null;
     }
 
     public function getImage()

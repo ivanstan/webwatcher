@@ -19,7 +19,7 @@
             <a data-toggle="tooltip"
                data-placement="bottom"
                title="Create page snapshot"
-               class="btn btn-primary float-right mt-2 mr-2 {% if demo %}disabled{% endif %}"
+               class="btn btn-primary float-right mt-2 mr-2"
                href="{{ path('snapshot_page_new', {'project': page.project.id, 'page': page.id}) }}">
                 <i class="fa fa-camera"></i>
             </a>
@@ -56,14 +56,18 @@
 
         <div class="compare-selector compare-page-snapshots-selector mb-3" data-path="{{ path('compare_page_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
             <select class="custom-select" name="snapshot1">
-                {% for snapshot in page.snapshots %}
-                    <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</option>
+                {% set newest = page.snapshots[0].timestamp %}
+                {% for index, snapshot in page.snapshots %}
+                    <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}
+                        - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
                 {% endfor %}
             </select>
 
             <select class="custom-select" name="snapshot2">
+                {% set newest = page.snapshots[0].timestamp %}
                 {% for index, snapshot in page.snapshots %}
-                    <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</option>
+                    <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date('d/m/Y h:m:s') }}
+                        - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
                 {% endfor %}
             </select>
 
@@ -71,33 +75,35 @@
         </div>
     {% endif %}
 
-    <div class="row mb-3">
-        <div class="col-12">
-            <h2>Snapshots</h2>
+    {% if page.snapshots is not empty %}
+        <div class="row mb-3">
+            <div class="col-12">
+                <h2>Snapshots</h2>
+            </div>
         </div>
-    </div>
 
-    <table class="table table-striped table-bordered">
-        <thead>
+        <table class="table table-striped table-bordered">
+            <thead>
             <tr>
                 <td>Timestamp</td>
-                <td>Delta T</td>
+                <td>Delta Time</td>
                 <td>HTTP Status</td>
             </tr>
-        </thead>
-        <tbody>
-        {% set newest = page.snapshots[0].timestamp %}
-        {% for index, snapshot in page.snapshots %}
-            <tr>
-                <td><a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</a></td>
-                <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
-                <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3" class="text-center">No page screenshots here.</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% set newest = page.snapshots[0].timestamp %}
+            {% for index, snapshot in page.snapshots %}
+                <tr>
+                    <td><a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</a></td>
+                    <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
+                    <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">No page screenshots here.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}

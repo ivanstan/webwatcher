@@ -1,19 +1,6 @@
 @import "~bootstrap/scss/bootstrap";
 @import "fontawesome";
 @import "monaco";
-
-.compare-selector {
-  .custom-select {
-    width:calc(100% / 2 - 56px);
-    display: inline-block;
-  }
-
-  button {
-    width: 100px;
-    display: inline-block;
-  }
-}
-
-.cursor-zoom-in {
-  cursor: zoom-in;
-}
+@import "compare";
+@import "overrides";
+@import "base";

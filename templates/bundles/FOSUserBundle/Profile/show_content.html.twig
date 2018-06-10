@@ -1,3 +1,7 @@
-<h1 class="title">Profile</h1>
+{% extends 'content.html.twig' %}
 
-<a href="{{ path('fos_user_change_password') }}" class="mb-2">Change password</a>
+{% block content %}
+    <h1 class="title">Profile</h1>
+
+    <a href="{{ path('fos_user_change_password') }}" class="mb-2">Change password</a>
+{% endblock %}

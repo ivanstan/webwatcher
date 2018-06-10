@@ -1,3 +1,7 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
 <h1 class="title">Profile</h1>
 
 {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'mt-3' } }) }}
@@ -6,3 +10,5 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 {{ form_end(form) }}
+
+{% endblock %}

@@ -1,0 +1,10 @@
+html,
+body {
+  height: 100%;
+}
+
+.vertical-align {
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
+}

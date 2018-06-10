@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'content.html.twig' %}
 
 {% block title %}Compare snapshots | {{ parent() }}{% endblock %}
 
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('build/monaco/editor.css') }}">
 {% endblock %}
 
-{% block body %}
+{% block content %}
     {% if snapshot2 %}
         <div class="monaco-compare"
              data-snapshot1="{{ snapshot1.body }}"

@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'content.html.twig' %}
 
 {% block title %}Page {{ page.name }} | {{ parent() }}{% endblock %}
 
-{% block body %}
+{% block content %}
     <div class="row">
         <div class="col-10">
             <h1>Page {{ page.name }}</h1>
@@ -81,13 +81,16 @@
         <thead>
             <tr>
                 <td>Timestamp</td>
+                <td>Delta T</td>
                 <td>HTTP Status</td>
             </tr>
         </thead>
         <tbody>
-        {% for snapshot in page.snapshots %}
+        {% set newest = page.snapshots[0].timestamp %}
+        {% for index, snapshot in page.snapshots %}
             <tr>
                 <td><a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</a></td>
+                <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
                 <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
             </tr>
         {% else %}

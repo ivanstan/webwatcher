@@ -1,6 +1,6 @@
-{% extends "@FOSUser/layout.html.twig" %}
+{% extends 'base.html.twig' %}
 
-{% block fos_user_content %}
+{% block body %}
     <div class="alert alert-primary mt-3" role="alert">
         {{ 'resetting.check_email'|trans({'%tokenLifetime%': tokenLifetime})|nl2br }}
     </div>

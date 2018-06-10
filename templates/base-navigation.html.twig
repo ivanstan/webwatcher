@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block navigation %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ path('project_index') }}">WebWatcher</a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('project_index') }}">Projects <span
+                            class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false">
+                    <i class="fa fa-user"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ path('fos_user_profile_edit') }}">Account</a>
+                    <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}

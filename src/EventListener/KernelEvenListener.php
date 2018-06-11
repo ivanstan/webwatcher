@@ -22,8 +22,10 @@ class KernelEvenListener
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $user = $this->token->getToken()->getUser();
+        if ($this->token->getToken()) {
+            $user = $this->token->getToken()->getUser();
 
-        date_default_timezone_set('Europe/Belgrade');
+            date_default_timezone_set('Europe/Belgrade');
+        }
     }
 }

@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^demo\.hrono\.rs$ [NC]
+RewriteRule ^(.*)$ public/$1 [R=301,L]

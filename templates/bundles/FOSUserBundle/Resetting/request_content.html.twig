@@ -2,16 +2,25 @@
 
 {% block body %}
 
-    <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="mt-3">
-        <div class="form-group row">
-            <label for="username" class="col-auto col-form-label">Enter email address</label>
-            <div class="col">
-                <input type="text" id="username" name="username" required="required" class="form-control"/>
-            </div>
+<div class="container vertical-align">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <h1 class="title">Reset Password</h1>
+
+            <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="mt-3">
+                <div class="form-group row">
+                    <label for="username" class="col-auto col-form-label">Enter email address</label>
+                    <div class="col">
+                        <input type="text" id="username" name="username" required="required" class="form-control"/>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
         </div>
-        <div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-    </form>
+    </div>
+</div>
 
 {% endblock %}

@@ -3,7 +3,10 @@
 namespace App\Form;
 
 use App\Entity\UserPreference;
+use App\Util\DateTimeFormatEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +16,15 @@ class UserPreferenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('timezone', TimezoneType::class)
+            ->add('timezone', TimezoneType::class, [
+                'data' => 'UTC',
+            ])
+            ->add('datetimeFormat', ChoiceType::class, [
+                'data' => 'd/m/Y h:m:s',
+                'choice_loader' => new CallbackChoiceLoader(function () {
+                    return DateTimeFormatEnum::getFormats();
+                }),
+            ])
         ;
     }
 

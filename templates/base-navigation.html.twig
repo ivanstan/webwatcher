@@ -18,6 +18,8 @@
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
                     {% if not demo %}
+                        <a class="dropdown-item" href="{{ path('user_preference_edit') }}">Preferences</a>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ path('fos_user_profile_edit') }}">Account</a>
                     {% endif %}
 

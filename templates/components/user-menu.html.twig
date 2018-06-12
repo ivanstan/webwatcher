@@ -1,0 +1,20 @@
+{% set route = app.request.get('_route') %}
+
+<ul class="list-group">
+    {% if route == 'user_preference_edit' %}
+        <li class="list-group-item active">Preferences</li>
+    {% else %}
+        <li class="list-group-item"><a href="{{ path('user_preference_edit') }}">Preferences</a></li>
+    {% endif %}
+    {% if route == 'fos_user_profile_edit' %}
+        <li class="list-group-item active">Account</li>
+    {% else %}
+        <li class="list-group-item"><a href="{{ path('fos_user_profile_edit') }}">Account</a></li>
+    {% endif %}
+
+    {% if route == 'fos_user_change_password' %}
+        <li class="list-group-item active">Change Password</li>
+    {% else %}
+        <li class="list-group-item"><a href="{{ path('fos_user_change_password') }}">Change Password</a></li>
+    {% endif %}
+</ul>

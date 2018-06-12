@@ -1,7 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="alert alert-primary mt-3" role="alert">
-        {{ 'resetting.check_email'|trans({'%tokenLifetime%': tokenLifetime})|nl2br }}
+
+    <div class="container vertical-align">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <h1 class="title">Reset Password</h1>
+
+                <div class="alert alert-primary mt-3" role="alert">
+                    Check your email. Token lifetime is {{ tokenLifetime }} minutes.
+                </div>
+            </div>
+        </div>
     </div>
+
 {% endblock %}

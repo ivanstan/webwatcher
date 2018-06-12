@@ -7,12 +7,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/user")
+ * @Route("/profile")
  */
-class UserController extends Controller
+class ProfileController extends Controller
 {
     /**
-     * @Route("/preference", name="user_preference_edit", methods="GET|POST")
+     * @Route("/preferences", name="user_preference_edit", methods="GET|POST")
      */
     public function preference(Request $request) {
         $form = $this->createForm(UserType::class, $this->getUser());

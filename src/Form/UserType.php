@@ -12,7 +12,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('preference', UserPreferenceType::class)
+            ->add('preference', UserPreferenceType::class, ['label' => false])
         ;
     }
 

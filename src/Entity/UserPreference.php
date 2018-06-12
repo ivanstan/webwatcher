@@ -16,15 +16,16 @@ class UserPreference
     /**
      * @var string
      *
-     * @ORM\Column(name="timezone", type="string", nullable=true)
+     * @ORM\Column(name="timezone", type="string", options={"default" : "d/m/Y h:m:s"})
      */
-    private $timezone;
+    private $timezone = 'd/m/Y h:m:s';
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\DateTimeFormat")
-     * @ORM\JoinColumn(name="date_time_format_id", referencedColumnName="id")
+     * @var string
+     *
+     * @ORM\Column(name="date_time_format", type="string", options={"default" : "UTC"})
      */
-    protected $dateTimeFormat;
+    protected $dateTimeFormat = 'UTC';
 
     public function getTimezone(): ?string
     {
@@ -34,5 +35,15 @@ class UserPreference
     public function setTimezone(string $timezone): void
     {
         $this->timezone = $timezone;
+    }
+
+    public function getDateTimeFormat(): string
+    {
+        return $this->dateTimeFormat;
+    }
+
+    public function setDateTimeFormat(string $dateTimeFormat): void
+    {
+        $this->dateTimeFormat = $dateTimeFormat;
     }
 }

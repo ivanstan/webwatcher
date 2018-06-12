@@ -17,10 +17,10 @@ class UserPreferenceType extends AbstractType
     {
         $builder
             ->add('timezone', TimezoneType::class, [
-                'data' => 'UTC',
+                'data' => UserPreference::DEFAULT_TIMEZONE,
             ])
             ->add('datetimeFormat', ChoiceType::class, [
-                'data' => 'd/m/Y h:m:s',
+                'data' => UserPreference::DEFAULT_DATETIME_FORMAT,
                 'choice_loader' => new CallbackChoiceLoader(function () {
                     return DateTimeFormatEnum::getFormats();
                 }),

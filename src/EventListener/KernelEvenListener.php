@@ -7,8 +7,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class KernelEvenListener
 {
-    private const DEFAULT_TIMEZONE = 'UTC';
-
     private $twig;
     private $token;
 

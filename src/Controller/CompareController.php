@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\PageSnapshot;
 use App\Entity\ProjectSnapshot;
-use App\Service\ImageDeltaService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,17 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CompareController extends Controller
 {
-    private $imageDelta;
-    private $projectDir;
-
-    public function __construct(
-        ImageDeltaService $imageDelta
-//        string $projectDir
-    ) {
-        $this->imageDelta = $imageDelta;
-//        $this->projectDir = $projectDir;
-    }
-
     /**
      * @Route("/compare-page-snapshots/{snapshot1}/{snapshot2}", name="compare_page_snapshot")
      */
@@ -37,10 +25,6 @@ class CompareController extends Controller
         return $this->render('pages/compare/page-snapshot.html.twig', [
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
-            'delta' => $this->imageDelta->compare(
-                $this->getImagePath($snapshot1->getImage()),
-                $this->getImagePath($snapshot2->getImage())
-            )
         ]);
     }
 
@@ -96,12 +80,5 @@ class CompareController extends Controller
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
         ]);
-    }
-
-    public function getImagePath(?string $image): string
-    {
-//        return $this->projectDir . DIRECTORY_SEPARATOR . 'public/snapshots/'. $image;
-
-        return '';
     }
 }

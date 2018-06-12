@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserPreference
 {
+    public const DEFAULT_DATETIME_FORMAT = 'd/m/Y h:m:s';
+    public const DEFAULT_TIMEZONE = 'UTC';
     use Id;
 
     /**
@@ -18,14 +20,14 @@ class UserPreference
      *
      * @ORM\Column(name="timezone", type="string", options={"default" : "d/m/Y h:m:s"})
      */
-    private $timezone = 'd/m/Y h:m:s';
+    private $timezone = self::DEFAULT_DATETIME_FORMAT;
 
     /**
      * @var string
      *
      * @ORM\Column(name="date_time_format", type="string", options={"default" : "UTC"})
      */
-    protected $dateTimeFormat = 'UTC';
+    protected $dateTimeFormat = self::DEFAULT_TIMEZONE;
 
     public function getTimezone(): ?string
     {

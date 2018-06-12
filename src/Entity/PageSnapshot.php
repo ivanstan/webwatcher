@@ -6,6 +6,7 @@ use App\Property\Id;
 use App\Property\Timestamp;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
+use Mihaeu\HtmlFormatter;
 
 /**
  * @ORM\Entity()
@@ -74,7 +75,7 @@ class PageSnapshot
 
     public function getBody(): string
     {
-        return @\Mihaeu\HtmlFormatter::format($this->body);
+        return @HtmlFormatter::format($this->body);
     }
 
     public function setBody(string $body)

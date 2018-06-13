@@ -50,10 +50,14 @@
 
     <div class="row">
         <div class="col-6">
-            <img class="img-fluid" alt="{{ snapshot1.hash }}" src="{{ asset(snapshot1.image) }}">
+            <a target="_blank" class="cursor-zoom-in" href="{{ asset(snapshot1.image) }}">
+                <img class="img-fluid" alt="{{ snapshot1.hash }}" src="{{ asset(snapshot1.image) }}">
+            </a>
         </div>
         <div class="col-6">
-            <img class="img-fluid" alt="{{ snapshot2.hash }}" src="{{ asset(snapshot2.image) }}">
+            <a target="_blank" class="cursor-zoom-in" href="{{ asset(snapshot2.image) }}">
+                <img class="img-fluid" alt="{{ snapshot2.hash }}" src="{{ asset(snapshot2.image) }}">
+            </a>
         </div>
     </div>
 

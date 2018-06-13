@@ -25,20 +25,7 @@ class UserAdministerType extends AbstractType
             ])
             ->add('enabled')
             ->add(
-                'currentPassword',
-                PasswordType::class,
-                [
-                    'required' => false,
-                    'mapped' => false,
-                    'constraints' => [
-                        new UserPassword([
-                            'groups' => 'profile_password',
-                        ]),
-                    ],
-                ]
-            )
-            ->add(
-                'newPassword',
+                'password',
                 PasswordType::class,
                 [
                     'required' => false,
@@ -47,7 +34,7 @@ class UserAdministerType extends AbstractType
                         'message' => 'This value should not be blank.',
                     ]),
                     'mapped' => false,
-                    'label' => 'New password',
+                    'label' => 'Password',
                 ]
             )
             ->add('roles')
@@ -57,11 +44,11 @@ class UserAdministerType extends AbstractType
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) use ($options) {
             $user = $event->getData();
             $form = $event->getForm();
-            $newPassword = $form->get('newPassword')->getData();
+            $password = $form->get('password')->getData();
 
-            if ($form->isSubmitted() && $form->isValid() && $newPassword) {
+            if ($form->isSubmitted() && $form->isValid() && $password) {
                 $encoder  = $em = $options['security.encoder_factory'];
-                $password = $encoder->encodePassword($newPassword, $user->getSalt());
+                $password = $encoder->encodePassword($password, $user->getSalt());
                 $user->setPassword($password);
                 $user->setPlainPassword(null);
 

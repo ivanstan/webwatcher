@@ -5,8 +5,8 @@
 {% set snapshot1Suffix = '' %}
 {% set snapshot2Suffix = '' %}
 {% if snapshot1.id != snapshot2.id %}
-    {% set snapshot1Suffix = '(Newer)' %}
-    {% set snapshot2Suffix = '(' ~ snapshot1.timestamp|time_diff(snapshot2.timestamp) ~ ')' %}
+    {% set snapshot1Suffix = '(' ~ snapshot1.timestamp|time_diff(snapshot2.timestamp) ~ ')' %}
+    {% set snapshot2Suffix = '(Newer)' %}
 {% endif %}
 
 {% block content %}

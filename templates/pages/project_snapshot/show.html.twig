@@ -38,7 +38,7 @@
         {% for page_snapshot in project_snapshot.snapshots %}
             <tr>
                 <td>
-                    <a href="{{ path('page_snapshot_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}">{{ page_snapshot.hash }}</a>
+                    <a href="{{ path('page_snapshot_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}">{{ page_snapshot.timestamp|date('d/m/Y h:m:s') }}</a>
                 </td>
                 <td>
                     <a href="{{ path('page_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id} ) }}">{{ page_snapshot.page.name }}</a>

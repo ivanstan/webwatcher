@@ -11,7 +11,22 @@
 {% endblock %}
 
 {% block content %}
+    <div class="row mt-2">
+        <div class="col-12">
+            {% include 'components/flash-messages.html.twig' %}
+        </div>
+    </div>
+
     {% if snapshot2 %}
+        <div class="row">
+            <div class="col-6">
+                {{ breadcrumbs(snapshot1)|raw }}
+            </div>
+            <div class="col-6">
+                {{ breadcrumbs(snapshot2)|raw }}
+            </div>
+        </div>
+
         <div class="monaco-compare"
              data-snapshot1="{{ snapshot1.body }}"
              data-snapshot2="{{ snapshot2.body }}"
@@ -19,6 +34,12 @@
              style="height: 600px">
         </div>
     {% else %}
+        <div class="row">
+            <div class="col-12">
+                {{ breadcrumbs(snapshot1) }}
+            </div>
+        </div>
+
         <div class="monaco-editor"
              data-code="{{ snapshot1.body }}"
              data-language="html"

@@ -2,6 +2,13 @@
 
 {% block title %}Compare | {{ parent() }}{% endblock %}
 
+{% set snapshot1Suffix = '' %}
+{% set snapshot2Suffix = '' %}
+{% if snapshot1.id != snapshot2.id %}
+    {% set snapshot1Suffix = '(Newer)' %}
+    {% set snapshot2Suffix = '(' ~ snapshot1.timestamp|time_diff(snapshot2.timestamp) ~ ')' %}
+{% endif %}
+
 {% block content %}
     <div class="row">
         <div class="col-10">
@@ -13,11 +20,11 @@
 
     <div class="row">
         <div class="col-5">
-            {{ breadcrumbs(snapshot1)|raw }}
+            {{ breadcrumbs(snapshot1, snapshot1Suffix)|raw }}
         </div>
         <div class="col-2"></div>
         <div class="col-5">
-            {{ breadcrumbs(snapshot2)|raw }}
+            {{ breadcrumbs(snapshot2, snapshot2Suffix)|raw }}
         </div>
     </div>
 

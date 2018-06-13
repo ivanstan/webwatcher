@@ -33,6 +33,9 @@ class SeleniumService
             $driver->get($snapshot->getPage()->getUrl())
                 ->takeScreenshot($destination)
             ;
+
+//            $driver->manage()->window()->setSize(new WebDriverDimension(1225, 996));
+
             $driver->quit();
         } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage());

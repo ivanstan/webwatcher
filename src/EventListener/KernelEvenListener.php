@@ -2,6 +2,8 @@
 
 namespace App\EventListener;
 
+use App\Entity\User;
+use App\Entity\UserPreference;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -21,9 +23,15 @@ class KernelEvenListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         if ($this->token->getToken()) {
+            /** @var User $user */
             $user = $this->token->getToken()->getUser();
 
-            date_default_timezone_set('Europe/Belgrade');
+            $timezone = UserPreference::DEFAULT_TIMEZONE;
+            if ($user->getPreference() && $user->getPreference()->getTimezone()) {
+                $timezone =  $user->getPreference()->getTimezone();
+            }
+
+            date_default_timezone_set($timezone);
         }
     }
 }

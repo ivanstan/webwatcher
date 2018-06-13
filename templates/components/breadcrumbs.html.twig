@@ -8,6 +8,9 @@
             {% if index < breadcrumbs|length - 1 %}
                 <i class="fa fa-chevron-right"></i>
             {% endif %}
+            {% if index == breadcrumbs|length - 1 %}
+                {{ suffix }}
+            {% endif %}
         {% endfor %}
     </div>
 </div>

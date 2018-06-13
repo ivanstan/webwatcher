@@ -36,7 +36,7 @@ class BreadcrumbExtension extends AbstractExtension
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function breadcrumbs($entity = null)
+    public function breadcrumbs($entity = null, $suffix = null)
     {
         if ($entity instanceof Project) {
             $project = $entity;
@@ -111,6 +111,7 @@ class BreadcrumbExtension extends AbstractExtension
 
         return $this->template->render('components/breadcrumbs.html.twig', [
             'breadcrumbs' => $breadcrumbs,
+            'suffix' => $suffix,
         ]);
     }
 }

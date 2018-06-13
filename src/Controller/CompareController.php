@@ -13,14 +13,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class CompareController extends Controller
 {
     /**
-     * @Route("/compare-page-snapshots/{snapshot1}/{snapshot2}", name="compare_page_snapshot")
+     * @Route("/compare/page-snapshots/{snapshot1}/{snapshot2}", name="compare_page_snapshot")
      */
-    public function snapshot(string $snapshot1, string $snapshot2)
+    public function snapshot(PageSnapshot $snapshot1, PageSnapshot $snapshot2)
     {
-        $repository = $this->getDoctrine()->getManager()->getRepository(PageSnapshot::class);
+        if ($snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
+            list($snapshot1, $snapshot2) = [$snapshot1, $snapshot2];
+        }
 
-        $snapshot1 = $repository->find($snapshot1);
-        $snapshot2 = $repository->find($snapshot2);
+        $this->setFlashMessages($snapshot1, $snapshot2);
 
         return $this->render('pages/compare/page-snapshot.html.twig', [
             'snapshot1' => $snapshot1,
@@ -29,22 +30,16 @@ class CompareController extends Controller
     }
 
     /**
-     * @Route("/compare-project-snapshots/{snapshot1}/{snapshot2}", name="compare_project_snapshot")
+     * @Route("/compare/project-snapshots/{snapshot1}/{snapshot2}", name="compare_project_snapshot")
      */
     public function compareProjectSnapshot(ProjectSnapshot $snapshot1, ProjectSnapshot $snapshot2) {
-
         if ($snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
             list($snapshot1, $snapshot2) = [$snapshot2, $snapshot1];
         }
 
         $compare = [];
 
-        if ($snapshot1->getId() === $snapshot2->getId()) {
-            $this->addFlash(
-                'warning',
-                'You are comparing the snapshot with itself.'
-            );
-        }
+        $this->setFlashMessages($snapshot1, $snapshot2);
 
         /** @var PageSnapshot $pageSnapshot */
         foreach ($snapshot1->getSnapshots() as $pageSnapshot) {
@@ -66,19 +61,25 @@ class CompareController extends Controller
      * @Route("/editor/{snapshot1}/{snapshot2}", name="editor", defaults={"snapshot2": null})
      */
     public function editor(PageSnapshot $snapshot1, ?PageSnapshot $snapshot2) {
+        if ($snapshot2 && $snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
+            list($snapshot1, $snapshot2) = [$snapshot2, $snapshot1];
+        }
+
+        $this->setFlashMessages($snapshot1, $snapshot2);
+
         return $this->render('pages/compare/editor.html.twig', [
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
         ]);
     }
 
-    /**
-     * @Route("/image/{snapshot1}/{snapshot2}", name="image", defaults={"snapshot2": null})
-     */
-    public function imageDiff(PageSnapshot $snapshot1, ?PageSnapshot $snapshot2) {
-        return $this->render('pages/compare/editor.html.twig', [
-            'snapshot1' => $snapshot1,
-            'snapshot2' => $snapshot2,
-        ]);
+    private function setFlashMessages($snapshot1, $snapshot2): void
+    {
+        if ($snapshot1->getId() === $snapshot2->getId()) {
+            $this->addFlash(
+                'warning',
+                'You are comparing the snapshot with itself.'
+            );
+        }
     }
 }

@@ -1,0 +1,66 @@
+{% extends 'content.html.twig' %}
+
+{% block title %}Users | {{ parent() }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-10">
+            <h1>Users</h1>
+        </div>
+        <div class="col-2">
+            <a data-toggle="tooltip"
+               data-placement="left"
+               title="Create new user"
+               class="btn btn-primary mt-2 float-right"
+               href="{{ path('user_new') }}">
+                <i class="fa fa-user-plus"></i>
+            </a>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Enabled</th>
+            <th>Last login</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td><a href="{{ path('user_show', {'id': user.id}) }}">{{ user.username }}</a></td>
+                <td>{{ user.email }}</td>
+                <td>{% if user.enabled %}
+                        <span class="badge badge-success">Yes</span>
+                    {% else %}
+                        <span class="badge badge-danger">No</span>
+                    {% endif %}
+                </td>
+                <td>{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i') : '' }}</td>
+                <td>
+                    {% for role in user.roles %}
+                        <span class="badge badge-secondary">{{ role|replace({'ROLE_': '' }) }}</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a data-toggle="tooltip"
+                       data-placement="bottom"
+                       title="Edit user"
+                       class="mr-1 ml-1"
+                       href="{{ path('user_edit', {'id': user.id}) }}">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Users don't exist.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

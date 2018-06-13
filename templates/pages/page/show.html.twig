@@ -41,12 +41,14 @@
                     <th>Average Response Time</th>
                     <td>{{ page.averageResponseTime|number_format(2) }} sec</td>
                 </tr>
-                <tr>
-                    <td colspan="2">
-                        <canvas class="response-time-chart" id="response-time-chart-1"
-                                data-chart="{{ page.responseTimeData|json_encode }}" height="50"></canvas>
-                    </td>
-                </tr>
+                {% if page.snapshots|length >= 2 %}
+                    <tr>
+                        <td colspan="2">
+                            <canvas class="response-time-chart" id="response-time-chart-1"
+                                    data-chart="{{ page.responseTimeData|json_encode }}" height="50"></canvas>
+                        </td>
+                    </tr>
+                {% endif %}
             {% endif %}
         </tbody>
     </table>

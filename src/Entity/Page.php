@@ -111,7 +111,7 @@ class Page
         $result = [];
 
         foreach ($this->getSnapshots() as $snapshot) {
-            $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp())->format('d/m/Y h:m:s');
+            $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp())->format('d/m/Y H:i:s');
 
             $result[$dateTime] = number_format($snapshot->getResponseTime(), 2);
         }

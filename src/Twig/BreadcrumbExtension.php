@@ -88,7 +88,7 @@ class BreadcrumbExtension extends AbstractExtension
         if (isset($project) && isset($page) && isset($snapshot)) {
             $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp());
             $breadcrumbs[] = [
-                'title' => $dateTime->format('d/m/Y h:m:s'),
+                'title' => $dateTime->format('d/m/Y H:i:s'),
                 'tooltip' => 'Page snapshot',
                 'href' => $this->router->generate('page_snapshot_show', [
                     'project' => $project->getId(),
@@ -100,7 +100,7 @@ class BreadcrumbExtension extends AbstractExtension
 
         if (isset($project) && isset($projectSnapshot)) {
             $breadcrumbs[] = [
-                'title' => 'Snapshot ' . date('d/m/Y h:m:s', $projectSnapshot->getTimestamp()),
+                'title' => 'Snapshot ' . date('d/m/Y H:i:s', $projectSnapshot->getTimestamp()),
                 'tooltip' => 'Project snapshot',
                 'href' => $this->router->generate('project_snapshot_show', [
                     'project' => $project->getId(),

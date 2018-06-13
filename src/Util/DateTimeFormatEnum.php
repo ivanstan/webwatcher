@@ -5,7 +5,7 @@ namespace App\Util;
 final class DateTimeFormatEnum
 {
     private static $formats = [
-        'd/m/Y h:m:s'
+        'd/m/Y H:i:s'
     ];
 
     public static function getFormats(): array
@@ -13,7 +13,7 @@ final class DateTimeFormatEnum
         $result = [];
 
         foreach (self::$formats as $format) {
-            $result[$format] = date($format);
+            $result[date($format)] = $format;
         }
 
         return $result;

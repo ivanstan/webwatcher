@@ -16,11 +16,8 @@ class UserPreferenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('timezone', TimezoneType::class, [
-                'data' => UserPreference::DEFAULT_TIMEZONE,
-            ])
+            ->add('timezone', TimezoneType::class)
             ->add('datetimeFormat', ChoiceType::class, [
-                'data' => UserPreference::DEFAULT_DATETIME_FORMAT,
                 'choice_loader' => new CallbackChoiceLoader(function () {
                     return DateTimeFormatEnum::getFormats();
                 }),

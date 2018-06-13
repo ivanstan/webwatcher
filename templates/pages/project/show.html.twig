@@ -100,7 +100,7 @@
             <select class="custom-select" name="snapshot1">
                 {% set newest = project.snapshots[0].timestamp %}
                 {% for index, snapshot in project.snapshots %}
-                    <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}
+                    <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y H:i:s') }}
                         - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
                 {% endfor %}
             </select>
@@ -108,7 +108,7 @@
             <select class="custom-select" name="snapshot2">
                 {% set newest = project.snapshots[0].timestamp %}
                 {% for index, snapshot in project.snapshots %}
-                    <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date('d/m/Y h:m:s') }}
+                    <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date('d/m/Y H:i:s') }}
                         - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
                 {% endfor %}
             </select>
@@ -127,7 +127,7 @@
         {% set newest = project.snapshots[0].timestamp %}
         {% for index, snapshot in project.snapshots %}
             <tr>
-                <td><a href="{{ path('project_snapshot_show', {"project": project.id, "snapshot": snapshot.id}) }}">{{ snapshot.timestamp|date('d/m/Y h:m:s') }}</a></td>
+                <td><a href="{{ path('project_snapshot_show', {"project": project.id, "snapshot": snapshot.id}) }}">{{ snapshot.timestamp|date('d/m/Y H:i:s') }}</a></td>
                 <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
             </tr>
         {% else %}

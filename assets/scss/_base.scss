@@ -8,3 +8,12 @@ body {
   position: relative;
   transform: translateY(-50%);
 }
+
+.margin-auto {
+  margin: auto;
+}
+
+.image-diff img {
+  margin: auto;
+  display: block;
+}

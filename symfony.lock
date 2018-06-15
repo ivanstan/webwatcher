@@ -1,4 +1,7 @@
 {
+    "caxy/php-htmldiff": {
+        "version": "v0.1.7"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -67,6 +70,9 @@
     },
     "egulias/email-validator": {
         "version": "2.1.4"
+    },
+    "ezyang/htmlpurifier": {
+        "version": "v4.10.0"
     },
     "facebook/webdriver": {
         "version": "1.6.0"
@@ -145,6 +151,9 @@
     },
     "spatie/async": {
         "version": "0.0.4"
+    },
+    "sunra/php-simple-html-dom-parser": {
+        "version": "v1.5.2"
     },
     "swiftmailer/swiftmailer": {
         "version": "v6.0.2"

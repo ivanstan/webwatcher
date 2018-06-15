@@ -65,6 +65,13 @@
                                href="{{ path('editor', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">
                                 <i class="fas fa-file-code"></i>
                             </a>
+                            <a data-toggle="tooltip"
+                               data-placement="bottom"
+                               title="View diff"
+                               target="_blank"
+                               href="{{ path('compare_image', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">
+                                <i class="fas fa-images"></i>
+                            </a>
                         </td>
                     </tr>
                 </table>

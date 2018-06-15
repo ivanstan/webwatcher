@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\PageSnapshot;
 use App\Entity\ProjectSnapshot;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -67,6 +68,30 @@ class CompareController extends Controller
             'snapshot1' => $snapshot1,
             'snapshot2' => $snapshot2,
         ]);
+    }
+
+    /**
+     * @Route("/image/{snapshot1}/{snapshot2}", name="compare_image")
+     */
+    public function image(PageSnapshot $snapshot1, PageSnapshot $snapshot2) {
+        $this->setFlashMessages($snapshot1, $snapshot2);
+        if ($snapshot2 && $snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
+            list($snapshot1, $snapshot2) = [$snapshot2, $snapshot1];
+        }
+
+        return $this->render('pages/compare/image.html.twig', [
+            'snapshot1' => $snapshot1,
+            'snapshot2' => $snapshot2,
+        ]);
+    }
+
+    /**
+     * @Route("/image-source/{snapshot}", name="image_source")
+     */
+    public function imageData(PageSnapshot $snapshot) {
+        $projectDir = $this->getParameter('kernel.project_dir');
+
+        return BinaryFileResponse::create($projectDir . '/public/' . $snapshot->getImage());
     }
 
     private function setFlashMessages($snapshot1, $snapshot2): void

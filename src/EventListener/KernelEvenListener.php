@@ -26,12 +26,11 @@ class KernelEvenListener
             /** @var User $user */
             $user = $this->token->getToken()->getUser();
 
-            $timezone = UserPreference::DEFAULT_TIMEZONE;
-            if ($user->getPreference() && $user->getPreference()->getTimezone()) {
+            if ($user instanceof User && $user->getPreference() && $user->getPreference()->getTimezone()) {
                 $timezone =  $user->getPreference()->getTimezone();
-            }
 
-            date_default_timezone_set($timezone);
+                date_default_timezone_set($timezone);
+            }
         }
     }
 }

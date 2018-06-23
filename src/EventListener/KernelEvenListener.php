@@ -3,7 +3,6 @@
 namespace App\EventListener;
 
 use App\Entity\User;
-use App\Entity\UserPreference;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 

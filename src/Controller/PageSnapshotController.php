@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
-use App\Service\SnapshotService;
+use App\Service\Snapshot\PageSnapshotService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +28,7 @@ class PageSnapshotController extends Controller
      * @Route("/new", name="snapshot_page_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function new(Page $page, SnapshotService $service)
+    public function new(Page $page, PageSnapshotService $service)
     {
         $snapshot = $service->new($page);
 

@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
-use App\Service\SnapshotService;
+use App\Service\Snapshot\PageSnapshotService;
+use App\Service\Snapshot\ProjectSnapshotService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,24 +44,9 @@ class ProjectSnapshotController extends Controller
      * @Route("/new", name="project_snapshot_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function newSnapshot(Project $project, SnapshotService $service)
+    public function newSnapshot(Project $project, ProjectSnapshotService $service)
     {
-        $em = $this->getDoctrine()->getManager();
-        $dateTime = new \DateTime();
-
-        $projectSnapshot = new ProjectSnapshot();
-        $projectSnapshot->setTimestamp($dateTime->getTimestamp());
-        $projectSnapshot->setProject($project);
-        $em->persist($projectSnapshot);
-
-        foreach ($project->getPages() as $page) {
-            $snapshot = $service->new($page);
-            $snapshot->setTimestamp($dateTime->getTimestamp());
-            $snapshot->setProjectSnapshot($projectSnapshot);
-
-            $em->persist($snapshot);
-            $em->flush();
-        }
+        $service->new($project);
 
         return $this->redirectToRoute('project_show', ['project' => $project->getId()]);
     }

@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Page;
 use App\Entity\Project;
 use App\Form\ProjectType;
+use App\Service\Factory\ProjectFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,20 +29,16 @@ class ProjectController extends Controller
      * @Route("project/new", name="project_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, ProjectFactory $factory): Response
     {
-        $project = new Project();
-        $page = new Page();
-        $page->setPath('/');
-        $page->setName('Home');
-        $page->setProject($project);
+        $project = $factory->create();
 
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($page);
+            $em->persist($project->getPages()[0]);
             $em->flush();
 
             return $this->redirectToRoute('project_index');

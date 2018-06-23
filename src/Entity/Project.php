@@ -42,6 +42,14 @@ class Project
     protected $snapshots;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="pages", cascade={"persist"})
+     * @ORM\JoinColumn(name="owner", referencedColumnName="id", nullable=true)
+     */
+    protected $owner;
+
+    /**
      * @return Page[]|Collection
      */
     public function getPages()
@@ -85,6 +93,16 @@ class Project
     public function setBaseUrl(?string $baseUrl): void
     {
         $this->baseUrl = $baseUrl;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): void
+    {
+        $this->owner = $owner;
     }
 
     public function __toString(): string

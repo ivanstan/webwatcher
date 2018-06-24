@@ -12,7 +12,7 @@
 
 {% set snapshot1Suffix = '' %}
 {% set snapshot2Suffix = '' %}
-{% if snapshot1.id != snapshot2.id %}
+{% if snapshot2 and snapshot1.id != snapshot2.id %}
     {% set snapshot1Suffix = '(' ~ snapshot1.timestamp|time_diff(snapshot2.timestamp) ~ ')' %}
     {% set snapshot2Suffix = '(Newer)' %}
 {% endif %}
@@ -43,7 +43,7 @@
     {% else %}
         <div class="row">
             <div class="col-12">
-                {{ breadcrumbs(snapshot1) }}
+                {{ breadcrumbs(snapshot1)|raw }}
             </div>
         </div>
 

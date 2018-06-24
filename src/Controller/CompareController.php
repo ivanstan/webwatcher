@@ -96,7 +96,7 @@ class CompareController extends Controller
 
     private function setFlashMessages($snapshot1, $snapshot2): void
     {
-        if ($snapshot1->getId() === $snapshot2->getId()) {
+        if ($snapshot2 && $snapshot1->getId() === $snapshot2->getId()) {
             $this->addFlash(
                 'warning',
                 'You are comparing the snapshot with itself.'

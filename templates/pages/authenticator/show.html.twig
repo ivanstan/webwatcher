@@ -1,0 +1,22 @@
+{% extends 'content.html.twig' %}
+
+{% block title %}Authenticator{% endblock %}
+
+{% block content %}
+    <h1>Authenticator</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ authenticator.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('authenticator_index') }}">back to list</a>
+
+    <a href="{{ path('authenticator_edit', {'id': authenticator.id}) }}">edit</a>
+
+    {{ include('pages/authenticator/_delete_form.html.twig') }}
+{% endblock %}

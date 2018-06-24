@@ -50,6 +50,11 @@ class Project
     protected $owner;
 
     /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Authenticator\Authenticator", mappedBy="project", cascade={"persist"})
+     */
+    protected $authenticator;
+
+    /**
      * @return Page[]|Collection
      */
     public function getPages()
@@ -103,6 +108,16 @@ class Project
     public function setOwner(?User $owner): void
     {
         $this->owner = $owner;
+    }
+
+    public function getAuthenticator()
+    {
+        return $this->authenticator;
+    }
+
+    public function setAuthenticator($authenticator): void
+    {
+        $this->authenticator = $authenticator;
     }
 
     public function __toString(): string

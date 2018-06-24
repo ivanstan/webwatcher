@@ -1,0 +1,27 @@
+{% extends 'content.html.twig' %}
+
+{% block title %}Edit Authenticator{% endblock %}
+
+{% block content %}
+    <h1>Edit Authenticator</h1>
+
+    {{ include('pages/authenticator/_form.html.twig', {'button_label': 'Update'}) }}
+
+    {% if cookies is not empty %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Value</td>
+                </tr>
+            </thead>
+        {% for cookie in cookies %}
+            <tr>
+                <td>{{ cookie.name }}</td>
+                <td>{{ cookie.value }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock %}

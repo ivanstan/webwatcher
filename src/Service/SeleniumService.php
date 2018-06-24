@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use App\Entity\PageSnapshot;
-use Facebook\WebDriver\Remote\DesiredCapabilities;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
+use App\Service\Factory\WebDriverFactory;
+use Facebook\WebDriver\Cookie;
 use Psr\Log\LoggerInterface;
 
 class SeleniumService
@@ -12,15 +12,21 @@ class SeleniumService
     public const SNAPSHOT_FOLDER_NAME = 'snapshots';
     public const PUBLIC_FOLDER_NAME = 'public';
 
-    private $seleniumServerUrl;
     private $projectDir;
     private $logger;
+    private $factory;
+    private $cookies;
 
-    public function __construct(string $seleniumServerUrl, string $projectDir, LoggerInterface $logger)
+    public function __construct(string $projectDir, LoggerInterface $logger, WebDriverFactory $factory)
     {
         $this->projectDir = $projectDir;
-        $this->seleniumServerUrl = $seleniumServerUrl;
         $this->logger = $logger;
+        $this->factory = $factory;
+    }
+
+    public function setCookies(array $cookies)
+    {
+        $this->cookies = $cookies;
     }
 
     public function setPageSnapshot(PageSnapshot $snapshot)
@@ -29,14 +35,19 @@ class SeleniumService
         $destination = $this->getPublicFolder() . '/' . self::SNAPSHOT_FOLDER_NAME . '/' . $filename;
 
         try {
-            $driver = RemoteWebDriver::create($this->seleniumServerUrl, DesiredCapabilities::chrome());
-            $driver->get($snapshot->getPage()->getUrl())
-                ->takeScreenshot($destination)
-            ;
+            $driver = $this->factory->create();
+
+            /** @var Cookie $cookie */
+            foreach ($this->cookies as $cookie) {
+//                $driver->manage()->addCookie($cookie->toArray());
+            }
+
+            $driver->get($snapshot->getPage()->getUrl())->takeScreenshot($destination);
 
 //            $driver->manage()->window()->setSize(new WebDriverDimension(1225, 996));
 
             $driver->quit();
+            unset($driver);
         } catch (\Exception $exception) {
             $this->logger->error($exception->getMessage());
 

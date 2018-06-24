@@ -54,7 +54,11 @@
     </table>
 
     {% if page.snapshots is not empty %}
-        <h2>Compare</h2>
+        <div class="row mb-3">
+            <div class="col-12">
+                <h2>Snapshots</h2>
+            </div>
+        </div>
 
         <div class="compare-selector compare-page-snapshots-selector mb-3" data-path="{{ path('compare_page_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
             <select class="custom-select" name="snapshot1">
@@ -74,14 +78,6 @@
             </select>
 
             <button class="btn btn-primary" type="button">Compare</button>
-        </div>
-    {% endif %}
-
-    {% if page.snapshots is not empty %}
-        <div class="row mb-3">
-            <div class="col-12">
-                <h2>Snapshots</h2>
-            </div>
         </div>
 
         <table class="table table-striped">

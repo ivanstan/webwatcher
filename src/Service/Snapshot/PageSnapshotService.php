@@ -6,7 +6,9 @@ use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Service\Factory\PageSnapshotFactory;
 use App\Service\SeleniumService;
+use Facebook\WebDriver\Cookie;
 use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request;
@@ -17,6 +19,8 @@ class PageSnapshotService
 
     private $seleniumService;
     private $factory;
+    private $cookieJar;
+    private $cookies;
 
     public function __construct(SeleniumService $seleniumService, PageSnapshotFactory $factory)
     {
@@ -24,19 +28,46 @@ class PageSnapshotService
         $this->factory = $factory;
     }
 
+    public function setCookies($cookies): void
+    {
+        if (empty($cookies)) {
+            return;
+        }
+
+        $domain = '';
+        $cookieArray = [];
+        /** @var Cookie $cookie */
+        foreach ($cookies as $cookie) {
+            $domain = $cookie->getDomain();
+            $cookieArray[$cookie->getName()] = $cookie->getValue();
+        }
+
+        $this->cookies = $cookies;
+        $this->cookieJar = CookieJar::fromArray($cookieArray, $domain);
+    }
+
+    public function getHeaders()
+    {
+        $headers = [];
+        if ($this->cookieJar) {
+            $headers['cookies'] = $this->cookieJar;
+        }
+
+        return $headers;
+    }
+
     public function new(Page $page): PageSnapshot
     {
         $client = new Client([
             'verify' => false,
+            'timeout' => self::MAX_TIMEOUT_SEC
         ]);
-
-        $request = new Request('GET', $page->getUrl());
 
         $snapshot = $this->factory->create($page);
 
         try {
             $start = microtime(true);
-            $response = $client->send($request, ['timeout' => self::MAX_TIMEOUT_SEC]);
+            $response = $client->request('GET', $page->getUrl(), $this->getHeaders());
             $snapshot->setResponseTime(microtime(true) - $start);
 
             $snapshot->setHeaders($response->getHeaders());
@@ -48,6 +79,10 @@ class PageSnapshotService
             $snapshot->setHeaders($exception->getRequest()->getHeaders());
         } catch (ConnectException $exception) {
 
+        }
+
+        if (!empty($this->cookies)) {
+            $this->seleniumService->setCookies($this->cookies);
         }
 
         $this->seleniumService->setPageSnapshot($snapshot);

@@ -1,0 +1,33 @@
+{% extends 'content.html.twig' %}
+
+{% block title %}Authenticator index{% endblock %}
+
+{% block content %}
+    <h1>Authenticator index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for authenticator in authenticators %}
+            <tr>
+                <td>{{ authenticator.id }}</td>
+                <td>
+                    <a href="{{ path('authenticator_show', {'id': authenticator.id}) }}">show</a>
+                    <a href="{{ path('authenticator_edit', {'id': authenticator.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('authenticator_new') }}">Create new</a>
+{% endblock %}

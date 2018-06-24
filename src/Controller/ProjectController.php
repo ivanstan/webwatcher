@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Authenticator\Authenticator;
 use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Service\Factory\ProjectFactory;
@@ -74,6 +75,7 @@ class ProjectController extends Controller
         }
 
         return $this->render('pages/project/edit.html.twig', [
+            'authenticator_types' => Authenticator::getTypes(),
             'project' => $project,
             'form' => $form->createView(),
         ]);

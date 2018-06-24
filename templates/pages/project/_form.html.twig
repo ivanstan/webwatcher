@@ -1,4 +1,40 @@
 {{ form_start(form) }}
-{{ form_widget(form) }}
+{{ form_row(form.name) }}
+{{ form_row(form.baseUrl) }}
+
+    {% if project.authenticator is null and project.id is not null %}
+        <div class="dropdown mb-3">
+            <button class="btn btn-secondary dropdown-toggle"
+                    type="button" id="dropdownMenu1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Add Authenticator
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                {% for type in authenticator_types %}
+                    <a class="dropdown-item"
+                       href="{{ path('authenticator_new', {project: project.id, type: type}) }}">{{ type|capitalize }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <table class="table">
+            <thead>
+            <tr>
+                <td colspan="2">Authenticator</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <a href="{{ path('authenticator_edit', {project: project.id, id: project.authenticator.id}) }}">{{ project.authenticator.type | capitalize }}</a>
+                </td>
+                <td>
+                    {{ include('pages/authenticator/_delete_form.html.twig') }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+
     <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

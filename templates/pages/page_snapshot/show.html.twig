@@ -25,6 +25,14 @@
                href="{{ path('editor', {'snapshot1': snapshot.id}) }}">
                 <i class="fa fa-file-code"></i>
             </a>
+            <a data-toggle="tooltip"
+               data-placement="bottom"
+               title="Show in iframe"
+               target="_blank"
+               class="btn btn-primary mt-2 mr-2 float-right"
+               href="{{ path('iframe', {'snapshot': snapshot.id}) }}">
+                <i class="fab fa-chrome"></i>
+            </a>
         </div>
     </div>
 

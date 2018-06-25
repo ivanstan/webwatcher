@@ -70,15 +70,15 @@ class PageSnapshotService
             $response = $client->request('GET', $page->getUrl(), $this->getHeaders());
             $snapshot->setResponseTime(microtime(true) - $start);
 
+            $snapshot->setResponseCode($response->getStatusCode());
             $snapshot->setHeaders($response->getHeaders());
             $snapshot->setBody($response->getBody());
-            $snapshot->setResponseCode($response->getStatusCode());
         } catch (BadResponseException $exception) {
             $snapshot->setResponseCode($exception->getCode());
-            $snapshot->setBody($exception->getRequest()->getBody());
             $snapshot->setHeaders($exception->getRequest()->getHeaders());
+            $snapshot->setBody($exception->getRequest()->getBody());
         } catch (ConnectException $exception) {
-
+            $snapshot->setResponseCode(0);
         }
 
         if (!empty($this->cookies)) {

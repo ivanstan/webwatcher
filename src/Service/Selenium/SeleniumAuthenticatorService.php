@@ -39,6 +39,7 @@ class SeleniumAuthenticatorService {
         $cookies = $driver->manage()->getCookies();
 
         $driver->quit();
+        unset($driver);
 
         return $cookies;
     }

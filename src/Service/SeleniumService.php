@@ -34,25 +34,31 @@ class SeleniumService
         $filename = $this->getSnapshotFilename($snapshot);
         $destination = $this->getPublicFolder() . '/' . self::SNAPSHOT_FOLDER_NAME . '/' . $filename;
 
-        try {
+//        try {
             $driver = $this->factory->create();
 
-            /** @var Cookie $cookie */
-            foreach ($this->cookies as $cookie) {
-//                $driver->manage()->addCookie($cookie->toArray());
+            $driver->get($snapshot->getPage()->getUrl());
+
+            if (!empty($this->cookies)) {
+                /** @var Cookie $cookie */
+                foreach ($this->cookies as $cookie) {
+                    $driver->manage()->addCookie($cookie->toArray());
+                }
+
+                $driver->get($snapshot->getPage()->getUrl());
             }
 
-            $driver->get($snapshot->getPage()->getUrl())->takeScreenshot($destination);
+            $driver->takeScreenshot($destination);
 
 //            $driver->manage()->window()->setSize(new WebDriverDimension(1225, 996));
 
             $driver->quit();
             unset($driver);
-        } catch (\Exception $exception) {
-            $this->logger->error($exception->getMessage());
-
-            return;
-        }
+//        } catch (\Exception $exception) {
+//            $this->logger->error($exception->getMessage());
+//
+//            return;
+//        }
 
         $snapshot->setImage(self::SNAPSHOT_FOLDER_NAME . '/' . $filename);
     }

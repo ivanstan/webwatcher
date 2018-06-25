@@ -9,6 +9,10 @@
     {% set snapshot2Suffix = '(Newer)' %}
 {% endif %}
 
+{% block javascripts %}
+    <script src="{{ asset('resemble.js') }}"></script>
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-10">
@@ -77,7 +81,7 @@
                 </table>
             </div>
         </div>
-        <div class="row">
+        <div class="row page-compare">
             <div class="col-5 mb-0">
                 <table class="table">
                     <tr>
@@ -87,7 +91,7 @@
                     <tr>
                         <td colspan="2">
                             <a target="_blank" class="cursor-zoom-in" href="{{ asset(item.snapshot1.image) }}">
-                                <img class="img-fluid" data-mh="img-equal-{{ loop.index }}"
+                                <img class="img-fluid screenshot-1" data-mh="img-equal-{{ loop.index }}"
                                      src="{{ asset(item.snapshot1.image) }}">
                             </a>
                         </td>
@@ -97,6 +101,9 @@
                             <a target="_blank"
                                href="{{ path('page_snapshot_show', {'project': page1.project.id, 'page': page1.id, 'snapshot': item.snapshot1.id}) }}">View
                                 snapshot</a>
+                            <a target="_blank" href="{{ path('editor', {'snapshot1': item.snapshot1.id}) }}">View
+                                Source</a>
+                            <a target="_blank" href="{{ path('iframe', {'snapshot': item.snapshot1.id}) }}">IFrame</a>
                         </td>
                     </tr>
                 </table>
@@ -125,6 +132,11 @@
                             {% endif %}
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <span>Image mismatch: </span><span class="image-analysis"></span>
+                        </td>
+                    </tr>
                 </table>
             </div>
 
@@ -137,7 +149,7 @@
                     <tr>
                         <td colspan="2">
                             <a target="_blank" class="cursor-zoom-in" href="{{ asset(item.snapshot2.image) }}">
-                                <img class="img-fluid" data-mh="img-equal-{{ loop.index }}"
+                                <img class="img-fluid screenshot-2" data-mh="img-equal-{{ loop.index }}"
                                      src="{{ asset(item.snapshot2.image) }}">
                             </a>
                         </td>
@@ -147,6 +159,9 @@
                             <a target="_blank"
                                href="{{ path('page_snapshot_show', {'project': page2.project.id, 'page': page2.id, 'snapshot': item.snapshot2.id}) }}">View
                                 snapshot</a>
+                            <a target="_blank" href="{{ path('editor', {'snapshot1': item.snapshot2.id}) }}">View
+                                Source</a>
+                            <a target="_blank" href="{{ path('iframe', {'snapshot': item.snapshot2.id}) }}">IFrame</a>
                         </td>
                     </tr>
                 </table>

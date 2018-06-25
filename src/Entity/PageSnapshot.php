@@ -89,6 +89,11 @@ class PageSnapshot
         return $this->headers;
     }
 
+    public function hasHeader(string $name): bool
+    {
+        return isset($this->headers[$name]);
+    }
+
     public function setHeaders(array $headers): void
     {
         $this->headers = $headers;

@@ -51,6 +51,14 @@
                href="{{ path('page_new', {'project': project.id}) }}">
                 <i class="fa fa-plus-square"></i>
             </a>
+            <a data-toggle="tooltip"
+               data-placement="left"
+               title="Bulk page add"
+               class="btn btn-primary float-right mt-1"
+               href="{{ path('project_bulk_add', {'project': project.id}) }}">
+                <i class="fa fa-plus-square"></i>
+                <i class="fa fa-plus-square"></i>
+            </a>
         </div>
     </div>
 

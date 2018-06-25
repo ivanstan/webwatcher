@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}IFrame | {{ parent() }}{% endblock %}
+
+{% block body %}
+    <iframe style="width: 100%; height: 100%;border: 0;" src="data:text/html;charset=utf-8,{{ html }}"></iframe>
+{% endblock %}

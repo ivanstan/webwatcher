@@ -132,21 +132,53 @@ $(document).ready(function () {
     editor.layout();
   });
 
+  $('.page-compare').each(function (index, element) {
+    let $element = $(element);
+    let image1 = $element.find('img.screenshot-1');
+    let image2 = $element.find('img.screenshot-2');
+
+    console.log(image1, image2);
+
+    if (image1.length > 0 && image2.length > 0) {
+      resemble(image2.attr('src')).compareTo(image1.attr('src')).onComplete(function (data) {
+        $element.find('.image-analysis').html(data.misMatchPercentage + '%');
+      });
+    }
+  });
+
   $('.image-diff').each(function (index, element) {
     let $element = $(element);
     let image1 = $element.data('image1');
     let image2 = $element.data('image2');
 
-    let resembleControl = resemble(image1).compareTo(image2).onComplete(function (data) {
+    let resembleControl = resemble(image2).compareTo(image1).onComplete(function (data) {
       let diffImage = new Image();
       diffImage.src = data.getImageDataUrl();
 
       $element.html(diffImage);
 
       $element.find('img').click(function () {
-
+        window.open($(this).attr(), '_blank');
       });
     });
-
   });
+
+  $('[data-toggle="select-all"]').each(function (index, element) {
+    let $element = $(element);
+    let target = $element.data('target');
+
+    $element.click(function () {
+      if(this.checked) {
+        // Iterate each checkbox
+        $('[data-group="' + target + '"]').each(function() {
+          this.checked = true;
+        });
+      } else {
+        $('[data-group="' + target + '"]').each(function() {
+          this.checked = false;
+        });
+      }
+    });
+  });
+
 });

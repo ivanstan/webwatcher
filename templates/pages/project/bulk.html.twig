@@ -1,0 +1,46 @@
+{% extends 'content.html.twig' %}
+
+{% block title %}New Project | {{ parent() }}{% endblock %}
+
+{% block content %}
+    <form method="post" action="{{ path('project_bulk_add', {'project': project.id}) }}">
+        <div class="row">
+            <div class="col-10">
+                <h1>Bulk page add</h1>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-primary float-right mt-3" type="submit">Import</button>
+            </div>
+        </div>
+
+        {{ breadcrumbs()|raw }}
+
+        {% include 'components/flash-messages.html.twig' %}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <td><input type="checkbox" data-toggle="select-all" data-target="select-page"></td>
+                <td>Path</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for page in pages %}
+                <tr>
+                    <td>
+                        <input data-group="select-page" name="pages[]" type="checkbox" value="{{ project.baseUrl ~ page }}">
+                    </td>
+                    <td> {{ page }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2" class="text-center">
+                        No new pages found.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+
+{% endblock %}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\PageSnapshot;
 use App\Entity\ProjectSnapshot;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,7 +21,7 @@ class CompareController extends Controller
     {
         $this->setFlashMessages($snapshot1, $snapshot2);
         if ($snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
-            list($snapshot1, $snapshot2) = [$snapshot1, $snapshot2];
+            list($snapshot1, $snapshot2) = [$snapshot2, $snapshot1];
         }
 
         return $this->render('pages/compare/page-snapshot.html.twig', [
@@ -32,7 +33,8 @@ class CompareController extends Controller
     /**
      * @Route("/compare/project-snapshots/{snapshot1}/{snapshot2}", name="compare_project_snapshot")
      */
-    public function compareProjectSnapshot(ProjectSnapshot $snapshot1, ProjectSnapshot $snapshot2) {
+    public function compareProjectSnapshot(ProjectSnapshot $snapshot1, ProjectSnapshot $snapshot2)
+    {
         $this->setFlashMessages($snapshot1, $snapshot2);
         if ($snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
             list($snapshot1, $snapshot2) = [$snapshot2, $snapshot1];
@@ -58,7 +60,8 @@ class CompareController extends Controller
     /**
      * @Route("/editor/{snapshot1}/{snapshot2}", name="editor", defaults={"snapshot2": null})
      */
-    public function editor(PageSnapshot $snapshot1, ?PageSnapshot $snapshot2) {
+    public function editor(PageSnapshot $snapshot1, ?PageSnapshot $snapshot2)
+    {
         $this->setFlashMessages($snapshot1, $snapshot2);
         if ($snapshot2 && $snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
             list($snapshot1, $snapshot2) = [$snapshot2, $snapshot1];
@@ -73,7 +76,8 @@ class CompareController extends Controller
     /**
      * @Route("/image/{snapshot1}/{snapshot2}", name="compare_image")
      */
-    public function image(PageSnapshot $snapshot1, PageSnapshot $snapshot2) {
+    public function image(PageSnapshot $snapshot1, PageSnapshot $snapshot2)
+    {
         $this->setFlashMessages($snapshot1, $snapshot2);
         if ($snapshot2 && $snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
             list($snapshot1, $snapshot2) = [$snapshot2, $snapshot1];
@@ -86,9 +90,45 @@ class CompareController extends Controller
     }
 
     /**
+     * @Route("/iframe/{snapshot}", name="iframe")
+     */
+    public function iframe(PageSnapshot $snapshot)
+    {
+        $crawler = new Crawler($snapshot->getBody());
+        $baseUrl = $snapshot->getPage()->getProject()->getBaseUrl();
+
+        foreach ($crawler->filter('a') as $link) {
+            $link->setAttribute('href', $baseUrl . $link->getAttribute('href'));
+            $link->setAttribute('target', '_blank');
+        }
+
+        foreach ($crawler->filter('link') as $stylesheet) {
+            if ($stylesheet->hasAttribute('rel') && $stylesheet->getAttribute('rel') === 'stylesheet') {
+                $stylesheet->setAttribute('href', $baseUrl . $stylesheet->getAttribute('href'));
+            }
+        }
+
+        foreach ($crawler->filter('script') as $script) {
+            if ($script->hasAttribute('src')) {
+                $script->setAttribute('src', $baseUrl . $script->getAttribute('src'));
+            }
+        }
+
+        if ($snapshot->hasHeader('Content-Type')) {
+            // ToDo replace hardcoded content type with one from header
+        }
+
+        return $this->render('pages/compare/iframe.html.twig', [
+            'snapshot1' => $snapshot,
+            'html' => $crawler->html(),
+        ]);
+    }
+
+    /**
      * @Route("/image-source/{snapshot}", name="image_source")
      */
-    public function imageData(PageSnapshot $snapshot) {
+    public function imageData(PageSnapshot $snapshot)
+    {
         $projectDir = $this->getParameter('kernel.project_dir');
 
         return BinaryFileResponse::create($projectDir . '/public/' . $snapshot->getImage());

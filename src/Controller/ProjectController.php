@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Authenticator\Authenticator;
+use App\Entity\Page;
 use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Service\Factory\ProjectFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -78,6 +80,61 @@ class ProjectController extends Controller
             'authenticator_types' => Authenticator::getTypes(),
             'project' => $project,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("project/{project}/bulk", name="project_bulk_add", methods="GET|POST")
+     * @Security("has_role('ROLE_MANAGER')")
+     */
+    public function bulkAdd(Request $request, Project $project)
+    {
+        if ($request->isMethod('POST')) {
+            $em = $this->getDoctrine()->getManager();
+            foreach ($request->request->get('pages') as $path) {
+                $path = str_replace($project->getBaseUrl(), '', $path);
+
+                $page = new Page();
+                $page->setPath($path);
+                $page->setProject($project);
+
+                $em->persist($page);
+            }
+
+            $em->flush();
+            $this->redirectToRoute('project_show', [
+               'project' => $project->getId()
+            ]);
+        }
+
+        $pages = [];
+
+        $options = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ],
+        ];
+
+        $crawler = new Crawler(
+            file_get_contents($project->getBaseUrl() . '/sitemap.xml', false, stream_context_create($options))
+        );
+
+        $existing = [];
+        foreach ($project->getPages() as $page) {
+            $existing[] = $page->getPath();
+        }
+
+        foreach ($crawler->filter('url loc') as $url) {
+            $pages[] =  parse_url($url->textContent, PHP_URL_PATH);
+        }
+
+        $pages = array_diff($pages, $existing);
+
+        sort($pages);
+        return $this->render('pages/project/bulk.html.twig', [
+            'project' => $project,
+            'pages' => $pages,
         ]);
     }
 

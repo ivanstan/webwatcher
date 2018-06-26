@@ -56,7 +56,7 @@ class SeleniumAuthenticator extends Authenticator
         return self::TYPE_SELENIUM;
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
     }

@@ -1,0 +1,29 @@
+{% if cookies is defined and cookies is not empty %}
+    <table class="table">
+        <thead>
+        <tr>
+            <td>Name</td>
+            <td>Value</td>
+        </tr>
+        </thead>
+        {% for cookie in cookies %}
+            <tr>
+                <td>{{ cookie.name }}</td>
+                <td>{{ cookie.value }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+{{ form_start(form) }}
+{{ form_row(form.url) }}
+
+{{ form_row(form.username) }}
+{{ form_row(form.password) }}
+
+{{ form_row(form.submitSelector) }}
+{{ form_row(form.usernameSelector) }}
+{{ form_row(form.passwordSelector) }}
+
+<button type="submit" class="btn btn-primary mb-3">Save</button>
+{{ form_end(form) }}

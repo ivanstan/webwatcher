@@ -15,12 +15,44 @@
         <th>HTTP Status</th>
         <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
     </tr>
+
+    {% if snapshot.seo %}
+        <tr>
+            <th colspan="2">SEO</th>
+        </tr>
+        <tr {% if snapshot.seo.title == null %}class="table-danger"{% endif %}>
+            <th>Title</th>
+            <td>{{ snapshot.seo.title }}</td>
+        </tr>
+        <tr {% if snapshot.seo.metaDescription == null %}class="table-danger"{% endif %}>
+            <th>Meta Description</th>
+            <td>{{ snapshot.seo.metaDescription }}</td>
+        </tr>
+        <tr {% if snapshot.seo.metaKeywords == null or snapshot.seo.metaKeywords is empty %}class="table-danger"{% endif %}>
+            <th>Meta Keywords</th>
+            <td>{{ snapshot.seo.metaKeywords|join(', ') }}</td>
+        </tr>
+    {% endif %}
+
+    {% if statistics is defined and statistics is not empty %}
+        <tr>
+            <th colspan="2">Statistics</th>
+        </tr>
+        {% for item in statistics %}
+            <tr>
+                <th>{{ item['title'] ~ 's' }}</th>
+                <td>{{ item['count']|number_format }}</td>
+            </tr>
+        {% endfor %}
+
+    {% endif %}
+
     <tr>
         <th colspan="2">Response headers</th>
     </tr>
     {% for name, value in snapshot.headers %}
         <tr>
-            <td>{{ name }}</td>
+            <th>{{ name }}</th>
             <td>{{ value[0] }}</td>
         </tr>
     {% endfor %}

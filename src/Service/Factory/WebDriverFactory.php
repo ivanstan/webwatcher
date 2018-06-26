@@ -10,6 +10,9 @@ class WebDriverFactory
 {
     private $seleniumHubUrl;
 
+    /** @var WebDriver */
+    private $driver;
+
     public function __construct(string $seleniumHubUrl)
     {
         $this->seleniumHubUrl = $seleniumHubUrl;
@@ -17,6 +20,16 @@ class WebDriverFactory
 
     public function create(): WebDriver
     {
-        return RemoteWebDriver::create($this->seleniumHubUrl, DesiredCapabilities::chrome());
+        if ($this->driver === null) {
+            $this->driver = RemoteWebDriver::create($this->seleniumHubUrl, DesiredCapabilities::chrome());
+        }
+
+        return $this->driver;
+    }
+
+    public function __destruct()
+    {
+        $this->driver->quit();
+        unset($this->driver);
     }
 }

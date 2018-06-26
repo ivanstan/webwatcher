@@ -78,6 +78,15 @@ class Page
         return $this->snapshots;
     }
 
+    public function getNewestSnapshot(): ?PageSnapshot
+    {
+        if (isset($this->snapshots[0])) {
+            return $this->snapshots[0];
+        }
+
+        return null;
+    }
+
     /**
      * @param PageSnapshot[]|Collection $snapshots
      */

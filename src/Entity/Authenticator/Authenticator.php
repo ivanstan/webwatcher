@@ -11,13 +11,17 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("authenticator")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({"Authenticator::TYPE_SELENIUM" = "App\Entity\Authenticator\SeleniumAuthenticator"})
+ * @ORM\DiscriminatorMap({
+ *     "Authenticator::TYPE_SELENIUM" = "App\Entity\Authenticator\SeleniumAuthenticator",
+ *     "Authenticator::TYPE_HTTP_BASIC" = "App\Entity\Authenticator\HttpBasicAuthenticator"
+ * })
  */
 abstract class Authenticator
 {
     use Id;
 
     const TYPE_SELENIUM = 'selenium';
+    const TYPE_HTTP_BASIC = 'http';
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Project", inversedBy="authenticator")
@@ -27,7 +31,10 @@ abstract class Authenticator
 
     public static function getTypes(): array
     {
-        return [self::TYPE_SELENIUM];
+        return [
+            self::TYPE_SELENIUM => 'Simulated',
+            self::TYPE_HTTP_BASIC => 'Basic HTTP'
+        ];
     }
 
     public function getProject(): ?Project

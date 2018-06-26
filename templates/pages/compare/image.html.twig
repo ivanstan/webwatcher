@@ -19,18 +19,22 @@
             {% include 'components/flash-messages.html.twig' %}
         </div>
     </div>
-
     <div class="row">
         <div class="col-6">
             {{ breadcrumbs(snapshot1, snapshot1Suffix)|raw }}
-            <img width="300px" class="d-block margin-auto" src="{{ asset(snapshot1.image) }}" alt="Snapshot image {{ snapshot1.id }}">
+            <a target="_blank" href="{{ path('image_source', {'snapshot': snapshot1.id}) }}">
+                <img width="300px" class="d-block margin-auto cursor-zoom-in" src="{{ asset(snapshot1.image) }}"
+                     alt="Snapshot image {{ snapshot1.id }}">
+            </a>
         </div>
         <div class="col-6">
             {{ breadcrumbs(snapshot2, snapshot2Suffix)|raw }}
-            <img width="300px" class="d-block margin-auto" src="{{ asset(snapshot2.image) }}" alt="Snapshot image {{ snapshot1.id }}">
+            <a target="_blank" href="{{ path('image_source', {'snapshot': snapshot2.id}) }}">
+                <img width="300px" class="d-block margin-auto cursor-zoom-in" src="{{ asset(snapshot2.image) }}"
+                     alt="Snapshot image {{ snapshot1.id }}">
+            </a>
         </div>
     </div>
-
-    <div class="image-diff margin-auto mt-3 mb-3" data-image1="{{ asset(snapshot1.image) }}" data-image2="{{ asset(snapshot2.image) }}"></div>
-
+    <div class="image-diff margin-auto mt-3 mb-3 cursor-zoom-in" data-image1="{{ asset(snapshot1.image) }}"
+         data-image2="{{ asset(snapshot2.image) }}"></div>
 {% endblock %}

@@ -7,6 +7,7 @@ use App\Entity\Project;
 use App\Form\Authenticator\SeleniumAuthenticatorType;
 use App\Service\Factory\AuthenticatorFactory;
 use App\Service\Selenium\SeleniumAuthenticatorService;
+use Facebook\WebDriver\Exception\NoSuchElementException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,24 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class AuthenticatorController extends Controller
 {
     /**
-     * @Route("/", name="authenticator_index", methods="GET")
-     */
-    public function index(): Response
-    {
-        $authenticators = $this->getDoctrine()
-            ->getRepository(Authenticator::class)
-            ->findAll()
-        ;
-
-        return $this->render('pages/authenticator/index.html.twig', ['authenticators' => $authenticators]);
-    }
-
-    /**
      * @Route("/{type}/new", name="authenticator_new", methods="GET|POST")
      */
     public function new(Request $request, Project $project, string $type, AuthenticatorFactory $factory): Response
     {
         $authenticator = $factory->create($type);
+        $authenticator->setProject($project);
+
         $form = $this->createForm($factory->getFormType($type), $authenticator);
         $form->handleRequest($request);
 
@@ -44,21 +34,13 @@ class AuthenticatorController extends Controller
             $em->persist($authenticator);
             $em->flush();
 
-            return $this->redirectToRoute('authenticator_index');
+            return $this->redirectToRoute('project_edit', ['project' => $project->getId()]);
         }
 
         return $this->render('pages/authenticator/new.html.twig', [
             'authenticator' => $authenticator,
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @Route("/{id}", name="authenticator_show", methods="GET")
-     */
-    public function show(Authenticator $authenticator): Response
-    {
-        return $this->render('pages/authenticator/show.html.twig', ['authenticator' => $authenticator]);
     }
 
     /**
@@ -73,12 +55,15 @@ class AuthenticatorController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $cookies = $seleniumAuthenticator->resolve($authenticator);
+            try {
+                $cookies = $seleniumAuthenticator->resolve($authenticator);
+            } catch (NoSuchElementException $exception) {
+                $this->addFlash('danger', $exception->getMessage());
+            }
 
-//            return $this->redirectToRoute('authenticator_edit', [
-//                'project' => $authenticator->getProject(),
-//                'id' => $authenticator->getId()
-//            ]);
+            if (!empty($cookies)) {
+                $this->addFlash('success', 'Login finished successfully.');
+            }
         }
 
         return $this->render('pages/authenticator/edit.html.twig', [
@@ -91,7 +76,7 @@ class AuthenticatorController extends Controller
     /**
      * @Route("/{id}", name="authenticator_delete", methods="DELETE")
      */
-    public function delete(Request $request, Authenticator $authenticator): Response
+    public function delete(Request $request, Authenticator $authenticator, Project $project): Response
     {
         if ($this->isCsrfTokenValid('delete' . $authenticator->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
@@ -99,6 +84,6 @@ class AuthenticatorController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('authenticator_index');
+        return $this->redirectToRoute('project_edit', ['project' => $project->getId()]);
     }
 }

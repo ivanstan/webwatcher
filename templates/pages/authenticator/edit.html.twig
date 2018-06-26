@@ -5,23 +5,14 @@
 {% block content %}
     <h1>Edit Authenticator</h1>
 
-    {{ include('pages/authenticator/_form.html.twig', {'button_label': 'Update'}) }}
+    {% include 'components/flash-messages.html.twig' %}
 
-    {% if cookies is not empty %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <td>Name</td>
-                    <td>Value</td>
-                </tr>
-            </thead>
-        {% for cookie in cookies %}
-            <tr>
-                <td>{{ cookie.name }}</td>
-                <td>{{ cookie.value }}</td>
-            </tr>
-        {% endfor %}
-        </table>
+    {% if authenticator.type == 'selenium' %}
+        {{ include('pages/authenticator/type/selenium_form.html.twig') }}
+    {% endif %}
+
+    {% if authenticator.type == 'http' %}
+        {{ include('pages/authenticator/type/http_form.html.twig') }}
     {% endif %}
 
 {% endblock %}

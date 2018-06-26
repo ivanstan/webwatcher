@@ -26,9 +26,9 @@
                 Add Authenticator
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                {% for type in authenticator_types %}
+                {% for type, typeTitle in authenticator_types %}
                     <a class="dropdown-item"
-                       href="{{ path('authenticator_new', {project: project.id, type: type}) }}">{{ type|capitalize }}</a>
+                       href="{{ path('authenticator_new', {project: project.id, type: type}) }}">{{ typeTitle }}</a>
                 {% endfor %}
             </div>
         </div>

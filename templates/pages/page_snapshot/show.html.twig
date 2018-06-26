@@ -42,7 +42,7 @@
 
     <div class="row">
         <div class="col-6">
-            {% include 'components/page-snapshot-details.html.twig' with {snapshot: snapshot} only %}
+            {% include 'components/page-snapshot-details.html.twig' %}
         </div>
         <div class="col-6">
             {% if snapshot.image %}
@@ -54,14 +54,5 @@
             {% endif %}
         </div>
     </div>
-
-    {#{% if snapshot.body %}#}
-        {#<div class="row">#}
-            {#<div class="col-12">#}
-                {#<div class="monaco-editor mb-3" data-code="{{ snapshot.body }}" data-language="html"#}
-                     {#style="height: 800px"></div>#}
-            {#</div>#}
-        {#</div>#}
-    {#{% endif %}#}
 
 {% endblock %}

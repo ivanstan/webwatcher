@@ -87,7 +87,7 @@ class ProjectController extends Controller
      * @Route("project/{project}/bulk", name="project_bulk_add", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function bulkAdd(Request $request, Project $project)
+    public function bulk(Request $request, Project $project)
     {
         if ($request->isMethod('POST')) {
             $em = $this->getDoctrine()->getManager();

@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\PageSnapshot;
 use App\Service\Factory\WebDriverFactory;
 use Facebook\WebDriver\Cookie;
+use Facebook\WebDriver\WebDriverDimension;
 use Psr\Log\LoggerInterface;
 
 class SeleniumService
@@ -34,10 +35,14 @@ class SeleniumService
         $filename = $this->getSnapshotFilename($snapshot);
         $destination = $this->getPublicFolder() . '/' . self::SNAPSHOT_FOLDER_NAME . '/' . $filename;
 
-//        try {
+        try {
             $driver = $this->factory->create();
 
             $driver->get($snapshot->getPage()->getUrl());
+
+            $height = $driver->manage()->window()->getSize()->getHeight();
+            $width = $driver->manage()->window()->getSize()->getWidth();
+            $driver->manage()->window()->setSize(new WebDriverDimension($width, $height));
 
             if (!empty($this->cookies)) {
                 /** @var Cookie $cookie */
@@ -50,15 +55,13 @@ class SeleniumService
 
             $driver->takeScreenshot($destination);
 
-//            $driver->manage()->window()->setSize(new WebDriverDimension(1225, 996));
+//            $driver->quit();
+//            unset($driver);
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage());
 
-            $driver->quit();
-            unset($driver);
-//        } catch (\Exception $exception) {
-//            $this->logger->error($exception->getMessage());
-//
-//            return;
-//        }
+            return;
+        }
 
         $snapshot->setImage(self::SNAPSHOT_FOLDER_NAME . '/' . $filename);
     }

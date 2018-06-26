@@ -79,6 +79,7 @@ $(document).ready(function () {
       language: $element.data('language'),
       automaticLayout: true,
       readOnly: true,
+      scrollBeyondLastLine: false,
     });
   });
 
@@ -96,7 +97,8 @@ $(document).ready(function () {
 
     monaco.editor.createDiffNavigator(diffEditor, {
       followsCaret: true,
-      ignoreCharChanges: true
+      ignoreCharChanges: true,
+      scrollBeyondLastLine: false,
     });
   });
 
@@ -136,8 +138,6 @@ $(document).ready(function () {
     let $element = $(element);
     let image1 = $element.find('img.screenshot-1');
     let image2 = $element.find('img.screenshot-2');
-
-    console.log(image1, image2);
 
     if (image1.length > 0 && image2.length > 0) {
       resemble(image2.attr('src')).compareTo(image1.attr('src')).onComplete(function (data) {

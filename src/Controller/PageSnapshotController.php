@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
+use App\Entity\PageSnapshotSeo;
 use App\Service\Snapshot\PageSnapshotService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,7 +22,14 @@ class PageSnapshotController extends Controller
      */
     public function show(PageSnapshot $snapshot): Response
     {
-        return $this->render('pages/page_snapshot/show.html.twig', ['snapshot' => $snapshot]);
+        $statistics = $this->getDoctrine()
+            ->getRepository(PageSnapshotSeo::class)
+            ->getLinkStatistics($snapshot);
+
+        return $this->render('pages/page_snapshot/show.html.twig', [
+            'snapshot' => $snapshot,
+            'statistics' => $statistics
+        ]);
     }
 
     /**

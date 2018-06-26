@@ -5,15 +5,14 @@ namespace App\Entity;
 use App\Property\Id;
 use App\Property\Timestamp;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Index;
 use Mihaeu\HtmlFormatter;
 
 /**
  * @ORM\Entity()
  * @ORM\Table("page_snapshot",
  *     indexes={
- *     @Index(columns={"body"}, flags={"fulltext"}),
- *     @Index(columns={"headers"}, flags={"fulltext"})
+ *     @ORM\Index(columns={"body"}, flags={"fulltext"}),
+ *     @ORM\Index(columns={"headers"}, flags={"fulltext"})
  * })
  */
 class PageSnapshot
@@ -73,9 +72,17 @@ class PageSnapshot
      */
     protected $projectSnapshot;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\PageSnapshotSeo", cascade={"persist"})
+     * @ORM\JoinColumn(name="seo_id", referencedColumnName="id")
+     */
+    protected $seo;
+
     public function getBody(): string
     {
-        return @HtmlFormatter::format($this->body);
+        $body = @HtmlFormatter::format($this->body);
+        $body = preg_replace('/^[ \t]*[\r\n]+/m', '', $body);
+        return $body;
     }
 
     public function setBody(string $body)
@@ -160,6 +167,16 @@ class PageSnapshot
     public function setProjectSnapshot(?ProjectSnapshot $projectSnapshot): void
     {
         $this->projectSnapshot = $projectSnapshot;
+    }
+
+    public function getSeo(): ?PageSnapshotSeo
+    {
+        return $this->seo;
+    }
+
+    public function setSeo(?PageSnapshotSeo $seo): void
+    {
+        $this->seo = $seo;
     }
 
     public function __toString(): string

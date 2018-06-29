@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\PageSnapshot;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
-use App\Service\Snapshot\PageSnapshotService;
 use App\Service\Snapshot\ProjectSnapshotService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,7 +22,9 @@ class ProjectSnapshotController extends Controller
      */
     public function show(ProjectSnapshot $snapshot): Response
     {
-        return $this->render('pages/project_snapshot/show.html.twig', ['project_snapshot' => $snapshot]);
+        return $this->render('pages/project_snapshot/show.html.twig', [
+            'project_snapshot' => $snapshot
+        ]);
     }
 
     /**

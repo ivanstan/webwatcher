@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\Assert\Assert;
 use App\Property\Id;
 use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints as Constraint;
 
 /**
  * @ORM\Entity()
@@ -21,7 +22,7 @@ class Page
      * @var string
      *
      * @ORM\Column(name="path", type="string", nullable=true)
-     * @Assert\Regex(
+     * @Constraint\Regex(
      *     pattern="/^\/+?/",
      *     match=true,
      *     message="Path must begin with '/'"
@@ -44,6 +45,13 @@ class Page
      * @ORM\OrderBy({"timestamp" = "DESC"})
      */
     protected $snapshots;
+
+    /**
+     * @var Assert[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Assert\Assert", mappedBy="page", cascade={"persist"})
+     */
+    protected $asserts;
 
     public function getPath(): ?string
     {
@@ -78,6 +86,14 @@ class Page
         return $this->snapshots;
     }
 
+    /**
+     * @param PageSnapshot[]|Collection $snapshots
+     */
+    public function setSnapshots($snapshots)
+    {
+        $this->snapshots = $snapshots;
+    }
+
     public function getNewestSnapshot(): ?PageSnapshot
     {
         if (isset($this->snapshots[0])) {
@@ -88,11 +104,19 @@ class Page
     }
 
     /**
-     * @param PageSnapshot[]|Collection $snapshots
+     * @return Collection|Assert[]
      */
-    public function setSnapshots($snapshots)
+    public function getAsserts()
     {
-        $this->snapshots = $snapshots;
+        return $this->asserts;
+    }
+
+    /**
+     * @param Collection|Assert[] $asserts
+     */
+    public function setAsserts($asserts): void
+    {
+        $this->asserts = $asserts;
     }
 
     public function getAverageResponseTime()

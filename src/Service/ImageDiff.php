@@ -25,7 +25,7 @@ class ImageDiff
 
     private function createImage($i)
     {
-        /*retuns image resource or false if its not jpg or png*/
+        /*returns image resource or false if its not jpg or png*/
         $mime = $this->mimeType($i);
 
         if($mime[2] == 'jpg')
@@ -44,7 +44,7 @@ class ImageDiff
 
     private function resizeImage($i,$source)
     {
-        /*resizes the image to a 8x8 squere and returns as image resource*/
+        /*resize the image to a 8x8 square and returns as image resource*/
         $mime = $this->mimeType($source);
 
         $t = imagecreatetruecolor(8, 8);

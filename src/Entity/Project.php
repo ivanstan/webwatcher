@@ -44,7 +44,7 @@ class Project
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="pages", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="owner", referencedColumnName="id", nullable=true)
      */
     protected $owner;

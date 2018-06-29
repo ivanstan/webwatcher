@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PageSnapshotSeoRepository")
+ * @ORM\Entity()
  * @ORM\Table("page_snapshot_seo",
  *     indexes={
  *     @ORM\Index(columns={"title"}, flags={"fulltext"}),

@@ -14,22 +14,22 @@ class PageSnapshotRepository extends ServiceEntityRepository
         parent::__construct($registry, ProjectSnapshot::class);
     }
 
-    public function select(): QueryBuilder
-    {
-        return
-            $this
-                ->createQueryBuilder('page_snapshot')
-                ->join('page_snapshot.page', 'page')
-            ;
-    }
-
-    public function whereProjectSnapshot(ProjectSnapshot $snapshot)
-    {
-        $builder = $this->select()
-            ->where('page_snapshot.projectSnapshot = :snapshot')
-            ->setParameter('snapshot', $snapshot)
-        ;
-
-        return $builder;
-    }
+//    public function select(): QueryBuilder
+//    {
+//        return
+//            $this
+//                ->createQueryBuilder('page_snapshot')
+//                ->join('page_snapshot.page', 'page')
+//            ;
+//    }
+//
+//    public function whereProjectSnapshot(ProjectSnapshot $snapshot)
+//    {
+//        $builder = $this->select()
+//            ->where('page_snapshot.projectSnapshot = :snapshot')
+//            ->setParameter('snapshot', $snapshot)
+//        ;
+//
+//        return $builder;
+//    }
 }

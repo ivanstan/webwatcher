@@ -33,7 +33,7 @@ abstract class Authenticator
     {
         return [
             self::TYPE_SELENIUM => 'Simulated',
-            self::TYPE_HTTP_BASIC => 'Basic HTTP'
+            self::TYPE_HTTP_BASIC => 'Basic HTTP',
         ];
     }
 

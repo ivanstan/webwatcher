@@ -22,13 +22,15 @@ class PageSnapshotController extends Controller
      */
     public function show(PageSnapshot $snapshot): Response
     {
-        $statistics = $this->getDoctrine()
-            ->getRepository(PageSnapshotSeo::class)
-            ->getLinkStatistics($snapshot);
+//        $statistics = $this->getDoctrine()
+//            ->getRepository(PageSnapshotSeo::class)
+//            ->getLinkStatistics($snapshot);
+
+        // ToDo enable this
 
         return $this->render('pages/page_snapshot/show.html.twig', [
             'snapshot' => $snapshot,
-            'statistics' => $statistics
+//            'statistics' => $statistics
         ]);
     }
 

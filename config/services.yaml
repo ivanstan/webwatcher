@@ -34,8 +34,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
 
-    App\Service\Factory\WebDriverFactory:
+    App\Service\Selenium\SeleniumWebDriver:
         arguments: ['%selenium_server_url%']
 
-    App\Service\SeleniumService:
+    App\Service\Selenium\SeleniumScreenShotService:
         arguments: [ '%kernel.project_dir%']

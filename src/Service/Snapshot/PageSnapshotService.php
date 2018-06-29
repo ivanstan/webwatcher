@@ -8,7 +8,7 @@ use App\Entity\PageSnapshot;
 use App\Entity\PageSnapshotSeo;
 use App\Repository\LinkRepository;
 use App\Service\Factory\PageSnapshotFactory;
-use App\Service\SeleniumService;
+use App\Service\Selenium\SeleniumScreenShotService;
 use Facebook\WebDriver\Cookie;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
@@ -27,7 +27,7 @@ class PageSnapshotService
     private $links;
     private $linkRepository;
 
-    public function __construct(SeleniumService $seleniumService, PageSnapshotFactory $factory, LinkRepository $linkRepository)
+    public function __construct(SeleniumScreenShotService $seleniumService, PageSnapshotFactory $factory, LinkRepository $linkRepository)
     {
         $this->seleniumService = $seleniumService;
         $this->factory = $factory;

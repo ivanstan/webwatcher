@@ -54,10 +54,9 @@
             <a data-toggle="tooltip"
                data-placement="left"
                title="Bulk page add"
-               class="btn btn-primary float-right mt-1"
+               class="btn btn-primary float-right mt-1 mr-2"
                href="{{ path('project_bulk_add', {'project': project.id}) }}">
-                <i class="fa fa-plus-square"></i>
-                <i class="fa fa-plus-square"></i>
+                <i class="fa fa-file-alt"></i>
             </a>
         </div>
     </div>
@@ -73,7 +72,7 @@
         <tbody>
         {% for page in project.pages %}
             <tr>
-                <td><a href="{{ path('page_show', {'project': project.id, 'page': page.id}) }}">{{ page.name }}</a></td>
+                <td><a href="{{ path('page_show', {'project': project.id, 'page': page.id}) }}">{% if page.name %}{{ page.name }}{% else %}{{ page.path }}{% endif %}</a></td>
                 <td>{{ page.path }}</td>
                 <td>
                     <a data-toggle="tooltip"

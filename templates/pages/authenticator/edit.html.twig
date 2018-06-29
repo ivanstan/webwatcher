@@ -5,6 +5,8 @@
 {% block content %}
     <h1>Edit Authenticator</h1>
 
+    {{ breadcrumbs(authenticator)|raw }}
+
     {% include 'components/flash-messages.html.twig' %}
 
     {% if authenticator.type == 'selenium' %}

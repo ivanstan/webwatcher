@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\Authenticator\Authenticator;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Entity\Project;
@@ -58,6 +59,11 @@ class BreadcrumbExtension extends AbstractExtension
             $projectSnapshot = $entity;
         }
 
+        if (is_subclass_of($entity, Authenticator::class)) {
+            $project = $entity->getProject();
+            $authenticator = $entity;
+        }
+
         $breadcrumbs = [];
 
         if (isset($project)) {
@@ -105,6 +111,17 @@ class BreadcrumbExtension extends AbstractExtension
                 'href' => $this->router->generate('project_snapshot_show', [
                     'project' => $project->getId(),
                     'snapshot' => $projectSnapshot->getId()
+                ])
+            ];
+        }
+
+        if (isset($authenticator)) {
+            $breadcrumbs[] = [
+                'title' => 'Authenticator',
+                'tooltip' => '',
+                'href' => $this->router->generate('authenticator_edit', [
+                    'project' => $project->getId(),
+                    'id' => $authenticator->getId()
                 ])
             ];
         }

@@ -4,13 +4,13 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -37,7 +37,18 @@ class UserAdministerType extends AbstractType
                     'label' => 'Password',
                 ]
             )
-            ->add('roles')
+            ->add(
+                'roles', ChoiceType::class, [
+                    'choices' => [
+                        'ROLE_ADMIN' => 'ROLE_ADMIN',
+                        'ROLE_MANAGER' => 'ROLE_MANAGER',
+                        'ROLE_VIEWER' => 'ROLE_VIEWER',
+                        'ROLE_USER' => 'ROLE_USER',
+                    ],
+                    'expanded' => true,
+                    'multiple' => true,
+                ]
+            )
             ->add('preference', UserPreferenceType::class)
         ;
 

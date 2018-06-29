@@ -131,7 +131,7 @@ class ProjectController extends Controller
 
         $pages = array_diff($pages, $existing);
 
-        sort($pages);
+        array_unique($pages);
         return $this->render('pages/project/bulk.html.twig', [
             'project' => $project,
             'pages' => $pages,

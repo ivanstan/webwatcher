@@ -57,7 +57,7 @@ class AuthenticatorController extends Controller
 
             try {
                 $cookies = $seleniumAuthenticator->resolve($authenticator);
-            } catch (NoSuchElementException $exception) {
+            } catch (\Exception $exception) {
                 $this->addFlash('danger', $exception->getMessage());
             }
 

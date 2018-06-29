@@ -8,7 +8,7 @@ class ImageDiff
     {
         /*returns array with mime type and if its jpg or png. Returns false if it isn't jpg or png*/
         $mime = getimagesize($i);
-        $return = array($mime[0],$mime[1]);
+        $return = [$mime[0],$mime[1]];
 
         switch ($mime['mime'])
         {
@@ -59,7 +59,7 @@ class ImageDiff
     private function colorMeanValue($i)
     {
         /*returns the mean value of the colors and the list of all pixel's colors*/
-        $colorList = array();
+        $colorList = [];
         $colorSum = 0;
         for($a = 0;$a<8;$a++)
         {
@@ -75,13 +75,13 @@ class ImageDiff
 
         }
 
-        return array($colorSum/64,$colorList);
+        return [$colorSum/64,$colorList];
     }
 
     private function bits($colorMean)
     {
         /*returns an array with 1 and zeros. If a color is bigger than the mean value of colors it is 1*/
-        $bits = array();
+        $bits = [];
 
         foreach($colorMean[1] as $color){$bits[]= ($color>=$colorMean[0])?1:0;}
 

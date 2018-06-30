@@ -15,11 +15,16 @@
         <th>HTTP Status</th>
         <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
     </tr>
+</table>
 
-    {% if snapshot.seo %}
+{% if snapshot.seo %}
+    <table class="table">
+        <thead>
         <tr>
             <th colspan="2">SEO</th>
         </tr>
+        </thead>
+        <tbody>
         <tr {% if snapshot.seo.title == null %}class="table-danger"{% endif %}>
             <th>Title</th>
             <td>{{ snapshot.seo.title }}</td>
@@ -32,28 +37,47 @@
             <th>Meta Keywords</th>
             <td>{{ snapshot.seo.metaKeywords|join(', ') }}</td>
         </tr>
-    {% endif %}
+        </tbody>
+    </table>
+{% endif %}
 
-    {% if statistics is defined and statistics is not empty %}
+{% if statistics is defined and statistics is not empty %}
+    <table class="table">
+        <thead>
         <tr>
             <th colspan="2">Statistics</th>
         </tr>
+        </thead>
+        <tbody>
         {% for item in statistics %}
             <tr>
                 <th>{{ item['title'] ~ 's' }}</th>
                 <td>{{ item['count']|number_format }}</td>
             </tr>
         {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
 
-    {% endif %}
+{% if freq is not null %}
+    <canvas id="word-count-chart" data-title="Word frequency" class="pie-chart" data-chart="{{ freq|json_encode }}"></canvas>
+{% endif %}
 
-    <tr>
-        <th colspan="2">Response headers</th>
-    </tr>
-    {% for name, value in snapshot.headers %}
+{% if snapshot.headers is not empty %}
+    <table class="table">
+        <thead>
         <tr>
-            <th>{{ name }}</th>
-            <td>{{ value[0] }}</td>
+            <th colspan="2">Response headers</th>
         </tr>
-    {% endfor %}
-</table>
+        </thead>
+        <tbody>
+        {% for name, value in snapshot.headers %}
+            <tr>
+                <th>{{ name }}</th>
+                <td>{{ value[0] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+

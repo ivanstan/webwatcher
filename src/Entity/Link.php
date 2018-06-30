@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Psr\Log\InvalidArgumentException;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\LinkRepository")
  * @ORM\Table("link")
  */
 class Link

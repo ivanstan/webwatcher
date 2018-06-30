@@ -27,6 +27,8 @@ class TimeExtension extends Twig_Extension
 
     public function getFilters()
     {
+        // ToDo: setup user timezone and date format in templates
+
         return [
             new Twig_SimpleFilter('time_diff', [$this, 'diff'], ['needs_environment' => true]),
         ];

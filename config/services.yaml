@@ -39,3 +39,6 @@ services:
 
     App\Service\Selenium\SeleniumScreenShotService:
         arguments: [ '%kernel.project_dir%']
+
+    App\Service\KeywordExtractor:
+        arguments: [ '%kernel.project_dir%']

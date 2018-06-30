@@ -5,6 +5,7 @@ require('popper.js');
 require('bootstrap');
 var Chart = require('chart.js');
 require('jquery-match-height');
+require('./pie-chart');
 
 $(document).ready(function () {
   $('[data-toggle="popover"]').popover();

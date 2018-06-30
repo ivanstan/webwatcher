@@ -125,10 +125,14 @@ class PageSnapshotService
 
         $seo->setTitle($this->html->getTitle());
         $seo->setMetaDescription($this->html->getMetaDescription());
-        $seo->setMetaKeywords($this->html->getMetaKeywords());
         $seo->setLanguage($this->html->getLanguage());
         $seo->setContent($this->html->getContent());
         $seo->setH1($this->html->getH1());
+
+        $metaKeywords = $this->html->getMetaKeywords();
+        if (!empty($metaKeywords)) {
+            $seo->setMetaKeywords($metaKeywords);
+        }
 
         $links = [];
         $baseUrl = $snapshot->getPage()->getProject()->getBaseUrl();

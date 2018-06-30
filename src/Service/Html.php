@@ -67,10 +67,10 @@ class Html
         return self::removeMultipleSpaces($result);
     }
 
-    public function getMetaKeywords(): ?array
+    public function getMetaKeywords(): array
     {
         if (!$this->crawler->filter("meta[name='keywords']")->count()) {
-            return null;
+            return [];
         }
 
         $keywords = $this->crawler->filter("meta[name='keywords']")->attr('content');

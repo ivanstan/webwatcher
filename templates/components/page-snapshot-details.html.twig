@@ -2,7 +2,7 @@
     <tr>
         <th>Timestamp</th>
         <td>
-            {{ snapshot.timestamp|date('d/m/Y H:i:s') }}
+            {{ snapshot.timestamp|date(datetime_format()) }}
         </td>
     </tr>
     <tr>

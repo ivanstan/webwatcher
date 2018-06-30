@@ -34,7 +34,7 @@ class BulkPage
             }
         }
 
-        return $result;
+        return array_unique($result);
     }
 
     private function getCrawler(string $url): ?Crawler

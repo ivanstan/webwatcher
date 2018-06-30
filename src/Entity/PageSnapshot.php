@@ -131,7 +131,7 @@ class PageSnapshot
         $this->responseCode = $responseCode;
     }
 
-    public function getResponseTime(): float
+    public function getResponseTime(): ?float
     {
         return $this->responseTime;
     }

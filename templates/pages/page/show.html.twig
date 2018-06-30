@@ -64,7 +64,7 @@
             <select class="custom-select" name="snapshot1">
                 {% set newest = page.snapshots[0].timestamp %}
                 {% for index, snapshot in page.snapshots %}
-                    <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date('d/m/Y H:i:s') }}
+                    <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date(datetime_format()) }}
                         - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
                 {% endfor %}
             </select>
@@ -72,7 +72,7 @@
             <select class="custom-select" name="snapshot2">
                 {% set newest = page.snapshots[0].timestamp %}
                 {% for index, snapshot in page.snapshots %}
-                    <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date('d/m/Y H:i:s') }}
+                    <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date(datetime_format()) }}
                         - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
                 {% endfor %}
             </select>
@@ -92,7 +92,7 @@
             {% set newest = page.snapshots[0].timestamp %}
             {% for index, snapshot in page.snapshots %}
                 <tr>
-                    <td><a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.timestamp|date('d/m/Y H:i:s') }}</a></td>
+                    <td><a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.timestamp|date(datetime_format()) }}</a></td>
                     <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
                     <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
                 </tr>

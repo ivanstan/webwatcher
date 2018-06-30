@@ -2,12 +2,12 @@
 
 namespace App\Twig;
 
+use App\Entity\User;
+use App\Entity\UserPreference;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Twig_Environment;
-use Twig_Extension;
-use Twig_SimpleFilter;
 
-class TimeExtension extends Twig_Extension
+class TimeExtension extends \Twig_Extension
 {
     public static $units = [
         'y' => 'year',
@@ -19,40 +19,38 @@ class TimeExtension extends Twig_Extension
     ];
 
     private $translator;
+    private $token;
 
-    public function __construct(TranslatorInterface $translator = null)
+    public function __construct(TranslatorInterface $translator = null, TokenStorageInterface $token)
     {
         $this->translator = $translator;
+        $this->token = $token;
     }
 
     public function getFilters()
     {
-        // ToDo: setup user timezone and date format in templates
+        $filters = parent::getFilters();
+        $filters[] = new \Twig_SimpleFilter('time_diff', [$this, 'diff'], ['needs_environment' => true]);
+        $filters[] = new \Twig_SimpleFilter('datetime_format', [$this, 'dateTimeFormat'], ['needs_environment' => true]);
 
-        return [
-            new Twig_SimpleFilter('time_diff', [$this, 'diff'], ['needs_environment' => true]),
-        ];
+        return $filters;
     }
 
-    /**
-     * Filter for converting dates to a time ago string like Facebook and Twitter has.
-     *
-     * @param Twig_Environment $env a Twig_Environment instance
-     * @param string|\DateTime $date a string or DateTime object to convert
-     * @param string|\DateTime $now A string or DateTime object to compare with. If none given, the current time will be used.
-     *
-     * @return string the converted time
-     */
-    public function diff(Twig_Environment $env, $date, $now = null)
+    public function getFunctions()
     {
-        // Convert both dates to DateTime instances.
+        $functions = parent::getFunctions();
+        $functions[] = new \Twig_SimpleFunction('datetime_format', [$this, 'dateTimeFormat'], ['needs_environment' => true]);
+
+        return $functions;
+    }
+
+    public function diff(\Twig_Environment $env, $date, $now = null): string
+    {
         $date = twig_date_converter($env, $date);
         $now = twig_date_converter($env, $now);
 
-        // Get the difference between the two DateTime objects.
         $diff = $date->diff($now);
 
-        // Check for each interval if it appears in the $diff object.
         foreach (self::$units as $attribute => $unit) {
             $count = $diff->$attribute;
 
@@ -62,6 +60,20 @@ class TimeExtension extends Twig_Extension
         }
 
         return '';
+    }
+
+    public function dateTimeFormat(): string
+    {
+        if ($this->token->getToken()) {
+            /** @var User $user */
+            $user = $this->token->getToken()->getUser();
+
+            if ($user instanceof User && $user->getPreference() && $user->getPreference()->getTimezone()) {
+                return $user->getPreference()->getDateTimeFormat();
+            }
+        }
+
+        return UserPreference::DEFAULT_DATETIME_FORMAT;
     }
 
     protected function getPluralizedInterval($count, $invert, $unit)
@@ -77,10 +89,5 @@ class TimeExtension extends Twig_Extension
         }
 
         return $invert ? "in $count $unit" : "$count $unit ago";
-    }
-
-    public function getName()
-    {
-        return 'date';
     }
 }

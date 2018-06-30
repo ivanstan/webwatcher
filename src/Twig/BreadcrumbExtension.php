@@ -89,7 +89,7 @@ class BreadcrumbExtension extends AbstractExtension
 
         if (isset($project) && isset($page)) {
             $breadcrumbs[] = [
-                'title' => $page->getName(),
+                'title' => $page->getName() ?? $page->getPath(),
                 'tooltip' => 'Page',
                 'href' => $this->router->generate('page_show', [
                     'project' => $project->getId(),

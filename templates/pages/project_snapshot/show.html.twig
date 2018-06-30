@@ -20,7 +20,7 @@
         <tbody>
             <tr>
                 <th>Timestamp</th>
-                <td>{{ project_snapshot.timestamp|date('d/m/Y H:i:s') }}</td>
+                <td>{{ project_snapshot.timestamp|date(datetime_format()) }}</td>
             </tr>
         </tbody>
     </table>
@@ -28,6 +28,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
+            <th>Image</th>
             <th>Page snapshot</th>
             <th>Page</th>
             <th>HTTP Status</th>
@@ -38,7 +39,13 @@
         {% for page_snapshot in project_snapshot.snapshots %}
             <tr>
                 <td>
-                    <a href="{{ path('page_snapshot_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}">{{ page_snapshot.timestamp|date('d/m/Y H:i:s') }}</a>
+                    <a target="_blank" class="cursor-zoom-in" href="{{ asset(page_snapshot.image) }}">
+                        <img width="200px" alt="{{ page_snapshot.timestamp|date(datetime_format()) }} snapshot"
+                             src="{{ asset(page_snapshot.image) }}">
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('page_snapshot_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}">{{ page_snapshot.timestamp|date(datetime_format()) }}</a>
                 </td>
                 <td>
                     <a href="{{ path('page_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id} ) }}">{% if page_snapshot.page.name is not empty %}{{ page_snapshot.page.name }}{% else %}{{ page_snapshot.page.path }}{% endif %}</a>
@@ -51,6 +58,20 @@
                        target="_blank"
                        href="{{ page_snapshot.page.url }}">
                         <i class="fa fa-external-link-alt"></i>
+                    </a>
+                    <a data-toggle="tooltip"
+                       data-placement="bottom"
+                       title="Show code"
+                       target="_blank"
+                       href="{{ path('editor', {'snapshot1': page_snapshot.id}) }}">
+                        <i class="fa fa-file-code"></i>
+                    </a>
+                    <a data-toggle="tooltip"
+                       data-placement="bottom"
+                       title="Show in iframe"
+                       target="_blank"
+                       href="{{ path('iframe', {'snapshot': page_snapshot.id}) }}">
+                        <i class="fab fa-chrome"></i>
                     </a>
                 </td>
             </tr>

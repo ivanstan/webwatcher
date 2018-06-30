@@ -102,7 +102,7 @@ class ProjectController extends Controller
             }
 
             $em->flush();
-            $this->redirectToRoute('project_show', [
+            return $this->redirectToRoute('project_show', [
                'project' => $project->getId()
             ]);
         }
@@ -119,7 +119,7 @@ class ProjectController extends Controller
         }
 
         $pages = array_diff($pages, $existing);
-        array_unique($pages);
+        $pages = array_unique($pages);
 
         return $this->render('pages/project/bulk.html.twig', [
             'project' => $project,

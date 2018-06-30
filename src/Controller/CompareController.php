@@ -114,13 +114,19 @@ class CompareController extends Controller
             }
         }
 
+        try {
+            $html = $crawler->html();
+        } catch (\Exception $exception) {
+            $html = '';
+        }
+
         if ($snapshot->hasHeader('Content-Type')) {
             // ToDo replace hardcoded content type with one from header
         }
 
         return $this->render('pages/compare/iframe.html.twig', [
             'snapshot1' => $snapshot,
-            'html' => $crawler->html(),
+            'html' => $html,
         ]);
     }
 

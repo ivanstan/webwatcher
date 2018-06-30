@@ -66,14 +66,16 @@ class KeywordExtractor
     {
         $file = $this->stopWordsDir . '/' . $language . '.list';
 
-        if (file_exists($file)) {
-            $stopWords = StopWordFactory::get($file);
-
-
-            $this->tokenFilters = [
-                new Filters\StopWordsFilter($stopWords),
-            ];
+        if (!file_exists($file)) {
+            return $this;
         }
+
+        $stopWords = array_map('trim', file($file));
+
+        $this->tokenFilters = [
+            new Filters\StopWordsFilter($stopWords),
+            new Filter\TokenLengthFilter(),
+        ];
 
         return $this;
     }
@@ -106,10 +108,8 @@ class KeywordExtractor
         unset($tokens);
 
         foreach ($this->tokenFilters as $filter) {
-            $tokenDoc->applyTransformation($filter, false);
+            $tokenDoc->applyTransformation($filter);
         }
-
-        // ToDo: add stopwords
 
         try {
             $freqDist = new FreqDist($tokenDoc->toArray());

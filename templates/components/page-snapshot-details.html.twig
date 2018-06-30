@@ -59,7 +59,7 @@
     </table>
 {% endif %}
 
-{% if freq is not null %}
+{% if freq is not null and freq is not empty %}
     <canvas id="word-count-chart" data-title="Word frequency" class="pie-chart" data-chart="{{ freq|json_encode }}"></canvas>
 {% endif %}
 

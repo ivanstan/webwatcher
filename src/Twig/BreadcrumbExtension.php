@@ -123,14 +123,16 @@ class BreadcrumbExtension extends AbstractExtension
         }
 
         if (isset($authenticator)) {
-            $breadcrumbs[] = [
-                'title' => 'Authenticator',
-                'tooltip' => '',
-                'href' => $this->router->generate('authenticator_edit', [
-                    'project' => $project->getId(),
-                    'id' => $authenticator->getId()
-                ])
-            ];
+            if ($authenticator->getId()) {
+                $breadcrumbs[] = [
+                    'title' => 'Authenticator',
+                    'tooltip' => '',
+                    'href' => $this->router->generate('authenticator_edit', [
+                        'project' => $project->getId(),
+                        'id' => $authenticator->getId()
+                    ]),
+                ];
+            }
         }
 
         if ($routeName === 'project_bulk_add') {

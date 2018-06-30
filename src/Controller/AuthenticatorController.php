@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\AuthenticatorInterface;
 use App\Entity\Project;
 use App\Form\Authenticator\SeleniumAuthenticatorType;
 use App\Service\Factory\AuthenticatorFactory;
 use App\Service\Selenium\SeleniumAuthenticatorService;
-use Facebook\WebDriver\Exception\NoSuchElementException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,39 +21,73 @@ class AuthenticatorController extends Controller
     /**
      * @Route("/{type}/new", name="authenticator_new", methods="GET|POST")
      */
-    public function new(Request $request, Project $project, string $type, AuthenticatorFactory $factory): Response
+    public function new(
+        Request $request,
+        Project $project,
+        string $type,
+        AuthenticatorFactory $factory,
+        SeleniumAuthenticatorService $seleniumAuthenticator
+    ): Response
     {
         $authenticator = $factory->create($type);
         $authenticator->setProject($project);
 
         $form = $this->createForm($factory->getFormType($type), $authenticator);
         $form->handleRequest($request);
+        $cookies = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($authenticator);
-            $em->flush();
 
-            return $this->redirectToRoute('project_edit', ['project' => $project->getId()]);
+            if ($form->get('save')->isClicked()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($authenticator);
+                $em->flush();
+
+                return $this->redirectToRoute('project_edit', ['project' => $project->getId()]);
+            }
+
+            if ($form->get('test')->isClicked()) {
+                try {
+                    $cookies = $seleniumAuthenticator->resolve($authenticator);
+                } catch (\Exception $exception) {
+                    $this->addFlash('danger', $exception->getMessage());
+                }
+
+                if (!empty($cookies)) {
+                    $this->addFlash('success', 'Login finished successfully.');
+                }
+            }
         }
 
         return $this->render('pages/authenticator/new.html.twig', [
             'authenticator' => $authenticator,
             'form' => $form->createView(),
+            'cookies' => $cookies,
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="authenticator_edit", methods="GET|POST")
      */
-    public function edit(Request $request, Authenticator $authenticator, SeleniumAuthenticatorService $seleniumAuthenticator): Response
+    public function edit(
+        Request $request,
+        AuthenticatorInterface $authenticator,
+        SeleniumAuthenticatorService $seleniumAuthenticator
+    ): Response
     {
         $form = $this->createForm(SeleniumAuthenticatorType::class, $authenticator);
         $form->handleRequest($request);
         $cookies = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+
+            if ($form->get('save')->isClicked()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($authenticator);
+                $em->flush();
+
+                return $this->redirectToRoute('project_edit', ['project' => $project->getId()]);
+            }
 
             try {
                 $cookies = $seleniumAuthenticator->resolve($authenticator);
@@ -69,7 +103,7 @@ class AuthenticatorController extends Controller
         return $this->render('pages/authenticator/edit.html.twig', [
             'authenticator' => $authenticator,
             'form' => $form->createView(),
-            'cookies' => $cookies
+            'cookies' => $cookies,
         ]);
     }
 

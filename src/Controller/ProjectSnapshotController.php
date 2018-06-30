@@ -23,7 +23,7 @@ class ProjectSnapshotController extends Controller
     public function show(ProjectSnapshot $snapshot): Response
     {
         return $this->render('pages/project_snapshot/show.html.twig', [
-            'project_snapshot' => $snapshot
+            'project_snapshot' => $snapshot,
         ]);
     }
 
@@ -48,8 +48,11 @@ class ProjectSnapshotController extends Controller
      */
     public function newSnapshot(Project $project, ProjectSnapshotService $service)
     {
-        $service->new($project);
+        $snapshot = $service->new($project);
 
-        return $this->redirectToRoute('project_show', ['project' => $project->getId()]);
+        return $this->redirectToRoute('project_snapshot_show', [
+            'project' => $project->getId(),
+            'snapshot' => $snapshot->getId(),
+        ]);
     }
 }

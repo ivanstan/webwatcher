@@ -5,6 +5,10 @@
 {% block content %}
     <h1>Create new Authenticator</h1>
 
+    {{ breadcrumbs(authenticator)|raw }}
+
+    {% include 'components/flash-messages.html.twig' %}
+
     {% if authenticator.type == 'selenium' %}
         {{ include('pages/authenticator/type/selenium_form.html.twig') }}
     {% endif %}
@@ -12,6 +16,5 @@
     {% if authenticator.type == 'http' %}
         {{ include('pages/authenticator/type/http_form.html.twig') }}
     {% endif %}
-
 
 {% endblock %}

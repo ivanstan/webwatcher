@@ -44,7 +44,9 @@ class ProjectController extends Controller
             $em->persist($project->getPages()[0]);
             $em->flush();
 
-            return $this->redirectToRoute('project_index');
+            return $this->redirectToRoute('project_edit', [
+                'project' => $project->getId(),
+            ]);
         }
 
         return $this->render('pages/project/new.html.twig', [

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table("http_basic_authenticator")
  */
-class HttpBasicAuthenticator extends Authenticator
+class HttpBasicAuthenticator extends Authenticator implements AuthenticatorInterface
 {
     /**
      * @var string

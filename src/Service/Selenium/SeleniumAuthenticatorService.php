@@ -2,6 +2,7 @@
 
 namespace App\Service\Selenium;
 
+use App\Entity\Authenticator\AuthenticatorInterface;
 use App\Entity\Authenticator\SeleniumAuthenticator;
 use Facebook\WebDriver\Cookie;
 use Facebook\WebDriver\WebDriverBy;
@@ -19,7 +20,7 @@ class SeleniumAuthenticatorService {
      * @param \App\Entity\Authenticator\SeleniumAuthenticator $authenticator
      * @return Cookie[]
      */
-    public function resolve(SeleniumAuthenticator $authenticator) {
+    public function resolve(AuthenticatorInterface $authenticator) {
 
         $driver = $this->webDriver->getInstance();
 

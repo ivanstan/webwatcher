@@ -25,5 +25,9 @@
 {{ form_row(form.usernameSelector) }}
 {{ form_row(form.passwordSelector) }}
 
-<button type="submit" class="btn btn-primary mb-3">Save</button>
+<div class="mb-3">
+{{ form_widget(form.save) }}
+{{ form_widget(form.test) }}
+</div>
+
 {{ form_end(form) }}

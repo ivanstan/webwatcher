@@ -33,7 +33,7 @@
     <table class="table">
         <tbody>
         <tr>
-            <th>Base URL</th>
+            <th>URL</th>
             <td>{{ project.baseUrl }}</td>
         </tr>
         </tbody>
@@ -66,7 +66,7 @@
                                 aria-expanded="false">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item"
                                href="{{ path('project_bulk_add', {'project': project.id, 'type': 'sitemap'}) }}">Sitemap</a>
                             <a class="dropdown-item"

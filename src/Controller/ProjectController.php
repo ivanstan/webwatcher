@@ -6,13 +6,13 @@ use App\Entity\Authenticator\Authenticator;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Form\ProjectType;
+use App\Service\Bulk\BulkPage;
 use App\Service\Factory\ProjectFactory;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class ProjectController extends Controller
 {
@@ -84,10 +84,10 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("project/{project}/bulk", name="project_bulk_add", methods="GET|POST")
+     * @Route("project/{project}/bulk/{type}", requirements={"slug"="sitemap|crawl"}, name="project_bulk_add", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function bulk(Request $request, Project $project)
+    public function bulk(Request $request, Project $project, string $type, BulkPage $bulk)
     {
         if ($request->isMethod('POST')) {
             $em = $this->getDoctrine()->getManager();
@@ -107,34 +107,24 @@ class ProjectController extends Controller
             ]);
         }
 
-        $pages = [];
-
-        $options = [
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-            ],
-        ];
-
-        $crawler = new Crawler(
-            file_get_contents($project->getBaseUrl() . '/sitemap.xml', false, stream_context_create($options))
-        );
-
         $existing = [];
         foreach ($project->getPages() as $page) {
             $existing[] = $page->getPath();
         }
 
-        foreach ($crawler->filter('url loc') as $url) {
-            $pages[] =  parse_url($url->textContent, PHP_URL_PATH);
+        if ($type === 'sitemap') {
+            $pages = $bulk->fromSiteMap($project->getBaseUrl());
+        } elseif ($type === 'crawl') {
+            $pages = $bulk->crawl($project->getBaseUrl());
         }
 
         $pages = array_diff($pages, $existing);
-
         array_unique($pages);
+
         return $this->render('pages/project/bulk.html.twig', [
             'project' => $project,
             'pages' => $pages,
+            'type' => $type,
         ]);
     }
 

@@ -7,6 +7,7 @@ use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -15,14 +16,17 @@ class BreadcrumbExtension extends AbstractExtension
 {
     private $router;
     private $template;
+    private $requestStack;
 
     public function __construct(
         RouterInterface $router,
-        \Twig_Environment $template
+        \Twig_Environment $template,
+        RequestStack $requestStack
     )
     {
         $this->router = $router;
         $this->template = $template;
+        $this->requestStack = $requestStack;
     }
 
     public function getFunctions(): array
@@ -39,6 +43,9 @@ class BreadcrumbExtension extends AbstractExtension
      */
     public function breadcrumbs($entity = null, $suffix = null)
     {
+        $request = $this->requestStack->getCurrentRequest();
+        $routeName = $request->get('_route');
+
         if ($entity instanceof Project) {
             $project = $entity;
         }
@@ -124,6 +131,10 @@ class BreadcrumbExtension extends AbstractExtension
                     'id' => $authenticator->getId()
                 ])
             ];
+        }
+
+        if ($routeName === 'project_bulk_add') {
+
         }
 
         return $this->template->render('components/breadcrumbs.html.twig', [

@@ -1,4 +1,7 @@
 {
+    "camspiers/porter-stemmer": {
+        "version": "1.0.0"
+    },
     "caxy/php-htmldiff": {
         "version": "v0.1.7"
     },
@@ -434,8 +437,20 @@
     "twig/twig": {
         "version": "v2.4.8"
     },
+    "wamania/php-stemmer": {
+        "version": "1.2"
+    },
     "webmozart/assert": {
         "version": "1.3.0"
+    },
+    "yooper/nicknames": {
+        "version": "v1.0.2"
+    },
+    "yooper/php-text-analysis": {
+        "version": "1.3.7"
+    },
+    "yooper/stop-words": {
+        "version": "v1.0.1"
     },
     "zendframework/zend-code": {
         "version": "3.3.0"

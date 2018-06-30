@@ -44,20 +44,24 @@
             <h2>Pages</h2>
         </div>
         <div class="col-2">
-            <a data-toggle="tooltip"
-               data-placement="left"
-               title="Create new page"
-               class="btn btn-primary float-right mt-1"
-               href="{{ path('page_new', {'project': project.id}) }}">
-                <i class="fa fa-plus-square"></i>
-            </a>
-            <a data-toggle="tooltip"
-               data-placement="left"
-               title="Bulk page add"
-               class="btn btn-primary float-right mt-1 mr-2"
-               href="{{ path('project_bulk_add', {'project': project.id}) }}">
-                <i class="fa fa-file-alt"></i>
-            </a>
+            <div class="btn-group float-right">
+                <button type="button" class="btn btn-primary"
+                        onclick="location.href='{{ path('page_new', {'project': project.id}) }}';">
+                    <i class="fa fa-plus-square"></i>
+                </button>
+                <button type="button"
+                        class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('project_bulk_add', {'project': project.id, 'type': 'sitemap'}) }}">Sitemap</a>
+                    <a class="dropdown-item" href="{{ path('project_bulk_add', {'project': project.id, 'type': 'crawl'}) }}">Crawl</a>
+                </div>
+            </div>
+
         </div>
     </div>
 

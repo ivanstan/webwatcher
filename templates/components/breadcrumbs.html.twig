@@ -1,9 +1,7 @@
 <div class="row mb-3">
     <div class="col-12">
         {% for index, breadcrumb in breadcrumbs %}
-            <a data-toggle="tooltip"
-               data-placement="bottom"
-               title="{{ breadcrumb.tooltip }}"
+            <a {% if breadcrumb.tooltip is defined %}data-toggle="tooltip" data-placement="bottom" title="{{ breadcrumb.tooltip }}"{% endif %}
                href="{{ breadcrumb.href }}">{{ breadcrumb.title }}</a>
             {% if index < breadcrumbs|length - 1 %}
                 <i class="fa fa-chevron-right"></i>

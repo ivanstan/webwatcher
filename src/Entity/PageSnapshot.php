@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Mihaeu\HtmlFormatter;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\PageSnapshotRepository")
  * @ORM\Table("page_snapshot",
  *     indexes={
  *     @ORM\Index(columns={"body"}, flags={"fulltext"}),

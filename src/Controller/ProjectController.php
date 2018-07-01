@@ -8,11 +8,11 @@ use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Service\Bulk\BulkPage;
 use App\Service\Factory\ProjectFactory;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @Route("/project")
@@ -77,47 +77,78 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{project}/bulk/{type}", requirements={"slug"="sitemap|crawl"}, name="project_bulk_add", methods="GET|POST")
+     * @Route("/{project}/import/crawl", name="project_import_crawl", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function bulk(Request $request, Project $project, string $type, BulkPage $bulk)
+    public function importCrawl(Request $request, Project $project, BulkPage $bulk)
     {
         if ($request->isMethod('POST')) {
-            $em = $this->getDoctrine()->getManager();
-            foreach ($request->request->get('pages') as $path) {
-                $path = str_replace($project->getBaseUrl(), '', $path);
-
-                $page = new Page();
-                $page->setPath($path);
-                $page->setProject($project);
-
-                $em->persist($page);
-            }
-
-            $em->flush();
-            return $this->redirectToRoute('project_show', [
-               'project' => $project->getId()
-            ]);
+            return $this->bulkImport($project, $request->request->get('pages'));
         }
 
-        $existing = [];
-        foreach ($project->getPages() as $page) {
-            $existing[] = $page->getPath();
+        $url = $request->query->get('url');
+        $url = parse_url($url, PHP_URL_PATH);
+
+        if ($request->query->get('url')) {
+            $url = $project->getBaseUrl() . $url;
+        } else {
+            $url = $project->getBaseUrl();
         }
 
-        if ($type === 'sitemap') {
-            $pages = $bulk->fromSiteMap($project->getBaseUrl());
-        } elseif ($type === 'crawl') {
-            $pages = $bulk->crawl($project->getBaseUrl());
-        }
-
-        $pages = array_diff($pages, $existing);
-        $pages = array_unique($pages);
+        $pages = $bulk->crawl($url);
 
         return $this->render('pages/project/bulk.html.twig', [
             'project' => $project,
-            'pages' => $pages,
-            'type' => $type,
+            'url' => $url,
+            'pages' => array_diff($pages, $this->getExistingPages($project)),
+        ]);
+    }
+
+    /**
+     * @Route("/{project}/import/sitemap", name="project_import_sitemap", methods="GET|POST")
+     * @Security("has_role('ROLE_MANAGER')")
+     */
+    public function importSiteMap(Request $request, Project $project, BulkPage $bulk)
+    {
+        if ($request->isMethod('POST')) {
+            $this->bulkImport($project, $request->request->get('pages'));
+        }
+
+        $pages = $bulk->fromSiteMap($project->getBaseUrl());
+
+        return $this->render('pages/project/bulk.html.twig', [
+            'project' => $project,
+            'pages' => array_diff($pages, $this->getExistingPages($project)),
+        ]);
+    }
+
+    private function getExistingPages(Project $project): array
+    {
+        $result = [];
+        foreach ($project->getPages() as $page) {
+            $result[] = $page->getPath();
+        }
+
+        return $result;
+    }
+
+    private function bulkImport(Project $project, array $pages)
+    {
+        $em = $this->getDoctrine()->getManager();
+        foreach ($pages as $path) {
+            $path = str_replace($project->getBaseUrl(), '', $path);
+
+            $page = new Page();
+            $page->setPath($path);
+            $page->setProject($project);
+
+            $em->persist($page);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute('project_show', [
+            'project' => $project->getId()
         ]);
     }
 

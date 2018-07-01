@@ -68,9 +68,9 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item"
-                               href="{{ path('project_bulk_add', {'project': project.id, 'type': 'sitemap'}) }}">Sitemap</a>
+                               href="{{ path('project_import_sitemap', {'project': project.id}) }}">From sitemap</a>
                             <a class="dropdown-item"
-                               href="{{ path('project_bulk_add', {'project': project.id, 'type': 'crawl'}) }}">Crawl</a>
+                               href="{{ path('project_import_crawl', {'project': project.id}) }}">From url</a>
                         </div>
                     </div>
 
@@ -89,7 +89,13 @@
                 {% for page in project.pages %}
                     <tr>
                         <td>
-                            <a href="{{ path('page_show', {'project': project.id, 'page': page.id}) }}">{% if page.name %}{{ page.name }}{% else %}{{ page.path }}{% endif %}</a>
+                            {% set title = page.name|default(page.path) %}
+
+                            <a href="{{ path('page_show', {'project': project.id, 'page': page.id}) }}"
+                                    {% if title|length > 50 %} data-toggle="tooltip" data-placement="bottom" title="{{ title }}"{% endif %}
+                            >
+                                {{ (title|length > 50 ? title|slice(0, 50) ~ '…' : title) }}
+                            </a>
                         </td>
                         <td>{{ page.path }}</td>
                         <td>
@@ -107,6 +113,12 @@
                                target="_blank"
                                href="{{ page.url }}">
                                 <i class="fa fa-external-link-alt"></i>
+                            </a>
+                            <a data-toggle="tooltip"
+                               data-placement="bottom"
+                               title="Import links from this page"
+                               href="{{ path('project_import_crawl', {"project": project.id, "url": page.path }) }}">
+                                <i class="fas fa-link"></i>
                             </a>
                         </td>
                     </tr>

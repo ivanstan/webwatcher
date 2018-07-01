@@ -20,7 +20,7 @@ class BulkPage
             }
         }
 
-        return $result;
+        return array_filter(array_unique($result));
     }
 
     public function crawl(string $baseUrl)
@@ -34,7 +34,7 @@ class BulkPage
             }
         }
 
-        return array_unique($result);
+        return array_filter(array_unique($result));
     }
 
     private function getCrawler(string $url): ?Crawler

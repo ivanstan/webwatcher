@@ -3,10 +3,14 @@
 {% block title %}New Project | {{ parent() }}{% endblock %}
 
 {% block content %}
-    <form method="post" action="{{ path('project_bulk_add', {'project': project.id, 'type': type}) }}">
+    <form method="post" action="{{ path(app.request.attributes.get('_route'), {'project': project.id}) }}">
         <div class="row">
             <div class="col-10">
-                <h1>Bulk page import</h1>
+                {% if app.request.attributes.get('_route') == 'project_import_sitemap' %}
+                    <h1>Import sitemap</h1>
+                {% else %}
+                    <h1>Import links</h1>
+                {% endif %}
             </div>
             <div class="col-2">
                 <button class="btn btn-primary float-right mt-3" type="submit">Import</button>
@@ -17,11 +21,18 @@
 
         {% include 'components/flash-messages.html.twig' %}
 
+        {% if url is defined %}
+            <div class="mb-2">
+                <small >From url: {{ url }}</small>
+            </div>
+        {% endif %}
+
         <table class="table">
             <thead>
             <tr>
                 <td><input type="checkbox" data-toggle="select-all" data-target="select-page"></td>
                 <td>Path</td>
+                <td>Actions</td>
             </tr>
             </thead>
             <tbody>
@@ -30,11 +41,21 @@
                     <td>
                         <input data-group="select-page" name="pages[]" type="checkbox" value="{{ project.baseUrl ~ page }}">
                     </td>
-                    <td> {{ page }}</td>
+                    <td>
+                        {{ page }}
+                    </td>
+                    <td>
+                        <a data-toggle="tooltip"
+                           data-placement="bottom"
+                           title="Import links from this page"
+                           href="{{ path('project_import_crawl', {"project": project.id, "url": page }) }}">
+                            <i class="fas fa-link"></i>
+                        </a>
+                    </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="2" class="text-center">
+                    <td colspan="3" class="text-center">
                         No new pages found.
                     </td>
                 </tr>

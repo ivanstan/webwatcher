@@ -33,7 +33,7 @@ class Link
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", nullable=false, columnDefinition="ENUM('link_internal', 'link_external', 'stylesheet', 'javascript', 'image', 'resource')")
+     * @ORM\Column(name="type", type="string", nullable=false)
      */
     protected $type;
 

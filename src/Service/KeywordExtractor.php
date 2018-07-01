@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use StopWordFactory;
 use TextAnalysis\Analysis\FreqDist;
 use TextAnalysis\Analysis\Keywords\Rake;
 use TextAnalysis\Documents\TokensDocument;

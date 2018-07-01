@@ -3,6 +3,7 @@
 namespace App\Entity\Assert;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @ORM\Entity
@@ -11,14 +12,29 @@ use Doctrine\ORM\Mapping as ORM;
 class ResponseCodeAssert extends Assert
 {
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="code", type="string", nullable=false)
+     * @ORM\Column(name="code", type="integer", nullable=false)
      */
     private $code;
+
+    public function __construct()
+    {
+        $this->code = Response::HTTP_OK;
+    }
 
     public function getType()
     {
         return Assert::TYPE_RESPONSE_CODE;
+    }
+
+    public function getCode(): ?int
+    {
+        return $this->code;
+    }
+
+    public function setCode(?int $code): void
+    {
+        $this->code = $code;
     }
 }

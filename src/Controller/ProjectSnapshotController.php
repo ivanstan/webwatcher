@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\PageSnapshot;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Service\Snapshot\ProjectSnapshotService;

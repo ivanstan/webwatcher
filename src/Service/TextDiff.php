@@ -73,15 +73,15 @@ class TextDiff {
             self::generatePartialDiff($table, $sequence1, $sequence2, $start);
 
         // generate the full diff
-        $diff = array();
+        $diff = [];
         for ($index = 0; $index < $start; $index ++){
-            $diff[] = array($sequence1[$index], self::UNMODIFIED);
+            $diff[] = [$sequence1[$index], self::UNMODIFIED];
         }
         while (count($partialDiff) > 0) $diff[] = array_pop($partialDiff);
         for ($index = $end1 + 1;
              $index < ($compareCharacters ? strlen($sequence1) : count($sequence1));
              $index ++){
-            $diff[] = array($sequence1[$index], self::UNMODIFIED);
+            $diff[] = [$sequence1[$index], self::UNMODIFIED];
         }
 
         // return the diff
@@ -124,13 +124,13 @@ class TextDiff {
         $length2 = $end2 - $start + 1;
 
         // initialise the table
-        $table = array(array_fill(0, $length2 + 1, 0));
+        $table = [array_fill(0, $length2 + 1, 0)];
 
         // loop over the rows
         for ($index1 = 1; $index1 <= $length1; $index1 ++){
 
             // create the new row
-            $table[$index1] = array(0);
+            $table[$index1] = [0];
 
             // loop over the columns
             for ($index2 = 1; $index2 <= $length2; $index2 ++){
@@ -164,7 +164,7 @@ class TextDiff {
         $table, $sequence1, $sequence2, $start){
 
         //  initialise the diff
-        $diff = array();
+        $diff = [];
 
         // initialise the indices
         $index1 = count($table) - 1;
@@ -179,7 +179,7 @@ class TextDiff {
                 == $sequence2[$index2 + $start - 1]){
 
                 // update the diff and the indices
-                $diff[] = array($sequence1[$index1 + $start - 1], self::UNMODIFIED);
+                $diff[] = [$sequence1[$index1 + $start - 1], self::UNMODIFIED];
                 $index1 --;
                 $index2 --;
 
@@ -187,13 +187,13 @@ class TextDiff {
                 && $table[$index1][$index2] == $table[$index1][$index2 - 1]){
 
                 // update the diff and the indices
-                $diff[] = array($sequence2[$index2 + $start - 1], self::INSERTED);
+                $diff[] = [$sequence2[$index2 + $start - 1], self::INSERTED];
                 $index2 --;
 
             }else{
 
                 // update the diff and the indices
-                $diff[] = array($sequence1[$index1 + $start - 1], self::DELETED);
+                $diff[] = [$sequence1[$index1 + $start - 1], self::DELETED];
                 $index1 --;
 
             }

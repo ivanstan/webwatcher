@@ -3,7 +3,6 @@
 namespace App\Service\Selenium;
 
 use App\Entity\Authenticator\AuthenticatorInterface;
-use App\Entity\Authenticator\SeleniumAuthenticator;
 use Facebook\WebDriver\Cookie;
 use Facebook\WebDriver\WebDriverBy;
 

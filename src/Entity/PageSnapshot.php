@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Property\Id;
 use App\Property\Timestamp;
 use Doctrine\ORM\Mapping as ORM;
-use function GuzzleHttp\Psr7\parse_header;
 use Mihaeu\HtmlFormatter;
 
 /**

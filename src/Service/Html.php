@@ -8,6 +8,8 @@ use Symfony\Component\DomCrawler\Crawler;
 class Html
 {
     protected $html;
+
+    /** @var Crawler */
     protected $crawler;
 
     public function setHtml(string $html)

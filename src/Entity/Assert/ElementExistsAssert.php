@@ -17,8 +17,18 @@ class ElementExistsAssert extends Assert
      */
     private $selector;
 
-    public function getType()
+    public function getType(): string
     {
         return Assert::TYPE_ELEMENT_EXISTS;
+    }
+
+    public function getSelector(): ?string
+    {
+        return $this->selector;
+    }
+
+    public function setSelector(?string $selector): void
+    {
+        $this->selector = $selector;
     }
 }

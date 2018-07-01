@@ -31,9 +31,10 @@ class BreadcrumbExtension extends AbstractExtension
 
     public function getFunctions(): array
     {
-        return [
-            new TwigFunction('breadcrumbs', [$this, 'breadcrumbs']),
-        ];
+        $functions = parent::getFunctions();
+        $functions[] = new TwigFunction('breadcrumbs', [$this, 'breadcrumbs']);
+
+        return $functions;
     }
 
     /**

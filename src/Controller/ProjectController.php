@@ -14,22 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * @Route("/project")
+ */
 class ProjectController extends Controller
 {
     /**
-     * @Route("/", name="project_index", methods="GET")
-     */
-    public function index(): Response
-    {
-        $projects = $this->getDoctrine()
-            ->getRepository(Project::class)
-            ->findAll();
-
-        return $this->render('pages/project/index.html.twig', ['projects' => $projects]);
-    }
-
-    /**
-     * @Route("project/new", name="project_new", methods="GET|POST")
+     * @Route("/new", name="project_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
     public function new(Request $request, ProjectFactory $factory): Response
@@ -56,7 +47,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("project/{project}", name="project_show", methods="GET")
+     * @Route("/{project}", name="project_show", methods="GET")
      */
     public function show(Project $project): Response
     {
@@ -86,7 +77,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("project/{project}/bulk/{type}", requirements={"slug"="sitemap|crawl"}, name="project_bulk_add", methods="GET|POST")
+     * @Route("/{project}/bulk/{type}", requirements={"slug"="sitemap|crawl"}, name="project_bulk_add", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
     public function bulk(Request $request, Project $project, string $type, BulkPage $bulk)
@@ -131,7 +122,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("project/{project}", name="project_delete", methods="DELETE")
+     * @Route("/{project}", name="project_delete", methods="DELETE")
      * @Security("has_role('ROLE_MANAGER')")
      */
     public function delete(Request $request, Project $project): Response

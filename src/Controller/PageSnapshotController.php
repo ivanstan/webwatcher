@@ -26,7 +26,7 @@ class PageSnapshotController extends Controller
     public function show(PageSnapshot $snapshot, KeywordExtractor $extractor): Response
     {
         $statistics = $this->getDoctrine()
-            ->getRepository(PageSnapshotSeo::class)
+            ->getRepository(PageSnapshot::class)
             ->getLinkStatistics($snapshot);
 
         if ($snapshot->getSeo()) {

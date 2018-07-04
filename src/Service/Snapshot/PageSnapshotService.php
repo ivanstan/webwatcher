@@ -103,17 +103,17 @@ class PageSnapshotService
         }
 
         if ($this->links === null) {
-            $this->links = $this->linkRepository->getLinks()->getQuery()->getResult();
+            $this->links = $this->linkRepository->select()->getQuery()->getResult();
         }
 
-        $this->setPageSeo($snapshot);
+        $this->setAdditionalData($snapshot);
 
         $this->seleniumService->setPageSnapshot($snapshot);
 
         return $snapshot;
     }
 
-    private function setPageSeo(PageSnapshot $snapshot)
+    private function setAdditionalData(PageSnapshot $snapshot)
     {
         if (!$snapshot->getBody()) {
             return;
@@ -134,6 +134,8 @@ class PageSnapshotService
             $seo->setMetaKeywords($metaKeywords);
         }
 
+        $snapshot->setSeo($seo);
+
         $links = [];
         $baseUrl = $snapshot->getPage()->getProject()->getBaseUrl();
         foreach ($this->html->getLinks() as $url => $type) {
@@ -141,21 +143,19 @@ class PageSnapshotService
         }
 
         foreach ($links as $href => $type){
-            if (isset($this->links[$href]) && !$seo->linkExists($href)) {
-                $seo->addLink($this->links[$href]);
+            if (isset($this->links[$href]) && !$snapshot->linkExists($href)) {
+                $snapshot->addLink($this->links[$href]);
             } else {
                 $link = new  Link();
                 $link->setType($type);
                 $link->setUrl($href);
                 $this->links[$href] = $link;
 
-                if (!$seo->linkExists($href)) {
-                    $seo->addLink($link);
+                if (!$snapshot->linkExists($href)) {
+                    $snapshot->addLink($link);
                 }
             }
         }
-
-        $snapshot->setSeo($seo);
     }
 
     private function forceAbsoluteUrl($url, $baseUrl) {

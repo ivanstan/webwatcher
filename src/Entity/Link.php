@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Property\Id;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Psr\Log\InvalidArgumentException;
 
@@ -30,12 +31,23 @@ class Link
         self::TYPE_LINK_RESOURCE => 'Resource',
     ];
 
+    public function __construct() {
+        $this->snapshots = new ArrayCollection();
+    }
+
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", nullable=false)
      */
     protected $type;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\PageSnapshot", inversedBy="links", cascade={"persist", "merge"})
+     * @ORM\OrderBy({"id"="DESC"})
+     * @ORM\JoinTable(name="page_snapshot_link")
+     */
+    protected $snapshots;
 
     /**
      * @var string

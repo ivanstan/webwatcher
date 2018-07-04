@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table("element_exists_assert")
  */
-class ElementExistsAssert extends Assert
+class ElementExistsAssert extends Assert implements AssertInterface
 {
     /**
      * @var string

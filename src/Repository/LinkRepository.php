@@ -13,9 +13,8 @@ class LinkRepository extends ServiceEntityRepository
         parent::__construct($registry, Link::class);
     }
 
-    public function getLinks()
+    public function select()
     {
-        return $this
-            ->createQueryBuilder('l', 'l.url');
+        return $this->createQueryBuilder('link', 'link.url');
     }
 }

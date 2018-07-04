@@ -22,13 +22,6 @@ class PageSnapshotSeo
 {
     use Id;
 
-    private $linkIndex = [];
-
-    public function __construct()
-    {
-        $this->link = new ArrayCollection();
-    }
-
     /**
      * @var string $title
      * @ORM\Column(name="title", type="string", nullable=true)
@@ -70,13 +63,6 @@ class PageSnapshotSeo
      * @ORM\Column(name="language", type="string", nullable=true)
      */
     protected $language;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Link", cascade={"persist", "merge"})
-     * @ORM\OrderBy({"url"="DESC"})
-     * @ORM\JoinTable(name="page_snapshot_seo_link")
-     */
-    protected $link;
 
     public function getTitle(): ?string
     {
@@ -146,31 +132,5 @@ class PageSnapshotSeo
     public function setLanguage(?string $language): void
     {
         $this->language = $language;
-    }
-
-    public function getLinks(): ?ArrayCollection
-    {
-        return $this->link;
-    }
-
-    public function setLinks(?ArrayCollection $link): void
-    {
-        $this->link = $link;
-
-        /** @var Link $link */
-        foreach ($this->link as $link) {
-            $this->linkIndex[$link->getUrl()] = $link;
-        }
-    }
-
-    public function addLink(Link $link): void
-    {
-        $this->link->add($link);
-        $this->linkIndex[$link->getUrl()] = $link;
-    }
-
-    public function linkExists(string $url)
-    {
-        return isset($this->linkIndex[$url]);
     }
 }

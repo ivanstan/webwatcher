@@ -4,6 +4,7 @@ namespace App\EventListener;
 
 use App\Entity\User;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class KernelEvenListener
@@ -31,5 +32,12 @@ class KernelEvenListener
                 date_default_timezone_set($timezone);
             }
         }
+    }
+
+    public function onKernelException(GetResponseForExceptionEvent $event)
+    {
+        $exception = $event->getException();
+
+        $exception;
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @ORM\Entity
  * @ORM\Table("response_code_assert")
  */
-class ResponseCodeAssert extends Assert
+class ResponseCodeAssert extends Assert implements AssertInterface
 {
     /**
      * @var int
@@ -23,7 +23,7 @@ class ResponseCodeAssert extends Assert
         $this->code = Response::HTTP_OK;
     }
 
-    public function getType()
+    public function getType(): string
     {
         return Assert::TYPE_RESPONSE_CODE;
     }

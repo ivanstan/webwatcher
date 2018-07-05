@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *     "Assert::TYPE_RESPONSE_CODE" = "App\Entity\Assert\ResponseCodeAssert",
- *     "Assert::TYPE_ELEMENT_EXISTS" = "App\Entity\Assert\ElementExistsAssert"
+ *     Assert::TYPE_RESPONSE_CODE = "App\Entity\Assert\ResponseCodeAssert",
+ *     Assert::TYPE_ELEMENT_EXISTS = "App\Entity\Assert\ElementExistsAssert"
  * })
  */
 abstract class Assert

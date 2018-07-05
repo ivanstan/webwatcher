@@ -29,15 +29,52 @@ services:
 #        volumes:
 #            - ./logs/nginx/:/var/log/nginx:cached
 
-    selenium-hub:
-        image: 'selenium/hub:3.12.0-boron'
-        container_name: selenium-hub
-        ports:
-            - '4444:4444'
-    chrome:
-        image: 'selenium/node-chrome:3.12.0-boron'
-        depends_on:
-            - selenium-hub
-        environment:
-            - HUB_HOST=selenium-hub
-            - HUB_PORT=4444
+#    selenium-hub:
+#        image: 'selenium/hub:3.12.0-boron'
+#        container_name: selenium-hub
+#        ports:
+#            - '4444:4444'
+#    chrome:
+#        image: 'selenium/node-chrome:3.12.0-boron'
+#        depends_on:
+#            - selenium-hub
+#        environment:
+#            - HUB_HOST=selenium-hub
+#            - HUB_PORT=4444
+
+    seleniumhub:
+      image: selenium/hub:3.12.0-boron
+      ports:
+        - "4444:4444"
+    firefoxnode:
+      image: selenium/node-firefox:3.12.0-boron
+      volumes:
+        - ~/selenium:/e2e/uploads
+        - ~/selenium/tmp:/e2e/uploads/tmp
+      ports:
+        - "5900"
+      expose:
+        - "80"
+      links:
+        - seleniumhub:hub
+    chromenode:
+      image: selenium/node-chrome:3.12.0-boron
+      volumes:
+        - ~/selenium:/e2e/uploads
+        - ~/selenium/tmp:/e2e/uploads/tmp
+      ports:
+        - "5900"
+      expose:
+        - "80"
+      links:
+        - seleniumhub:hub
+    browsermobproxy:
+      image: qautomatron/docker-browsermob-proxy
+      ports:
+        - "9090-9191:9090-9191"
+      expose:
+        - "9090-9191"
+      links:
+        - seleniumhub:hub_sel
+        - firefoxnode:node_ff
+        - chromenode:node_ch

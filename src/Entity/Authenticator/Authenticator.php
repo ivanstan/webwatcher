@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *     "selenium" = "App\Entity\Authenticator\SeleniumAuthenticator",
- *     "http" = "App\Entity\Authenticator\HttpBasicAuthenticator"
+ *     Authenticator::TYPE_SELENIUM = "App\Entity\Authenticator\SeleniumAuthenticator",
+ *     Authenticator::TYPE_HTTP_BASIC = "App\Entity\Authenticator\HttpBasicAuthenticator"
  * })
  */
 abstract class Authenticator

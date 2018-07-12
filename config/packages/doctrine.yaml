@@ -8,6 +8,8 @@ parameters:
 doctrine:
     dbal:
         # configure these for your database server
+        mapping_types:
+            enum: string
         driver: 'pdo_mysql'
         server_version: '5.7'
         charset: utf8mb4

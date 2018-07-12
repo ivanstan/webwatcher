@@ -1,80 +1,84 @@
 version: '2'
 services:
-#    db:
-#        image: mysql
-#        ports:
-#            - "3306:3303"
-#        environment:
-#            MYSQL_ROOT_PASSWORD: root
-#            MYSQL_DATABASE: symfony
-#            MYSQL_USER: symfony
-#            MYSQL_PASSWORD: symfony
-#    php:
-#        build: ./php-fpm
-#        ports:
-#            - "9000:9000"
-#        volumes:
-#            - ./symfony:/var/www/symfony:cached
-#            - ./logs/symfony:/var/www/symfony/var/logs:cached
-#        links:
-#            - db
-#    nginx:
-#        build: ./nginx
-#        ports:
-#            - "80:80"
-#        links:
-#            - php
-#        volumes_from:
-#            - php
-#        volumes:
-#            - ./logs/nginx/:/var/log/nginx:cached
-
-#    selenium-hub:
-#        image: 'selenium/hub:3.12.0-boron'
-#        container_name: selenium-hub
-#        ports:
-#            - '4444:4444'
-#    chrome:
-#        image: 'selenium/node-chrome:3.12.0-boron'
-#        depends_on:
-#            - selenium-hub
-#        environment:
-#            - HUB_HOST=selenium-hub
-#            - HUB_PORT=4444
-
-    seleniumhub:
-      image: selenium/hub:3.12.0-boron
-      ports:
-        - "4444:4444"
-    firefoxnode:
-      image: selenium/node-firefox:3.12.0-boron
-      volumes:
-        - ~/selenium:/e2e/uploads
-        - ~/selenium/tmp:/e2e/uploads/tmp
-      ports:
-        - "5900"
-      expose:
-        - "80"
-      links:
-        - seleniumhub:hub
-    chromenode:
-      image: selenium/node-chrome:3.12.0-boron
-      volumes:
-        - ~/selenium:/e2e/uploads
-        - ~/selenium/tmp:/e2e/uploads/tmp
-      ports:
-        - "5900"
-      expose:
-        - "80"
-      links:
-        - seleniumhub:hub
-    browsermobproxy:
-      image: qautomatron/docker-browsermob-proxy
-      ports:
-        - "9090-9191:9090-9191"
-      expose:
-        - "9090-9191"
-      links:
-        - seleniumhub:hub_sel
-        - firefoxnode:node_ff
-        - chromenode:node_ch
+    db:
+        image: mysql
+        ports:
+            - '3303:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: symfony
+            MYSQL_USER: symfony
+            MYSQL_PASSWORD: symfony
+    php:
+        build: ./php-fpm
+        ports:
+            - '9001:9000'
+        volumes:
+            - './:/var/www/symfony:cached'
+            - './var/log/symfony:/var/www/symfony/var/logs:cached'
+        links:
+            - db
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: symfony
+            MYSQL_USER: symfony
+            MYSQL_PASSWORD: symfony
+            PROXY_PORT_RANGE: 9091-9191
+    nginx:
+        build: ./nginx
+        ports:
+            - '8080:80'
+        links:
+            - php
+        volumes_from:
+            - php
+        volumes:
+            - './var/log/nginx/:/var/log/nginx:cached'
+    selenium-hub:
+        image: 'selenium/hub:3.12.0-boron'
+        ports:
+            - '4444:4444'
+    chrome-node:
+        image: 'selenium/node-chrome:3.12.0-boron'
+        volumes:
+            - '~/selenium:/e2e/uploads'
+            - '~/selenium/tmp:/e2e/uploads/tmp'
+        ports:
+            - '5900'
+        expose:
+            - '80'
+        links:
+            - 'selenium-hub:hub'
+        depends_on:
+            - selenium-hub
+        environment:
+            - HUB_HOST=selenium-hub
+            - HUB_PORT=4444
+    firefox-node:
+        image: 'selenium/node-firefox:3.12.0-boron'
+        volumes:
+            - '~/selenium:/e2e/uploads'
+            - '~/selenium/tmp:/e2e/uploads/tmp'
+        ports:
+            - '5900'
+        expose:
+            - '80'
+        links:
+            - 'selenium-hub:hub'
+        depends_on:
+            - selenium-hub
+        environment:
+            - HUB_HOST=selenium-hub
+            - HUB_PORT=4444
+    browsermob-proxy:
+        image: qautomatron/docker-browsermob-proxy
+        ports:
+            - '9090-9191:9090-9191'
+        expose:
+            - 9090-9191
+        environment:
+            - PORT_RANGE=9091-9191
+        links:
+            - 'selenium-hub:hub_sel'
+            - 'firefox-node:node_ff'
+            - 'chrome-node:node_ch'

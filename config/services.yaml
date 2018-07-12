@@ -35,10 +35,16 @@ services:
             - { name: kernel.event_listener, event: kernel.request }
 
     App\Service\Selenium\SeleniumWebDriver:
-        arguments: ['%selenium_server_url%']
+        arguments: ['%env(SELENIUM_HUB)%']
 
     App\Service\Selenium\SeleniumScreenShotService:
         arguments: [ '%kernel.project_dir%']
 
+    App\Service\FileManager:
+        arguments: [ '%kernel.project_dir%']
+
     App\Service\KeywordExtractor:
         arguments: [ '%kernel.project_dir%']
+
+    App\Service\BrowserMob\BrowserMobApi:
+        arguments: [ '%env(BROWSERMOB_PROXY)%', '%env(PROXY_PORT_RANGE)%']

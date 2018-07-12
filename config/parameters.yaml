@@ -1,4 +1,3 @@
 parameters:
     locale: 'en'
-    selenium_server_url: 'http://localhost:4444/wd/hub'
     demo: false

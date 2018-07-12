@@ -33,28 +33,30 @@ class InstallController extends Controller
         try {
             $user = $this->manager->getRepository(User::class)->findAll();
         } catch (\Exception $exception) {
-            $form = $this->createForm(CreateAdminType::class);
-            $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $data = $form->getData();
-
-                $this->migrate($kernel);
-                $this->createAdmin($data);
-
-                $this->addFlash('success', sprintf('Created new admin user: %s', $data['email']));
-
-                return $this->redirectToRoute('fos_user_security_login');
-            }
-
-            return $this->render('pages/install/install.html.twig', [
-                'form' => $form->createView(),
-            ]);
         }
 
         if ($user) {
             throw new AccessDeniedHttpException('Application has already been installed.');
         }
+
+        $form = $this->createForm(CreateAdminType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $this->migrate($kernel);
+            $this->createAdmin($data);
+
+            $this->addFlash('success', sprintf('Created new admin user: %s', $data['email']));
+
+            return $this->redirectToRoute('fos_user_security_login');
+        }
+
+        return $this->render('pages/install/install.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**

@@ -27,10 +27,13 @@ security:
 
     access_control:
         # disabled paths for ROLE_VIEWER
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/install, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
         - {path: "^/resetting$", allow_if: "!has_role('ROLE_VIEWER')" }
         - {path: "^/profile", allow_if: "!has_role('ROLE_VIEWER')" }
 
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: ROLE_ADMIN }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }
+
+        - { path: ^/register, role: ROLE_ADMIN }

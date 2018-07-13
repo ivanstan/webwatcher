@@ -10,18 +10,14 @@ use Doctrine\ORM\PersistentCollection;
 use Mihaeu\HtmlFormatter;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PageSnapshotRepository")
+ * @ORM\Entity()
  * @ORM\Table("page_snapshot",
  *     indexes={
  *     @ORM\Index(columns={"body"}, flags={"fulltext"}),
- *     @ORM\Index(columns={"headers"}, flags={"fulltext"})
  * })
  */
-class PageSnapshot
+class PageSnapshot extends AbstractSnapshot
 {
-    use Id;
-    use Timestamp;
-
     private $linkIndex = [];
 
     public function __construct()
@@ -64,22 +60,6 @@ class PageSnapshot
      * @ORM\Column(name="response_time", type="float", nullable=true)
      */
     protected $responseTime;
-
-    /**
-     * @var Page
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Page", inversedBy="snapshots", cascade={"persist"})
-     * @ORM\JoinColumn(name="page_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     */
-    protected $page;
-
-    /**
-     * @var ProjectSnapshot
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\ProjectSnapshot", inversedBy="snapshots", cascade={"persist"})
-     * @ORM\JoinColumn(name="project_snapshot_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
-     */
-    protected $projectSnapshot;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\PageSnapshotSeo", cascade={"persist"})
@@ -156,16 +136,6 @@ class PageSnapshot
         $this->responseTime = $responseTime;
     }
 
-    public function getPage(): ?Page
-    {
-        return $this->page;
-    }
-
-    public function setPage(Page $page)
-    {
-        $this->page = $page;
-    }
-
     public function getHash(): ?string
     {
         if ($this->hash) {
@@ -173,16 +143,6 @@ class PageSnapshot
         }
 
         return 'null';
-    }
-
-    public function getProjectSnapshot(): ?ProjectSnapshot
-    {
-        return $this->projectSnapshot;
-    }
-
-    public function setProjectSnapshot(?ProjectSnapshot $projectSnapshot): void
-    {
-        $this->projectSnapshot = $projectSnapshot;
     }
 
     public function getSeo(): ?PageSnapshotSeo

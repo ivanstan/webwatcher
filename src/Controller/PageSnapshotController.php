@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
-use App\Entity\PageSnapshotSeo;
 use App\Service\KeywordExtractor;
 use App\Service\Snapshot\PageSnapshotService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -25,10 +24,6 @@ class PageSnapshotController extends Controller
      */
     public function show(PageSnapshot $snapshot, KeywordExtractor $extractor): Response
     {
-        $statistics = $this->getDoctrine()
-            ->getRepository(PageSnapshot::class)
-            ->getLinkStatistics($snapshot);
-
         if ($snapshot->getSeo()) {
             $content = $snapshot->getSeo()->getContent();
             $language = $snapshot->getSeo()->getLanguage() ?? 'en';
@@ -41,7 +36,7 @@ class PageSnapshotController extends Controller
 
         return $this->render('pages/page_snapshot/show.html.twig', [
             'snapshot' => $snapshot,
-            'statistics' => $statistics,
+            'statistics' => null,
             'freq' => $freq ?? null,
         ]);
     }

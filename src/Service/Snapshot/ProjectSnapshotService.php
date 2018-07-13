@@ -31,7 +31,6 @@ class ProjectSnapshotService
     public function new(Project $project): ProjectSnapshot
     {
         $projectSnapshot = $this->factory->create($project);
-
         $this->em->persist($projectSnapshot);
 
         if ($project->getAuthenticator()) {

@@ -6,7 +6,6 @@ use App\Property\Id;
 use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
@@ -21,15 +20,13 @@ class Project
      * @var string
      *
      * @ORM\Column(name="base_url", type="string", nullable=false)
-     * @Assert\Url()
      */
     protected $baseUrl;
 
     /**
      * @var Page[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Page", mappedBy="project", cascade={"persist"})
-     * @ORM\OrderBy({"path" = "ASC"})
+     * @ORM\OneToMany(targetEntity="App\Entity\AbstractResource", mappedBy="project", cascade={"persist"})
      */
     protected $pages;
 
@@ -55,7 +52,7 @@ class Project
     protected $authenticator;
 
     /**
-     * @return Page[]|Collection
+     * @return AbstractResource[]|Collection
      */
     public function getPages()
     {
@@ -63,7 +60,7 @@ class Project
     }
 
     /**
-     * @param Page[]|Collection $pages
+     * @param AbstractResource[]|Collection $pages
      */
     public function setPages($pages)
     {
@@ -71,7 +68,7 @@ class Project
     }
 
     /**
-     * @param ProjectSnapshot[]|Collection $snapshots
+     * @param AbstractSnapshot[]|Collection $snapshots
      */
     public function setSnapshots($snapshots)
     {
@@ -79,7 +76,7 @@ class Project
     }
 
     /**
-     * @return ProjectSnapshot[]|Collection
+     * @return AbstractSnapshot[]|Collection
      */
     public function getSnapshots()
     {

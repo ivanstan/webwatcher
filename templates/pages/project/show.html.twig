@@ -43,8 +43,10 @@
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" data-toggle="tab" href="#pages" role="tab"
                aria-controls="nav-pages" aria-selected="true">Pages</a>
-            <a class="nav-item nav-link" data-toggle="tab" href="#snapshots" role="tab"
-               aria-controls="nav-snapshots" aria-selected="false">Snapshots</a>
+            {% if project.snapshots is not empty %}
+                <a class="nav-item nav-link" data-toggle="tab" href="#snapshots" role="tab"
+                   aria-controls="nav-snapshots" aria-selected="false">Snapshots</a>
+            {% endif %}
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">

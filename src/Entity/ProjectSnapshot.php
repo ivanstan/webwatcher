@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use App\Property\Id;
-use App\Property\Timestamp;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,11 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\ProjectSnapshotRepository")
  * @ORM\Table("project_snapshot")
  */
-class ProjectSnapshot
+class ProjectSnapshot extends AbstractSnapshot
 {
-    use Id;
-    use Timestamp;
-
     /**
      * @var Project
      *
@@ -25,9 +20,9 @@ class ProjectSnapshot
     protected $project;
 
     /**
-     * @var PageSnapshot[]|Collection
+     * @var AbstractSnapshot[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\PageSnapshot", mappedBy="projectSnapshot", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\AbstractSnapshot", mappedBy="snapshot", cascade={"persist"})
      * @ORM\OrderBy({"timestamp" = "DESC"})
      */
     protected $snapshots;
@@ -43,7 +38,7 @@ class ProjectSnapshot
     }
 
     /**
-     * @return PageSnapshot[]|Collection
+     * @return AbstractSnapshot[]|Collection
      */
     public function getSnapshots()
     {
@@ -51,7 +46,7 @@ class ProjectSnapshot
     }
 
     /**
-     * @param PageSnapshot[]|Collection $snapshots
+     * @param AbstractSnapshot[]|Collection $snapshots
      */
     public function setSnapshots($snapshots): void
     {

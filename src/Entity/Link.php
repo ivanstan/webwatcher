@@ -52,7 +52,7 @@ class Link
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", nullable=false)
+     * @ORM\Column(name="url", type="text", nullable=false)
      */
     protected $url;
 

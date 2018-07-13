@@ -2,10 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Assert\Assert;
-use App\Property\Id;
-use App\Property\Name;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Constraint;
 
@@ -13,11 +9,8 @@ use Symfony\Component\Validator\Constraints as Constraint;
  * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
  * @ORM\Table("page")
  */
-class Page
+class Page extends AbstractResource
 {
-    use Name;
-    use Id;
-
     /**
      * @var string
      *
@@ -29,29 +22,6 @@ class Page
      * )
      */
     protected $path;
-
-    /**
-     * @var Project
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="pages", cascade={"persist"})
-     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     */
-    protected $project;
-
-    /**
-     * @var PageSnapshot[]|Collection
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\PageSnapshot", mappedBy="page", cascade={"persist"})
-     * @ORM\OrderBy({"timestamp" = "DESC"})
-     */
-    protected $snapshots;
-
-    /**
-     * @var Assert[]|Collection
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Assert\Assert", mappedBy="page", cascade={"persist"})
-     */
-    protected $asserts;
 
     public function getPath(): ?string
     {
@@ -66,57 +36,6 @@ class Page
     public function getUrl(): string
     {
         return $this->project->getBaseUrl() . $this->getPath();
-    }
-
-    public function getProject(): ?Project
-    {
-        return $this->project;
-    }
-
-    public function setProject(Project $project)
-    {
-        $this->project = $project;
-    }
-
-    /**
-     * @return PageSnapshot[]|Collection
-     */
-    public function getSnapshots()
-    {
-        return $this->snapshots;
-    }
-
-    /**
-     * @param PageSnapshot[]|Collection $snapshots
-     */
-    public function setSnapshots($snapshots)
-    {
-        $this->snapshots = $snapshots;
-    }
-
-    public function getNewestSnapshot(): ?PageSnapshot
-    {
-        if (isset($this->snapshots[0])) {
-            return $this->snapshots[0];
-        }
-
-        return null;
-    }
-
-    /**
-     * @return Collection|Assert[]
-     */
-    public function getAsserts()
-    {
-        return $this->asserts;
-    }
-
-    /**
-     * @param Collection|Assert[] $asserts
-     */
-    public function setAsserts($asserts): void
-    {
-        $this->asserts = $asserts;
     }
 
     public function getAverageResponseTime()

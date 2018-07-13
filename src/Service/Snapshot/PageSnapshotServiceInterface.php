@@ -2,6 +2,8 @@
 
 namespace App\Service\Snapshot;
 
+use App\Entity\AbstractResource;
+use App\Entity\AbstractSnapshot;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Service\Factory\PageSnapshotFactory;
@@ -13,7 +15,7 @@ use Facebook\WebDriver\Cookie;
 use Facebook\WebDriver\WebDriver;
 use GuzzleHttp\Cookie\CookieJar;
 
-class PageSnapshotService
+class PageSnapshotServiceInterface implements SnapshotServiceInterface
 {
     public const MAX_TIMEOUT_SEC = 10;
 
@@ -21,7 +23,6 @@ class PageSnapshotService
     private $factory;
     private $cookieJar;
     private $cookies;
-    private $links;
     private $html;
     private $extractor;
     /** @var WebDriver */
@@ -70,7 +71,7 @@ class PageSnapshotService
         return $headers;
     }
 
-    public function snapshot(Page $page): PageSnapshot
+    public function snapshot(AbstractResource $page): AbstractSnapshot
     {
         $this->webDriver->setup();
 
@@ -94,13 +95,5 @@ class PageSnapshotService
         $snapshot->setResponseCode(0);
 
         return $snapshot;
-    }
-
-    private function forceAbsoluteUrl($url, $baseUrl) {
-        if (parse_url($url, PHP_URL_HOST) === null) {
-            $url = $baseUrl . $url;
-        }
-
-        return $url;
     }
 }

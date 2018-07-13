@@ -14,18 +14,22 @@ class ProjectSnapshotService
     private $factory;
     private $pageSnapshotService;
     private $authenticator;
+    /** @var ResourceSnapshotService */
+    private $resourceSnapshotService;
 
     public function __construct(
         EntityManagerInterface $em,
         ProjectSnapshotFactory $factory,
-        PageSnapshotService $pageSnapshotService,
-        SeleniumAuthenticatorService $authenticator
+        PageSnapshotServiceInterface $pageSnapshotService,
+        SeleniumAuthenticatorService $authenticator,
+        ResourceSnapshotService $resourceSnapshotService
     )
     {
         $this->em = $em;
         $this->factory = $factory;
         $this->pageSnapshotService = $pageSnapshotService;
         $this->authenticator = $authenticator;
+        $this->resourceSnapshotService = $resourceSnapshotService;
     }
 
     public function new(Project $project): ProjectSnapshot
@@ -39,8 +43,11 @@ class ProjectSnapshotService
             );
         }
 
-        foreach ($project->getPages() as $page) {
-            $snapshot = $this->pageSnapshotService->snapshot($page);
+        foreach ($project->getPages() as $resource) {
+            $service = $this->resourceSnapshotService->getService($resource);
+
+            $snapshot = $service->snapshot($resource);
+
             $snapshot->setTimestamp($projectSnapshot->getTimestamp());
             $snapshot->setProjectSnapshot($projectSnapshot);
 

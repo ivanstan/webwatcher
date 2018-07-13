@@ -32,51 +32,51 @@ services:
             - php
         volumes:
             - './var/log/nginx/:/var/log/nginx:cached'
-#    selenium-hub:
-#        image: 'selenium/hub:3.12.0-boron'
-#        ports:
-#            - '4444:4444'
-#    chrome-node:
-#        image: 'selenium/node-chrome:3.12.0-boron'
-#        volumes:
-#            - '~/webwatcher/selenium:/e2e/uploads'
-#            - '~/webwatcher/selenium/tmp:/e2e/uploads/tmp'
-#        ports:
-#            - 5900
-#        expose:
-#            - 80
-#        links:
-#            - 'selenium-hub'
-#        depends_on:
-#            - selenium-hub
-#        environment:
-#            - HUB_HOST=selenium-hub
-#            - HUB_PORT=4444
-#    firefox-node:
-#        image: 'selenium/node-firefox:3.12.0-boron'
-#        volumes:
-#            - '~/webwatcher/selenium:/e2e/uploads'
-#            - '~/webwatcher/selenium/tmp:/e2e/uploads/tmp'
-#        ports:
-#            - '5900'
-#        expose:
-#            - '80'
-#        links:
-#            - 'selenium-hub'
-#        depends_on:
-#            - selenium-hub
-#        environment:
-#            - HUB_HOST=selenium-hub
-#            - HUB_PORT=4444
-#    browsermob-proxy:
-#        image: qautomatron/docker-browsermob-proxy
-#        ports:
-#            - '9090-9191:9090-9191'
-#        expose:
-#            - 9090-9191
-#        environment:
-#            - PORT_RANGE=9091-9191
-#        links:
-#            - 'selenium-hub'
-#            - 'firefox-node'
-#            - 'chrome-node'
+    selenium-hub:
+        image: 'selenium/hub:3.12.0-boron'
+        ports:
+            - '4444:4444'
+    chrome-node:
+        image: 'selenium/node-chrome:3.12.0-boron'
+        volumes:
+            - '~/webwatcher/selenium:/e2e/uploads'
+            - '~/webwatcher/selenium/tmp:/e2e/uploads/tmp'
+        ports:
+            - 5900
+        expose:
+            - 80
+        links:
+            - 'selenium-hub'
+        depends_on:
+            - selenium-hub
+        environment:
+            - HUB_HOST=selenium-hub
+            - HUB_PORT=4444
+    firefox-node:
+        image: 'selenium/node-firefox:3.12.0-boron'
+        volumes:
+            - '~/webwatcher/selenium:/e2e/uploads'
+            - '~/webwatcher/selenium/tmp:/e2e/uploads/tmp'
+        ports:
+            - '5900'
+        expose:
+            - '80'
+        links:
+            - 'selenium-hub'
+        depends_on:
+            - selenium-hub
+        environment:
+            - HUB_HOST=selenium-hub
+            - HUB_PORT=4444
+    browsermob-proxy:
+        image: qautomatron/docker-browsermob-proxy
+        ports:
+            - '9090-9191:9090-9191'
+        expose:
+            - 9090-9191
+        environment:
+            - PORT_RANGE=9091-9191
+        links:
+            - 'selenium-hub'
+            - 'firefox-node'
+            - 'chrome-node'

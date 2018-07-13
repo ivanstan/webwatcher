@@ -32,6 +32,12 @@ class PageSnapshot extends AbstractSnapshot
     protected $body;
 
     /**
+     * @var string $har
+     * @ORM\Column(name="har", type="json", nullable=true)
+     */
+    protected $har;
+
+    /**
      * @var array $headers
      * @ORM\Column(name="headers", type="json_array", nullable=true)
      */
@@ -192,5 +198,15 @@ class PageSnapshot extends AbstractSnapshot
     public function equals(PageSnapshot $snapshot): bool
     {
         return $this->hash === $snapshot->getHash() && $this->responseCode === $snapshot->getResponseCode();
+    }
+
+    public function getHar(): ?string
+    {
+        return $this->har;
+    }
+
+    public function setHar(string $har): void
+    {
+        $this->har = $har;
     }
 }

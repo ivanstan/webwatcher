@@ -21,7 +21,7 @@ class SeleniumAuthenticatorService {
      */
     public function resolve(AuthenticatorInterface $authenticator) {
 
-        $driver = $this->webDriver->getInstance();
+        $driver = $this->webDriver->setup();
 
         $driver->get($authenticator->getUrl());
 

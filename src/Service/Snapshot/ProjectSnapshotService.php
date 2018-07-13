@@ -40,7 +40,7 @@ class ProjectSnapshotService
         }
 
         foreach ($project->getPages() as $page) {
-            $snapshot = $this->pageSnapshotService->new($page);
+            $snapshot = $this->pageSnapshotService->snapshot($page);
             $snapshot->setTimestamp($projectSnapshot->getTimestamp());
             $snapshot->setProjectSnapshot($projectSnapshot);
 

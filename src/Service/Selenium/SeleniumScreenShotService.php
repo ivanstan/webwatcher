@@ -29,38 +29,31 @@ class SeleniumScreenShotService
         $this->cookies = $cookies;
     }
 
-    public function setPageSnapshot(PageSnapshot $snapshot)
+    public function setPageSnapshot(string $url, PageSnapshot $snapshot): ?string
     {
         $filename = $this->getSnapshotFilename($snapshot);
         $destination = $this->getPublicFolder() . '/' . self::SNAPSHOT_FOLDER_NAME . '/' . $filename;
 
-        try {
-            $driver = $this->webDriver->getInstance();
+        $driver = $this->webDriver->setup();
 
-            $driver->get($snapshot->getPage()->getUrl());
+        $driver->get($url);
 
-            if (!empty($this->cookies)) {
-                /** @var Cookie $cookie */
-                foreach ($this->cookies as $cookie) {
-                    $driver->manage()->addCookie($cookie->toArray());
-                }
-
-                $driver->get($snapshot->getPage()->getUrl());
+        if (!empty($this->cookies)) {
+            /** @var Cookie $cookie */
+            foreach ($this->cookies as $cookie) {
+                $driver->manage()->addCookie($cookie->toArray());
             }
 
-            $height = $driver->manage()->window()->getSize()->getHeight();
-            $width = $driver->manage()->window()->getSize()->getWidth();
-            $driver->manage()->window()->setSize(new WebDriverDimension($width, $height));
-
-            $driver->takeScreenshot($destination);
-
-        } catch (\Exception $exception) {
-            $this->logger->error($exception->getMessage());
-
-            return;
+            $driver->get($url);
         }
 
-        $snapshot->setImage(self::SNAPSHOT_FOLDER_NAME . '/' . $filename);
+        $height = $driver->manage()->window()->getSize()->getHeight();
+        $width = $driver->manage()->window()->getSize()->getWidth();
+        $driver->manage()->window()->setSize(new WebDriverDimension($width, $height));
+
+        $driver->takeScreenshot($destination);
+
+        return $destination;
     }
 
     public function getPublicFolder(): string

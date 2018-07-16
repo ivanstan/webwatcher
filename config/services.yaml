@@ -13,7 +13,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel,Utility.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -24,15 +24,14 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\EventListener\PageSnapshotEventListener:
-        arguments: ['%kernel.project_dir%']
-        tags:
-            - { name: doctrine.event_listener, event: postRemove }
-
     App\EventListener\KernelEvenListener:
         arguments: ['@twig', '@security.token_storage']
         tags:
             - { name: kernel.event_listener, event: kernel.request }
+
+    App\EventListener\EntityRemoveEventListener:
+        tags:
+            - { name: doctrine.event_subscriber }
 
     App\Service\File\FileManager:
         arguments: [ '%kernel.project_dir%']

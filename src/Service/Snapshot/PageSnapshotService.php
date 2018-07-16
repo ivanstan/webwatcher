@@ -85,9 +85,9 @@ class PageSnapshotService implements SnapshotServiceInterface
             $this->seleniumService->setCookies($this->cookies);
         }
 
-        $destination = $this->imageFileManager->getSnapshotImageDestination($snapshot);
+        $destination = $this->imageFileManager->getSnapshotImageDestination($snapshot, 'full-page');
         $image = $this->seleniumService->getPageScreenShot($page->getUrl());
-        $imagePath = $this->imageFileManager->getSnapshotImagePath($snapshot);
+        $imagePath = $this->imageFileManager->getSnapshotImagePath($snapshot, 'full-page');
         $this->imageFileManager->save($destination, $image);
         $snapshot->setImage($imagePath);
 

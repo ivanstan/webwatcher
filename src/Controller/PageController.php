@@ -33,7 +33,10 @@ class PageController extends Controller
             $em->persist($page);
             $em->flush();
 
-            return $this->redirectToRoute('project_show', ['project' => $project->getId()]);
+            $url = $this->generateUrl('page_show', ['project' => $project->getId(), 'page' => $page->getId()]);
+            $this->addFlash('success', sprintf('New page "%s" created.', "<a href='$url'>{$page->getName()}</a>"));
+
+            return $this->redirectToRoute('page_new', ['project' => $project->getId()]);
         }
 
         return $this->render(

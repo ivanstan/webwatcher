@@ -117,4 +117,10 @@ class Project
     {
         $this->authenticator = $authenticator;
     }
+
+    // ToDo: remove this function
+    public function getBaseUrl()
+    {
+        return 'http://' . $this->getDomain();
+    }
 }

@@ -32,7 +32,6 @@
             <tr>
                 <td><input type="checkbox" data-toggle="select-all" data-target="select-page"></td>
                 <td>Path</td>
-                <td>Actions</td>
             </tr>
             </thead>
             <tbody>
@@ -42,15 +41,7 @@
                         <input data-group="select-page" name="pages[]" type="checkbox" value="{{ 'http://' ~ project.domain ~ page }}">
                     </td>
                     <td>
-                        {{ page }}
-                    </td>
-                    <td>
-                        <a data-toggle="tooltip"
-                           data-placement="bottom"
-                           title="Import links from this page"
-                           href="{{ path('project_import_crawl', {"project": project.id, "url": page }) }}">
-                            <i class="fas fa-link"></i>
-                        </a>
+                        <a href="{{ path('project_import_crawl', {"project": project.id, "url": page }) }}">{{ page }}</a>
                     </td>
                 </tr>
             {% else %}

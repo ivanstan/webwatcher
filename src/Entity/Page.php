@@ -40,7 +40,7 @@ class Page extends AbstractResource
         $this->path = $path;
     }
 
-    public function getProtocol(): string
+    public function getProtocol(): ?string
     {
         return $this->protocol;
     }

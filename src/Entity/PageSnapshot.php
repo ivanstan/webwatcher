@@ -190,11 +190,6 @@ class PageSnapshot extends AbstractSnapshot
         return isset($this->linkIndex[$url]);
     }
 
-    public function __toString(): string
-    {
-        return $this->hash;
-    }
-
     public function equals(PageSnapshot $snapshot): bool
     {
         return $this->hash === $snapshot->getHash() && $this->responseCode === $snapshot->getResponseCode();

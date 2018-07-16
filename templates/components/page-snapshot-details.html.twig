@@ -71,10 +71,10 @@
         </tr>
         </thead>
         <tbody>
-        {% for name, value in snapshot.headers %}
+        {% for header in snapshot.headers %}
             <tr>
-                <th>{{ name }}</th>
-                <td>{{ value[0] }}</td>
+                <th>{{ header.name }}</th>
+                <td>{{ header.value }}</td>
             </tr>
         {% endfor %}
         </tbody>

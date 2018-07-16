@@ -76,6 +76,9 @@ class PageSnapshotController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('page_show');
+        return $this->redirectToRoute('page_show', [
+            'project' => $snapshot->getPage()->getProject()->getId(),
+            'page' => $snapshot->getPage()->getId(),
+        ]);
     }
 }

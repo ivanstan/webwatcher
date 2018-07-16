@@ -37,10 +37,10 @@ services:
     App\Service\Selenium\SeleniumWebDriver:
         arguments: ['%env(SELENIUM_HUB)%']
 
-    App\Service\Selenium\SeleniumScreenShotService:
+    App\Service\File\FileManager:
         arguments: [ '%kernel.project_dir%']
 
-    App\Service\FileManager:
+    App\Service\File\ImageFileManager:
         arguments: [ '%kernel.project_dir%']
 
     App\Service\KeywordExtractor:

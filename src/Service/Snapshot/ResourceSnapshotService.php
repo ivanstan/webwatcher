@@ -10,7 +10,7 @@ class ResourceSnapshotService
     private $pageService;
 
     public function __construct(
-        PageSnapshotServiceInterface $pageService
+        PageSnapshotService $pageService
     ) {
         $this->pageService = $pageService;
     }

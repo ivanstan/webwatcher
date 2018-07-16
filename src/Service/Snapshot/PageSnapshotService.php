@@ -4,18 +4,16 @@ namespace App\Service\Snapshot;
 
 use App\Entity\AbstractResource;
 use App\Entity\AbstractSnapshot;
-use App\Entity\Page;
-use App\Entity\PageSnapshot;
 use App\Service\Factory\PageSnapshotFactory;
+use App\Service\File\ImageFileManager;
 use App\Service\Html;
 use App\Service\KeywordExtractor;
 use App\Service\Selenium\SeleniumScreenShotService;
 use App\Service\Selenium\SeleniumWebDriver;
 use Facebook\WebDriver\Cookie;
-use Facebook\WebDriver\WebDriver;
 use GuzzleHttp\Cookie\CookieJar;
 
-class PageSnapshotServiceInterface implements SnapshotServiceInterface
+class PageSnapshotService implements SnapshotServiceInterface
 {
     public const MAX_TIMEOUT_SEC = 10;
 
@@ -25,15 +23,16 @@ class PageSnapshotServiceInterface implements SnapshotServiceInterface
     private $cookies;
     private $html;
     private $extractor;
-    /** @var WebDriver */
     private $webDriver;
+    private $imageFileManager;
 
     public function __construct(
         SeleniumScreenShotService $seleniumService,
         PageSnapshotFactory $factory,
         Html $html,
         KeywordExtractor $extractor,
-        SeleniumWebDriver $webDriver
+        SeleniumWebDriver $webDriver,
+        ImageFileManager $imageFileManager
     )
     {
         $this->seleniumService = $seleniumService;
@@ -41,6 +40,7 @@ class PageSnapshotServiceInterface implements SnapshotServiceInterface
         $this->html = $html;
         $this->extractor = $extractor;
         $this->webDriver = $webDriver;
+        $this->imageFileManager = $imageFileManager;
     }
 
     public function setCookies($cookies): void
@@ -75,7 +75,6 @@ class PageSnapshotServiceInterface implements SnapshotServiceInterface
     {
         $this->webDriver->setup();
 
-        $driver = $this->webDriver->getDriver();
         $proxy = $this->webDriver->getProxy();
 
         $proxy->setup('page_1');
@@ -86,12 +85,15 @@ class PageSnapshotServiceInterface implements SnapshotServiceInterface
             $this->seleniumService->setCookies($this->cookies);
         }
 
-        $image = $this->seleniumService->setPageSnapshot($page->getUrl(), $snapshot);
-
         $har = $proxy->har();
-
         $snapshot->setHar($har);
-        $snapshot->setImage($image);
+
+        $destination = $this->imageFileManager->getSnapshotImageDestination($snapshot);
+        $image = $this->seleniumService->getPageScreenShot($page->getUrl());
+        $imagePath = $this->imageFileManager->getSnapshotImagePath($snapshot);
+        $this->imageFileManager->save($destination, $image);
+        $snapshot->setImage($imagePath);
+
         $snapshot->setResponseCode(0);
 
         return $snapshot;

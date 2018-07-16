@@ -77,8 +77,7 @@ class PageSnapshotService implements SnapshotServiceInterface
         $this->webDriver->setup();
 
         $proxy = $this->webDriver->getProxy();
-
-        $proxy->setup('page_1');
+        $proxy->setup('project-' . $page->getProject()->getId() . '-page-' . $page->getId());
 
         $snapshot = $this->factory->create($page);
 
@@ -108,4 +107,26 @@ class PageSnapshotService implements SnapshotServiceInterface
 
         return $snapshot;
     }
+
+//    public function thumbnail(string $base64, $finalWidth = 400, $finalHeight = 300): string
+//    {
+//        $size = getimagesizefromstring($base64);
+//        $initWidth = $size[0];
+//        $initHeight = $size[1];
+//
+//        $ratio = $initWidth / $initHeight;
+//        if ($ratio > 1) {
+//            $width = 500;
+//            $initHeight = 500 / $ratio;
+//        } else {
+//            $width = 500 * $ratio;
+//            $height = 500;
+//        }
+//
+//        $destination = imagecreatetruecolor($finalWidth, $finalHeight);
+//        imagecopyresampled($destination, $base64, 0, 0, 0, 0, $finalWidth, $finalHeight, $initWidth, $initHeight);
+//        imagedestroy($base64);
+//        imagepng($destination, '~/Desktop/test.png'); // adjust format as needed
+//        imagedestroy($destination);
+//    }
 }

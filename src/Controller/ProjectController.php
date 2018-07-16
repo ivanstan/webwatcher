@@ -114,7 +114,7 @@ class ProjectController extends Controller
             $this->bulkImport($project, $request->request->get('pages'));
         }
 
-        $pages = $bulk->fromSiteMap($project->getBaseUrl());
+        $pages = $bulk->fromSiteMap($project->getDomain());
 
         return $this->render('pages/project/bulk.html.twig', [
             'project' => $project,

@@ -12,7 +12,7 @@ class BulkPage
     public function fromSiteMap(string $baseUrl)
     {
         $result = [];
-        $crawler = $this->getCrawler($baseUrl . '/' . self::SITEMAP_NAME);
+        $crawler = $this->getCrawler('http://' . $baseUrl . '/' . self::SITEMAP_NAME);
 
         if ($crawler) {
             foreach ($crawler->filter('url loc') as $url) {

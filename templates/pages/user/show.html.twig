@@ -50,8 +50,8 @@
         <tr>
             <th>Roles</th>
             <td>
-                {% for   in user.roles %}
-                    <div><span class="badge badge-secondary">role</span></div>
+                {% for role in user.roles %}
+                    <div><span class="badge badge-secondary">{{ role }}</span></div>
                 {% endfor %}
             </td>
         </tr>

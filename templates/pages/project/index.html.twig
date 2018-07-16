@@ -26,7 +26,7 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>URL</th>
+                <th>Domain</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,7 +34,7 @@
         {% for project in projects %}
             <tr>
                 <td><a href="{{ path('project_show', {'project': project.id}) }}">{{ project.name }}</a></td>
-                <td>{{ project.baseUrl }}/</td>
+                <td>{{ project.domain }}</td>
                 <td>
                     <a data-toggle="tooltip"
                        data-placement="bottom"
@@ -48,7 +48,7 @@
                        title="Visit project home page"
                        class="mr-1 ml-1"
                        target="_blank"
-                       href="{{ project.baseUrl }}">
+                       href="{{ project.domain }}">
                         <i class="fa fa-external-link-alt"></i>
                     </a>
                 </td>

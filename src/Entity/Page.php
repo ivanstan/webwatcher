@@ -23,6 +23,13 @@ class Page extends AbstractResource
      */
     protected $path;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="protocol", type="string", nullable=false, options={"default":"https"}, columnDefinition="ENUM('http', 'https')")
+     */
+    protected $protocol;
+
     public function getPath(): ?string
     {
         return $this->path;
@@ -33,9 +40,19 @@ class Page extends AbstractResource
         $this->path = $path;
     }
 
+    public function getProtocol(): string
+    {
+        return $this->protocol;
+    }
+
+    public function setProtocol(string $protocol): void
+    {
+        $this->protocol = $protocol;
+    }
+
     public function getUrl(): string
     {
-        return $this->project->getBaseUrl() . $this->getPath();
+        return $this->getProtocol() . '://' . $this->getProject()->getDomain() . $this->getPath();
     }
 
     public function getAverageResponseTime()
@@ -69,10 +86,5 @@ class Page extends AbstractResource
         }
 
         return array_reverse($result);
-    }
-
-    public function __toString(): string
-    {
-        return $this->path;
     }
 }

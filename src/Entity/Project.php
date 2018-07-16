@@ -6,6 +6,7 @@ use App\Property\Id;
 use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
@@ -19,9 +20,13 @@ class Project
     /**
      * @var string
      *
-     * @ORM\Column(name="base_url", type="string", nullable=false)
+     * @ORM\Column(name="domain", type="string", nullable=false)
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Z0-9.]+/",
+     *     message="Domain name can contain only alphanumeric characters and dots."
+     * )
      */
-    protected $baseUrl;
+    protected $domain;
 
     /**
      * @var Page[]|Collection
@@ -83,18 +88,14 @@ class Project
         return $this->snapshots;
     }
 
-    public function getBaseUrl(): ?string
+    public function getDomain(): ?string
     {
-        if (substr($this->baseUrl, -1) === '/') {
-            return substr($this->baseUrl, 0, -1);
-        }
-
-        return $this->baseUrl;
+        return $this->domain;
     }
 
-    public function setBaseUrl(?string $baseUrl): void
+    public function setDomain(?string $domain): void
     {
-        $this->baseUrl = $baseUrl;
+        $this->domain = $domain;
     }
 
     public function getOwner(): ?User
@@ -115,10 +116,5 @@ class Project
     public function setAuthenticator($authenticator): void
     {
         $this->authenticator = $authenticator;
-    }
-
-    public function __toString(): string
-    {
-        return $this->name;
     }
 }

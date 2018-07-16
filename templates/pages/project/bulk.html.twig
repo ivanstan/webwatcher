@@ -39,7 +39,7 @@
             {% for page in pages %}
                 <tr>
                     <td>
-                        <input data-group="select-page" name="pages[]" type="checkbox" value="{{ project.baseUrl ~ page }}">
+                        <input data-group="select-page" name="pages[]" type="checkbox" value="{{ 'http://' ~ project.domain ~ page }}">
                     </td>
                     <td>
                         {{ page }}

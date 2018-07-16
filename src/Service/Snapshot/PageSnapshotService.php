@@ -8,7 +8,7 @@ use App\Service\Factory\PageSnapshotFactory;
 use App\Service\File\ImageFileManager;
 use App\Service\Html;
 use App\Service\KeywordExtractor;
-use App\Service\Selenium\SeleniumScreenShotService;
+use App\Service\Selenium\WebScreenshotService;
 use App\Service\Selenium\SeleniumWebDriver;
 use Facebook\WebDriver\Cookie;
 use GuzzleHttp\Cookie\CookieJar;
@@ -27,7 +27,7 @@ class PageSnapshotService implements SnapshotServiceInterface
     private $imageFileManager;
 
     public function __construct(
-        SeleniumScreenShotService $seleniumService,
+        WebScreenshotService $seleniumService,
         PageSnapshotFactory $factory,
         Html $html,
         KeywordExtractor $extractor,

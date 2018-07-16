@@ -45,7 +45,7 @@ class ProjectSnapshotController extends Controller
      * @Route("/new", name="project_snapshot_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function newSnapshot(Project $project, ProjectSnapshotService $service)
+    public function new(Project $project, ProjectSnapshotService $service)
     {
         $snapshot = $service->new($project);
 

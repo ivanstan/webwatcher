@@ -20,7 +20,7 @@ class ProjectSnapshotService
     public function __construct(
         EntityManagerInterface $em,
         ProjectSnapshotFactory $factory,
-        PageSnapshotServiceInterface $pageSnapshotService,
+        PageSnapshotService $pageSnapshotService,
         SeleniumAuthenticatorService $authenticator,
         ResourceSnapshotService $resourceSnapshotService
     )

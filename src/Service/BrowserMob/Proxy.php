@@ -87,8 +87,6 @@ class Proxy
     {
         $response = $this->client->get("/proxy/{$this->port}/har")->getBody()->getContents();
 
-        $response;
-
         return $response;
     }
 

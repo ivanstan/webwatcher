@@ -4,12 +4,13 @@ namespace App\Service\Snapshot;
 
 use App\Entity\AbstractResource;
 use App\Entity\AbstractSnapshot;
+use App\Service\Analytics\KeywordExtractor;
 use App\Service\Factory\PageSnapshotFactory;
 use App\Service\File\ImageFileManager;
 use App\Service\Html;
-use App\Service\KeywordExtractor;
-use App\Service\Selenium\WebScreenshotService;
+use App\Service\HttpArchive\HttpArchive;
 use App\Service\Selenium\SeleniumWebDriver;
+use App\Service\Selenium\WebScreenshotService;
 use Facebook\WebDriver\Cookie;
 use GuzzleHttp\Cookie\CookieJar;
 
@@ -85,16 +86,25 @@ class PageSnapshotService implements SnapshotServiceInterface
             $this->seleniumService->setCookies($this->cookies);
         }
 
-        $har = $proxy->har();
-        $snapshot->setHar($har);
-
         $destination = $this->imageFileManager->getSnapshotImageDestination($snapshot);
         $image = $this->seleniumService->getPageScreenShot($page->getUrl());
         $imagePath = $this->imageFileManager->getSnapshotImagePath($snapshot);
         $this->imageFileManager->save($destination, $image);
         $snapshot->setImage($imagePath);
 
+        $har = $proxy->har();
+        $snapshot->setHar(json_decode($har, true));
+
+        $har = new HttpArchive($har);
+        $entry = $har->getEntry($page->getUrl());
+
         $snapshot->setResponseCode(0);
+
+        if ($entry) {
+            $snapshot->setResponseCode($entry['response']['status']);
+            $snapshot->setBody($entry['response']['content']['text']);
+            $snapshot->setHeaders($entry['response']['headers']);
+        }
 
         return $snapshot;
     }

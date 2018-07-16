@@ -34,17 +34,17 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request }
 
-    App\Service\Selenium\SeleniumWebDriver:
-        arguments: ['%env(SELENIUM_HUB)%']
-
     App\Service\File\FileManager:
         arguments: [ '%kernel.project_dir%']
 
     App\Service\File\ImageFileManager:
         arguments: [ '%kernel.project_dir%']
 
-    App\Service\KeywordExtractor:
+    App\Service\Analytics\KeywordExtractor:
         arguments: [ '%kernel.project_dir%']
 
     App\Service\BrowserMob\BrowserMobApi:
         arguments: [ '%env(BROWSERMOB_PROXY)%', '%env(PROXY_PORT_RANGE)%']
+
+    App\Service\Selenium\SeleniumWebDriver:
+        arguments: ['%env(SELENIUM_HUB)%']

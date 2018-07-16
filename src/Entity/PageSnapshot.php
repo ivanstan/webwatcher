@@ -32,7 +32,7 @@ class PageSnapshot extends AbstractSnapshot
     protected $body;
 
     /**
-     * @var string $har
+     * @var array $har
      * @ORM\Column(name="har", type="json", nullable=true)
      */
     protected $har;
@@ -122,7 +122,7 @@ class PageSnapshot extends AbstractSnapshot
         $this->image = $image;
     }
 
-    public function getResponseCode(): int
+    public function getResponseCode(): ?int
     {
         return $this->responseCode;
     }
@@ -200,12 +200,12 @@ class PageSnapshot extends AbstractSnapshot
         return $this->hash === $snapshot->getHash() && $this->responseCode === $snapshot->getResponseCode();
     }
 
-    public function getHar(): ?string
+    public function getHar(): ?array
     {
         return $this->har;
     }
 
-    public function setHar(string $har): void
+    public function setHar(array $har): void
     {
         $this->har = $har;
     }

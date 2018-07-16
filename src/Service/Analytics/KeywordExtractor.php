@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Analytics;
 
 use TextAnalysis\Analysis\FreqDist;
 use TextAnalysis\Analysis\Keywords\Rake;

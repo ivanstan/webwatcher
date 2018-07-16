@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
-use App\Service\KeywordExtractor;
-use App\Service\Snapshot\PageSnapshotServiceInterface;
+use App\Service\Analytics\KeywordExtractor;
 use App\Service\Snapshot\ResourceSnapshotService;
+use App\Util\Archive;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;

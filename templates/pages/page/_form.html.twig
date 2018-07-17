@@ -1,4 +1,22 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.name) }}
+
+    <div class="form-group">
+        <label for="page_name" class="form-control-label">Path</label>
+        <div class="row">
+            <div class="col-1">
+                {{ form_widget(form.protocol) }}
+            </div>
+
+            <div class="col-3">
+                <input type="text" class="form-control" disabled value="{{ page.project.domain }}">
+            </div>
+
+            <div class="col-8">
+                {{ form_widget(form.path) }}
+            </div>
+        </div>
+    </div>
+
     <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

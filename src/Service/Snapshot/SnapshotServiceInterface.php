@@ -7,5 +7,5 @@ use App\Entity\AbstractSnapshot;
 
 interface SnapshotServiceInterface
 {
-    public function snapshot(AbstractResource $resource): AbstractSnapshot;
+    public function snapshot($resource);
 }

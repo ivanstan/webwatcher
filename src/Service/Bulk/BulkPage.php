@@ -9,44 +9,39 @@ class BulkPage
 {
     public const SITEMAP_NAME = 'sitemap.xml';
 
-    public function fromSiteMap(string $baseUrl)
-    {
-        $result = [];
-        $crawler = $this->getCrawler('http://' . $baseUrl . '/' . self::SITEMAP_NAME);
-
-        if ($crawler) {
-            foreach ($crawler->filter('url loc') as $url) {
-                $result[] = parse_url($url->textContent, PHP_URL_PATH);
-            }
-        }
-
-        return array_filter(array_unique($result));
-    }
-
-    public function crawl(string $baseUrl)
-    {
-        $result = [];
-        $crawler = $this->getCrawler($baseUrl);
-
-        if ($crawler) {
-            foreach ($crawler->filter('a') as $url) {
-                $result[] = parse_url($url->getAttribute('href'), PHP_URL_PATH);
-            }
-        }
-
-        return array_filter(array_unique($result));
-    }
-
-    private function getCrawler(string $url): ?Crawler
+    public function extract(string $url): array
     {
         $client = new Client(['verify' => false]);
 
         try {
             $response = $client->get($url);
+
+            $mime = 'text/html';
+            if ($response->hasHeader('Content-Type')) {
+                $header = \GuzzleHttp\Psr7\parse_header($response->getHeader('Content-Type'));
+                if (isset($header[0]) && isset($header[0][0])) {
+                    $mime = $header[0][0];
+                }
+            }
         } catch (\Exception $exception) {
-            return null;
+            return [];
         }
 
-        return new Crawler($response->getBody()->getContents());
+        $crawler = new Crawler($response->getBody()->getContents());
+        $result = [];
+
+        if ($mime === 'text/html') {
+            foreach ($crawler->filter('a') as $url) {
+                $result[] = $url->getAttribute('href');
+            }
+        }
+
+        if ($mime === 'application/xml' || $mime === 'text/xml') {
+            foreach ($crawler->filter('url loc') as $url) {
+                $result[] = $url->textContent;
+            }
+        }
+
+        return array_filter(array_unique($result));
     }
 }

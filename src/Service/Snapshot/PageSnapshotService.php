@@ -4,6 +4,8 @@ namespace App\Service\Snapshot;
 
 use App\Entity\AbstractResource;
 use App\Entity\AbstractSnapshot;
+use App\Entity\Page;
+use App\Entity\PageSnapshot;
 use App\Service\Analytics\KeywordExtractor;
 use App\Service\Factory\PageSnapshotFactory;
 use App\Service\File\ImageFileManager;
@@ -72,7 +74,10 @@ class PageSnapshotService implements SnapshotServiceInterface
         return $headers;
     }
 
-    public function snapshot(AbstractResource $page): AbstractSnapshot
+    /**
+     * @param Page $page
+     */
+    public function snapshot($page): PageSnapshot
     {
         $this->webDriver->setup();
 

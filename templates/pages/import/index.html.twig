@@ -3,17 +3,9 @@
 {% block title %}New Project | {{ parent() }}{% endblock %}
 
 {% block content %}
-    <form method="post" action="{{ path(app.request.attributes.get('_route'), {'project': project.id}) }}">
         <div class="row">
             <div class="col-10">
-                {% if app.request.attributes.get('_route') == 'project_import_sitemap' %}
-                    <h1>Import sitemap</h1>
-                {% else %}
-                    <h1>Import links</h1>
-                {% endif %}
-            </div>
-            <div class="col-2">
-                <button class="btn btn-primary float-right mt-3" type="submit">Import</button>
+                <h1>Import</h1>
             </div>
         </div>
 
@@ -21,12 +13,27 @@
 
         {% include 'components/flash-messages.html.twig' %}
 
-        {% if url is defined %}
-            <div class="mb-2">
-                <small >From url: {{ url }}</small>
+    <form action="{{ path('project_page_import', {'project': project.id}) }}" method="get">
+        <div class="row">
+            <div class="col-11">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="url" list="pages" value="{{ url }}"
+                           autocomplete="off">
+                    <datalist id="pages">
+                        {% for page in suggestions %}
+                        <option value="{{ page }}">
+                            {% endfor %}
+                    </datalist>
+                </div>
             </div>
-        {% endif %}
+            <div class="col-1">
+                <input type="submit" class="btn btn-primary" value="Submit">
+            </div>
+        </div>
+    </form>
 
+    <form method="post" action="{{ path(app.request.attributes.get('_route'), {'project': project.id}) }}">
+        <button class="btn btn-primary mt-3 mb-2" type="submit">Import</button>
         <table class="table">
             <thead>
             <tr>
@@ -41,7 +48,7 @@
                         <input data-group="select-page" name="pages[]" type="checkbox" value="{{ 'http://' ~ project.domain ~ page }}">
                     </td>
                     <td>
-                        <a href="{{ path('project_import_crawl', {"project": project.id, "url": page }) }}">{{ page }}</a>
+                        <a href="{{ path('project_page_import', {"project": project.id, "url": page }) }}">{{ page }}</a>
                     </td>
                 </tr>
             {% else %}

@@ -7,7 +7,7 @@ trait Name
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", nullable=true)
+     * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 

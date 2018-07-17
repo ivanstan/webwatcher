@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\HttpBasicAuthenticator;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Constraint;
 
@@ -28,7 +30,7 @@ class Page extends AbstractResource
      *
      * @ORM\Column(name="protocol", type="string", nullable=false, options={"default":"https"}, columnDefinition="ENUM('http', 'https')")
      */
-    protected $protocol;
+    protected $protocol = 'https';
 
     public function getPath(): ?string
     {
@@ -52,7 +54,21 @@ class Page extends AbstractResource
 
     public function getUrl(): string
     {
-        return $this->getProtocol() . '://' . $this->getProject()->getDomain() . $this->getPath();
+        $build = [
+            'scheme' => $this->getProtocol(),
+            'host' => $this->getProject()->getDomain(),
+            'path' => $this->getPath(),
+        ];
+
+        /** @var Authenticator $authenticator */
+        $authenticator = $this->getProject()->getAuthenticator();
+
+        if ($authenticator && $authenticator instanceof HttpBasicAuthenticator) {
+            $build['user'] = $authenticator->getUsername();
+            $build['pass'] = $authenticator->getPassword();
+        }
+
+        return \GuzzleHttp\Psr7\Uri::fromParts($build);
     }
 
     public function getAverageResponseTime()

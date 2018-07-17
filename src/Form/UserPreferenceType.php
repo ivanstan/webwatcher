@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\UserPreference;
-use App\Util\DateTimeFormatEnum;
+use App\Utility\DateTimeFormatEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

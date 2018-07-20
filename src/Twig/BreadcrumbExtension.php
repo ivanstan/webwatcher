@@ -50,7 +50,7 @@ class BreadcrumbExtension extends AbstractExtension
     {
         $request = $this->requestStack->getCurrentRequest();
         $routeName = $request->get('_route');
-        $dateTimeFormat = $this->dateTimeService = $this->dateTimeService->getDateTimeFormat();
+        $dateTimeFormat = $this->dateTimeService->getDateTimeFormat();
 
         if ($entity instanceof Project) {
             $project = $entity;
@@ -128,7 +128,7 @@ class BreadcrumbExtension extends AbstractExtension
             ];
         }
 
-        if (isset($authenticator)) {
+        if (isset($project) && isset($authenticator)) {
             if ($authenticator->getId()) {
                 $breadcrumbs[] = [
                     'title' => 'Authenticator',

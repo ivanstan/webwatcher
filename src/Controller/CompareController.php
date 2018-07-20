@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\PageSnapshot;
 use App\Entity\ProjectSnapshot;
+use App\Utility\Url;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -95,22 +96,38 @@ class CompareController extends Controller
     public function iframe(PageSnapshot $snapshot)
     {
         $crawler = new Crawler($snapshot->getBody());
-        $baseUrl = $snapshot->getPage()->getProject()->getBaseUrl();
+
+        $url = [
+            'scheme' => $snapshot->getPage()->getProtocol(),
+            'host' => $snapshot->getPage()->getProject()->getDomain(),
+        ];
 
         foreach ($crawler->filter('a') as $link) {
-            $link->setAttribute('href', $baseUrl . $link->getAttribute('href'));
-            $link->setAttribute('target', '_blank');
+            if (!Url::isAbsolute($link->getAttribute('href'))) {
+                $url['path'] = $link->getAttribute('href');
+                $link->setAttribute('href', \GuzzleHttp\Psr7\Uri::fromParts($url));
+                $link->setAttribute('target', '_blank');
+            }
         }
 
         foreach ($crawler->filter('link') as $stylesheet) {
-            if ($stylesheet->hasAttribute('rel') && $stylesheet->getAttribute('rel') === 'stylesheet') {
-                $stylesheet->setAttribute('href', $baseUrl . $stylesheet->getAttribute('href'));
+            if ($stylesheet->hasAttribute('rel') && $stylesheet->getAttribute('rel') === 'stylesheet' && !Url::isAbsolute($stylesheet->getAttribute('href'))) {
+                $url['path'] = $stylesheet->getAttribute('href');
+                $stylesheet->setAttribute('href', \GuzzleHttp\Psr7\Uri::fromParts($url));
             }
         }
 
         foreach ($crawler->filter('script') as $script) {
-            if ($script->hasAttribute('src')) {
-                $script->setAttribute('src', $baseUrl . $script->getAttribute('src'));
+            if ($script->hasAttribute('src') && !Url::isAbsolute($script->getAttribute('src'))) {
+                $url['path'] = $script->getAttribute('src');
+                $script->setAttribute('src', \GuzzleHttp\Psr7\Uri::fromParts($url));
+            }
+        }
+
+        foreach ($crawler->filter('img') as $image) {
+            if ($image->hasAttribute('src') && !Url::isAbsolute($image->getAttribute('src'))) {
+                $url['path'] = $image->getAttribute('src');
+                $image->setAttribute('src', \GuzzleHttp\Psr7\Uri::fromParts($url));
             }
         }
 

@@ -16,7 +16,8 @@ class Page extends AbstractResource
     /**
      * @var string
      *
-     * @ORM\Column(name="path", type="string", nullable=true)
+     * @ORM\Column(name="path", type="string", nullable=false)
+     * @Constraint\NotBlank()
      * @Constraint\Regex(
      *     pattern="/^\/+?/",
      *     match=true,
@@ -32,16 +33,6 @@ class Page extends AbstractResource
      */
     protected $protocol = 'https';
 
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function setPath(string $path)
-    {
-        $this->path = $path;
-    }
-
     public function getProtocol(): ?string
     {
         return $this->protocol;
@@ -50,6 +41,16 @@ class Page extends AbstractResource
     public function setProtocol(string $protocol): void
     {
         $this->protocol = $protocol;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(?string $path)
+    {
+        $this->path = $path;
     }
 
     public function getUrl(): string

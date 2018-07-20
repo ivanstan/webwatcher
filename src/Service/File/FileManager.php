@@ -5,6 +5,7 @@ namespace App\Service\File;
 use App\Entity\AbstractSnapshot;
 use App\Entity\Page;
 use App\Entity\Project;
+use ErrorException;
 
 class FileManager
 {
@@ -58,7 +59,11 @@ class FileManager
 
     public function remove(string $directory): bool
     {
-        $files = array_diff(scandir($directory), ['.', '..']);
+        try {
+            $files = array_diff(scandir($directory), ['.', '..']);
+        } catch (ErrorException $exception) {
+            $files = [];
+        }
 
         foreach ($files as $file) {
             if (is_dir("$directory/$file")) {
@@ -68,6 +73,10 @@ class FileManager
             }
         }
 
-        return rmdir($directory);
+        try {
+            return rmdir($directory);
+        } catch (ErrorException $exception) {
+            return false;
+        }
     }
 }

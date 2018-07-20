@@ -17,9 +17,16 @@ class UserPreferenceType extends AbstractType
     {
         $builder
             ->add('timezone', TimezoneType::class)
-            ->add('datetimeFormat', ChoiceType::class, [
+            ->add('dateFormat', ChoiceType::class, [
+                'label' => 'Date Format',
                 'choice_loader' => new CallbackChoiceLoader(function () {
-                    return DateTimeFormatEnum::getFormats();
+                    return DateTimeFormatEnum::getDateFormats();
+                }),
+            ])
+            ->add('timeFormat', ChoiceType::class, [
+                'label' => 'Time Format',
+                'choice_loader' => new CallbackChoiceLoader(function () {
+                    return DateTimeFormatEnum::getTimeFormats();
                 }),
             ])
         ;

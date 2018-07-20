@@ -3,7 +3,25 @@
 {% block title %}User | {{ parent() }}{% endblock %}
 
 {% block content %}
-    <h1>User</h1>
+    <div class="row">
+        <div class="col-10">
+            <h1>User</h1>
+        </div>
+        <div class="col-2">
+            {{ include('pages/user/_delete_form.html.twig') }}
+            <a data-toggle="tooltip"
+               data-placement="bottom"
+               title="Edit user"
+               class="float-right btn btn-primary mt-2 mr-2"
+               href="{{ path('user_edit', {'id': user.id}) }}">
+                <i class="fa fa-edit"></i>
+            </a>
+        </div>
+    </div>
+
+    {{ breadcrumbs(user)|raw }}
+
+    {% include 'components/flash-messages.html.twig' %}
 
     <table class="table">
         <tbody>
@@ -12,59 +30,26 @@
             <td>{{ user.username }}</td>
         </tr>
         <tr>
-            <th>UsernameCanonical</th>
-            <td>{{ user.usernameCanonical }}</td>
-        </tr>
-        <tr>
             <th>Email</th>
             <td>{{ user.email }}</td>
-        </tr>
-        <tr>
-            <th>EmailCanonical</th>
-            <td>{{ user.emailCanonical }}</td>
         </tr>
         <tr>
             <th>Enabled</th>
             <td>{{ user.enabled ? 'Yes' : 'No' }}</td>
         </tr>
         <tr>
-            <th>Salt</th>
-            <td>{{ user.salt }}</td>
-        </tr>
-        <tr>
-            <th>Password</th>
-            <td>{{ user.password }}</td>
-        </tr>
-        <tr>
-            <th>LastLogin</th>
+            <th>Last Login</th>
             <td>{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : '' }}</td>
-        </tr>
-        <tr>
-            <th>ConfirmationToken</th>
-            <td>{{ user.confirmationToken }}</td>
-        </tr>
-        <tr>
-            <th>PasswordRequestedAt</th>
-            <td>{{ user.passwordRequestedAt ? user.passwordRequestedAt|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
             <th>Roles</th>
             <td>
                 {% for role in user.roles %}
-                    <div><span class="badge badge-secondary">{{ role }}</span></div>
+                    <span class="badge badge-secondary">{{ role }}</span>
                 {% endfor %}
             </td>
-        </tr>
-        <tr>
-            <th>Id</th>
-            <td>{{ user.id }}</td>
         </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('user_index') }}">back to list</a>
-
-    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('pages/user/_delete_form.html.twig') }}
 {% endblock %}

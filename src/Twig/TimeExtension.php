@@ -69,11 +69,11 @@ class TimeExtension extends \Twig_Extension
             $user = $this->token->getToken()->getUser();
 
             if ($user instanceof User && $user->getPreference() && $user->getPreference()->getTimezone()) {
-                return $user->getPreference()->getDateTimeFormat();
+                return $user->getPreference()->getDateFormat() . ' ' . $user->getPreference()->getTimeFormat();
             }
         }
 
-        return UserPreference::DEFAULT_DATETIME_FORMAT;
+        return UserPreference::DEFAULT_DATE_FORMAT . ' ' . UserPreference::DEFAULT_TIME_FORMAT;
     }
 
     protected function getPluralizedInterval($count, $invert, $unit)

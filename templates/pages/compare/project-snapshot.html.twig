@@ -135,18 +135,6 @@
                         </tr>
                         <tr>
                             <td>
-                                {% if item.snapshot1.hash == item.snapshot2.hash %}
-                                    <span class="badge badge-success">OK</span>
-                                {% else %}
-                                    <a target="_blank"
-                                       href="{{ path('editor', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">
-                                        <span class="badge badge-warning"><i class="fa fa-file-code"></i> NOT</span>
-                                    </a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
                                 <span>Image mismatch: </span><span class="image-analysis"></span>
                             </td>
                         </tr>

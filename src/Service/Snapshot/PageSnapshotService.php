@@ -99,7 +99,7 @@ class PageSnapshotService implements SnapshotServiceInterface
         $har = $proxy->har();
         $snapshot->setHar(json_decode($har, true));
 
-        $har = new HttpArchive($har);
+        $har = HttpArchive::fromString($har);
         $entry = $har->getEntry($page->getUrl());
 
         $snapshot->setResponseCode(0);

@@ -58,12 +58,12 @@
     <div class="row mb-3">
         <div class="col-6">
             <a target="_blank" class="cursor-zoom-in" href="{{ asset(snapshot1.image) }}">
-                <img class="img-fluid" alt="{{ snapshot1.hash }}" src="{{ asset(snapshot1.image) }}">
+                <img class="img-fluid" alt="{{ snapshot1.timestamp | date(datetime_format()) }}" src="{{ asset(snapshot1.image) }}">
             </a>
         </div>
         <div class="col-6">
             <a target="_blank" class="cursor-zoom-in" href="{{ asset(snapshot2.image) }}">
-                <img class="img-fluid" alt="{{ snapshot2.hash }}" src="{{ asset(snapshot2.image) }}">
+                <img class="img-fluid" alt="{{ snapshot2.timestamp | date(datetime_format()) }}" src="{{ asset(snapshot2.image) }}">
             </a>
         </div>
     </div>

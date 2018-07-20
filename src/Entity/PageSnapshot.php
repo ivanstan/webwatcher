@@ -2,8 +2,7 @@
 
 namespace App\Entity;
 
-use App\Property\Id;
-use App\Property\Timestamp;
+use App\Service\HttpArchive\HttpArchive;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -26,12 +25,6 @@ class PageSnapshot extends AbstractSnapshot
     }
 
     /**
-     * @var string $body
-     * @ORM\Column(name="body", type="text", nullable=true)
-     */
-    protected $body;
-
-    /**
      * @var array $har
      * @ORM\Column(name="har", type="json", nullable=true)
      */
@@ -42,12 +35,6 @@ class PageSnapshot extends AbstractSnapshot
      * @ORM\Column(name="headers", type="json_array", nullable=true)
      */
     protected $headers;
-
-    /**
-     * @var string $hash
-     * @ORM\Column(name="hash", type="string", nullable=true)
-     */
-    protected $hash;
 
     /**
      * @var string $image
@@ -82,15 +69,12 @@ class PageSnapshot extends AbstractSnapshot
 
     public function getBody(): string
     {
-        $body = @HtmlFormatter::format($this->body);
+        $details = $this->getDetails();
+
+        $body = $details['response']['content']['text'] ?? '';
+        $body = @HtmlFormatter::format($body);
         $body = preg_replace('/^[ \t]*[\r\n]+/m', '', $body);
         return $body;
-    }
-
-    public function setBody(string $body)
-    {
-        $this->hash = sha1($body);
-        $this->body = $body;
     }
 
     public function getHeaders(): array
@@ -142,15 +126,6 @@ class PageSnapshot extends AbstractSnapshot
         $this->responseTime = $responseTime;
     }
 
-    public function getHash(): ?string
-    {
-        if ($this->hash) {
-            return $this->hash;
-        }
-
-        return 'null';
-    }
-
     public function getSeo(): ?PageSnapshotSeo
     {
         return $this->seo;
@@ -190,11 +165,6 @@ class PageSnapshot extends AbstractSnapshot
         return isset($this->linkIndex[$url]);
     }
 
-    public function equals(PageSnapshot $snapshot): bool
-    {
-        return $this->hash === $snapshot->getHash() && $this->responseCode === $snapshot->getResponseCode();
-    }
-
     public function getHar(): ?array
     {
         return $this->har;
@@ -203,5 +173,10 @@ class PageSnapshot extends AbstractSnapshot
     public function setHar(array $har): void
     {
         $this->har = $har;
+    }
+
+    public function getDetails()
+    {
+        return HttpArchive::fromArray($this->getHar())->getRedirectEntry($this->getPage()->getUrl());
     }
 }

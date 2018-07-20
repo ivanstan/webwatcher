@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\AbstractSnapshot;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Service\Analytics\KeywordExtractor;
+use App\Service\HttpArchive\HttpArchive;
 use App\Service\Snapshot\ResourceSnapshotService;
 use App\Util\Archive;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -48,14 +50,13 @@ class PageSnapshotController extends Controller
      */
     public function new(Page $page, ResourceSnapshotService $service)
     {
+        /** @var AbstractSnapshot $snapshot */
         $snapshot = $service->snapshot($page);
 
         $em = $this->getDoctrine()->getManager();
 
         $em->persist($snapshot);
         $em->flush();
-
-        //@todo check if success, return error if $snapshot is null
 
         return $this->redirectToRoute('page_snapshot_show', [
             'project' => $page->getProject()->getId(),

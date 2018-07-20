@@ -2,14 +2,6 @@
 
 {% block title %}Page snapshot {{ snapshot.timestamp|date(datetime_format()) }} | {{ parent() }}{% endblock %}
 
-{% block javascripts %}
-<script src="{{ asset('build/monaco/editor.js') }}"></script>
-{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/monaco/editor.css') }}">
-{% endblock %}
-
 {% block content %}
     <div class="row">
         <div class="col-10">
@@ -48,7 +40,7 @@
             {% if snapshot.image %}
                 <td>
                     <a target="_blank" class="cursor-zoom-in" href="{{ asset(snapshot.image) }}">
-                        <img class="img-fluid" alt="{{ snapshot.hash }}" src="{{ asset(snapshot.image) }}">
+                        <img class="img-fluid" alt="{{ snapshot.timestamp | date(datetime_format()) }}" src="{{ asset(snapshot.image) }}">
                     </a>
                 </td>
             {% endif %}

@@ -7,7 +7,5 @@ class Entry
     public function __construct(array $entry)
     {
 
-
-
     }
 }

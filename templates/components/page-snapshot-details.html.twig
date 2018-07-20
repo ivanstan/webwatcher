@@ -5,16 +5,19 @@
             {{ snapshot.timestamp|date(datetime_format()) }}
         </td>
     </tr>
-    <tr>
-        <th>Request time</th>
-        <td>
-            {{ snapshot.responseTime|number_format(2) }} sec
-        </td>
-    </tr>
-    <tr>
-        <th>HTTP Status</th>
-        <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
-    </tr>
+
+    {% if snapshot.details is defined %}
+        <tr>
+            <th>Request time</th>
+            <td>
+                {{ snapshot.details.time }} milliseconds
+            </td>
+        </tr>
+        <tr>
+            <th>HTTP Status</th>
+            <td>{% include 'components/response-code.html.twig' with {code: snapshot.details.response.status} only %}</td>
+        </tr>
+    {% endif %}
 </table>
 
 {% if snapshot.seo %}
@@ -63,7 +66,7 @@
     <canvas id="word-count-chart" data-title="Word frequency" class="pie-chart" data-chart="{{ freq|json_encode }}"></canvas>
 {% endif %}
 
-{% if snapshot.headers is not empty %}
+{% if snapshot.details.response.headers is not empty %}
     <table class="table">
         <thead>
         <tr>
@@ -71,7 +74,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for header in snapshot.headers %}
+        {% for header in snapshot.details.response.headers %}
             <tr>
                 <th>{{ header.name }}</th>
                 <td>{{ header.value }}</td>

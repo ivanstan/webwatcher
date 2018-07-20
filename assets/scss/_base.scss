@@ -21,3 +21,11 @@ body {
 .custom-select {
   background: #fff;
 }
+
+.icon-browser {
+  background: url(/assets/graphics/browser.svg) no-repeat 0px 4px;
+  width: 18px;
+  height: 24px;
+  display: block;
+  background-size: contain;
+}

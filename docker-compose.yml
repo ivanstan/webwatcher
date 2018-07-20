@@ -10,7 +10,8 @@ services:
             MYSQL_USER: symfony
             MYSQL_PASSWORD: symfony
     php:
-        build: docker/php-fpm
+        build: .
+        image: ivanstan/webwatcher
         volumes:
             - './:/var/www/symfony:cached'
             - './var/log/symfony:/var/www/symfony/var/logs:cached'
@@ -24,6 +25,7 @@ services:
             PROXY_PORT_RANGE: 9091-9191
     nginx:
         build: docker/nginx
+        image: ivanstan/webwatcher-nginx
         ports:
             - '8080:80'
         links:

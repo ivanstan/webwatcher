@@ -20,7 +20,7 @@ class UserPreference
      *
      * @ORM\Column(name="timezone", type="string", options={"default" : "d/m/Y H:i:s"})
      */
-    private $timezone = self::DEFAULT_DATETIME_FORMAT;
+    protected $timezone = self::DEFAULT_DATETIME_FORMAT;
 
     /**
      * @var string

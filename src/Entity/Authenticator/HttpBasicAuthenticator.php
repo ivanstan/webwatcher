@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table("http_basic_authenticator")
+ * @ORM\Table("authenticator_http_basic")
  */
 class HttpBasicAuthenticator extends Authenticator implements AuthenticatorInterface
 {
@@ -15,14 +15,14 @@ class HttpBasicAuthenticator extends Authenticator implements AuthenticatorInter
      *
      * @ORM\Column(name="username", type="string", nullable=false)
      */
-    private $username;
+    protected $username;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", nullable=false)
      */
-    private $password;
+    protected $password;
 
     public function getType(): string
     {

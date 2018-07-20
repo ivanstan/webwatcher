@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Constraint;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PageRepository")
- * @ORM\Table("page")
+ * @ORM\Entity(repositoryClass="App\Repository\PageResourceRepository")
+ * @ORM\Table("resource_page")
  */
 class Page extends AbstractResource
 {

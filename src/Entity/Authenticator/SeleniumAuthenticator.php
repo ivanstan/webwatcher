@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Entity("selenium_authenticator")
+ * @ORM\Entity("authenticator_selenium")
  */
 class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterface
 {
@@ -15,42 +15,42 @@ class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterf
      *
      * @ORM\Column(name="url", type="string", nullable=false)
      */
-    private $url;
+    protected $url;
 
     /**
      * @var string
      *
      * @ORM\Column(name="username", type="string", nullable=false)
      */
-    private $username;
+    protected $username;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", nullable=false)
      */
-    private $password;
+    protected $password;
 
     /**
      * @var string
      *
      * @ORM\Column(name="username_selector", type="string", nullable=false)
      */
-    private $usernameSelector;
+    protected $usernameSelector;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password_selector", type="string", nullable=false)
      */
-    private $passwordSelector;
+    protected $passwordSelector;
 
     /**
      * @var string
      *
      * @ORM\Column(name="submit_selector", type="string", nullable=false)
      */
-    private $submitSelector;
+    protected $submitSelector;
 
     public function getType(): string
     {

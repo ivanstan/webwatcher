@@ -15,22 +15,22 @@ class Image
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=true, name="name")
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", nullable=false, name="path")
      */
-    private $path;
+    protected $path;
 
     /**
      * @ORM\Column(type="json_array", nullable=true, name="tags")
      */
-    private $tags;
+    protected $tags;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\PageSnapshot", inversedBy="image", cascade={"remove"})
@@ -40,5 +40,5 @@ class Image
      *     inverseJoinColumns={@ORM\JoinColumn(name="snapshot_id", referencedColumnName="id", nullable=false)}
      * )
      */
-    private $snapshot;
+    protected $snapshot;
 }

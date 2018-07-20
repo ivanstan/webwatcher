@@ -18,7 +18,7 @@ use Mihaeu\HtmlFormatter;
  */
 class PageSnapshot extends AbstractSnapshot
 {
-    private $linkIndex = [];
+    protected $linkIndex = [];
 
     public function __construct()
     {

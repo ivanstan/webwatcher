@@ -2,9 +2,7 @@
 
 namespace App\Twig;
 
-use App\Entity\User;
-use App\Entity\UserPreference;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use App\Service\System\DateTimeService;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class TimeExtension extends \Twig_Extension
@@ -19,12 +17,12 @@ class TimeExtension extends \Twig_Extension
     ];
 
     private $translator;
-    private $token;
+    private $timeDateService;
 
-    public function __construct(TranslatorInterface $translator = null, TokenStorageInterface $token)
+    public function __construct(TranslatorInterface $translator = null, DateTimeService $timeDateService)
     {
         $this->translator = $translator;
-        $this->token = $token;
+        $this->timeDateService = $timeDateService;
     }
 
     public function getFilters()
@@ -64,16 +62,7 @@ class TimeExtension extends \Twig_Extension
 
     public function dateTimeFormat(): string
     {
-        if ($this->token->getToken()) {
-            /** @var User $user */
-            $user = $this->token->getToken()->getUser();
-
-            if ($user instanceof User && $user->getPreference() && $user->getPreference()->getTimezone()) {
-                return $user->getPreference()->getDateFormat() . ' ' . $user->getPreference()->getTimeFormat();
-            }
-        }
-
-        return UserPreference::DEFAULT_DATE_FORMAT . ' ' . UserPreference::DEFAULT_TIME_FORMAT;
+        return $this->timeDateService->getDateTimeFormat();
     }
 
     protected function getPluralizedInterval($count, $invert, $unit)

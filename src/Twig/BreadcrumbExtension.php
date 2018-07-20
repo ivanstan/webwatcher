@@ -7,6 +7,7 @@ use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
+use App\Service\System\DateTimeService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
@@ -17,16 +18,19 @@ class BreadcrumbExtension extends AbstractExtension
     private $router;
     private $template;
     private $requestStack;
+    private $dateTimeService;
 
     public function __construct(
         RouterInterface $router,
         \Twig_Environment $template,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        DateTimeService $dateTimeService
     )
     {
         $this->router = $router;
         $this->template = $template;
         $this->requestStack = $requestStack;
+        $this->dateTimeService = $dateTimeService;
     }
 
     public function getFunctions(): array
@@ -46,6 +50,7 @@ class BreadcrumbExtension extends AbstractExtension
     {
         $request = $this->requestStack->getCurrentRequest();
         $routeName = $request->get('_route');
+        $dateTimeFormat = $this->dateTimeService = $this->dateTimeService->getDateTimeFormat();
 
         if ($entity instanceof Project) {
             $project = $entity;
@@ -102,7 +107,7 @@ class BreadcrumbExtension extends AbstractExtension
         if (isset($project) && isset($page) && isset($snapshot)) {
             $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp());
             $breadcrumbs[] = [
-                'title' => $dateTime->format('d/m/Y H:i:s'),
+                'title' => $dateTime->format($dateTimeFormat),
                 'tooltip' => 'Page snapshot',
                 'href' => $this->router->generate('page_snapshot_show', [
                     'project' => $project->getId(),
@@ -114,7 +119,7 @@ class BreadcrumbExtension extends AbstractExtension
 
         if (isset($project) && isset($projectSnapshot)) {
             $breadcrumbs[] = [
-                'title' => 'Snapshot ' . date('d/m/Y H:i:s', $projectSnapshot->getTimestamp()),
+                'title' => 'Snapshot ' . date($dateTimeFormat, $projectSnapshot->getTimestamp()),
                 'tooltip' => 'Project snapshot',
                 'href' => $this->router->generate('project_snapshot_show', [
                     'project' => $project->getId(),

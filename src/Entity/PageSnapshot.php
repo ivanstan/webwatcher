@@ -10,13 +10,12 @@ use Mihaeu\HtmlFormatter;
 
 /**
  * @ORM\Entity()
- * @ORM\Table("page_snapshot",
- *     indexes={
- *     @ORM\Index(columns={"body"}, flags={"fulltext"}),
- * })
+ * @ORM\Table("page_snapshot")
  */
 class PageSnapshot extends AbstractSnapshot
 {
+    protected $details;
+
     protected $linkIndex = [];
 
     public function __construct()
@@ -177,6 +176,10 @@ class PageSnapshot extends AbstractSnapshot
 
     public function getDetails()
     {
-        return HttpArchive::fromArray($this->getHar())->getRedirectEntry($this->getPage()->getUrl());
+        if ($this->details === null) {
+            $this->details = HttpArchive::fromArray($this->getHar())->getRedirectEntry($this->getPage()->getUrl());
+        }
+
+        return $this->details;
     }
 }

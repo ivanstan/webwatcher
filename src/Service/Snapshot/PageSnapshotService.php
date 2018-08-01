@@ -2,8 +2,6 @@
 
 namespace App\Service\Snapshot;
 
-use App\Entity\AbstractResource;
-use App\Entity\AbstractSnapshot;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Service\Analytics\KeywordExtractor;
@@ -106,7 +104,6 @@ class PageSnapshotService implements SnapshotServiceInterface
 
         if ($entry) {
             $snapshot->setResponseCode($entry['response']['status']);
-            $snapshot->setBody($entry['response']['content']['text']);
             $snapshot->setHeaders($entry['response']['headers']);
         }
 

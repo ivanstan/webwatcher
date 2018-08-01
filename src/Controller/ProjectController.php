@@ -58,7 +58,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("project/{project}/edit", name="project_edit", methods="GET|POST")
+     * @Route("/{project}/edit", name="project_edit", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
     public function edit(Request $request, Project $project): Response

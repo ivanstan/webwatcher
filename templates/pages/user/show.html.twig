@@ -35,17 +35,23 @@
         </tr>
         <tr>
             <th>Enabled</th>
-            <td>{{ user.enabled ? 'Yes' : 'No' }}</td>
+            <td>
+                {% if user.enabled %}
+                    <span class="badge badge-success">Yes</span>
+                {% else %}
+                    <span class="badge badge-danger">No</span>
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <th>Last Login</th>
-            <td>{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ user.lastLogin ? user.lastLogin|date(datetime_format()) : '' }}</td>
         </tr>
         <tr>
             <th>Roles</th>
             <td>
                 {% for role in user.roles %}
-                    <span class="badge badge-secondary">{{ role }}</span>
+                    <span class="badge badge-secondary">{{ role|replace({'ROLE_': '' }) }}</span>
                 {% endfor %}
             </td>
         </tr>

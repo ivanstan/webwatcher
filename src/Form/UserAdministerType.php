@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -31,7 +32,6 @@ class UserAdministerType extends AbstractType
             ->add('email', EmailType::class, [
                 'constraints' => [new Email()],
             ])
-            ->add('enabled')
             ->add(
                 'password',
                 PasswordType::class,
@@ -45,19 +45,20 @@ class UserAdministerType extends AbstractType
                     'label' => 'Password',
                 ]
             )
+            ->add('enabled')
             ->add(
                 'roles', ChoiceType::class, [
                     'choices' => [
-                        'Admin' => 'ROLE_ADMIN',
-                        'Manager' => 'ROLE_MANAGER',
-                        'Viewer' => 'ROLE_VIEWER',
-                        'User' => 'ROLE_USER',
+                        'ADMIN' => 'ROLE_ADMIN',
+                        'MANAGER' => 'ROLE_MANAGER',
+                        'VIEWER' => 'ROLE_VIEWER',
+                        'USER' => 'ROLE_USER',
                     ],
                     'expanded' => true,
                     'multiple' => true,
                 ]
             )
-            ->add('preference', UserPreferenceType::class)
+            ->add('preference', UserPreferenceType::class, ['label' => false])
         ;
 
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) use ($options) {

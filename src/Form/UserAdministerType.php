@@ -11,11 +11,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserAdministerType extends AbstractType
 {
+    private $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -40,10 +48,10 @@ class UserAdministerType extends AbstractType
             ->add(
                 'roles', ChoiceType::class, [
                     'choices' => [
-                        'ROLE_ADMIN' => 'ROLE_ADMIN',
-                        'ROLE_MANAGER' => 'ROLE_MANAGER',
-                        'ROLE_VIEWER' => 'ROLE_VIEWER',
-                        'ROLE_USER' => 'ROLE_USER',
+                        'Admin' => 'ROLE_ADMIN',
+                        'Manager' => 'ROLE_MANAGER',
+                        'Viewer' => 'ROLE_VIEWER',
+                        'User' => 'ROLE_USER',
                     ],
                     'expanded' => true,
                     'multiple' => true,
@@ -58,8 +66,7 @@ class UserAdministerType extends AbstractType
             $password = $form->get('password')->getData();
 
             if ($form->isSubmitted() && $form->isValid() && $password) {
-                $encoder  = $em = $options['security.encoder_factory'];
-                $password = $encoder->encodePassword($password, $user->getSalt());
+                $password = $this->encoder->encodePassword($user, $password);
                 $user->setPassword($password);
                 $user->setPlainPassword(null);
 

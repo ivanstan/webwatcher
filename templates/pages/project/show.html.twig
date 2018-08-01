@@ -16,13 +16,15 @@
                href="{{ path('project_edit', {'project': project.id}) }}">
                 <i class="fa fa-edit"></i>
             </a>
-            <a data-toggle="tooltip"
-               data-placement="bottom"
-               title="Create project snapshot"
-               class="btn btn-primary mt-2 mr-2 float-right"
-               href="{{ path('project_snapshot_new', {"project": project.id}) }}">
-                <i class="fa fa-camera"></i>
-            </a>
+            {% if project.pages|length > 0 %}
+                <a data-toggle="tooltip"
+                   data-placement="bottom"
+                   title="Create project snapshot"
+                   class="btn btn-primary mt-2 mr-2 float-right"
+                   href="{{ path('project_snapshot_new', {"project": project.id}) }}">
+                    <i class="fa fa-camera"></i>
+                </a>
+            {% endif %}
         </div>
     </div>
 

@@ -20,8 +20,8 @@ class PageType extends AbstractType
             ->add('path')
             ->add('protocol', ChoiceType::class, [
                 'choices'  => [
-                    'https' => 'HTTPS',
-                    'http' => 'HTTP',
+                    'https' => 'https',
+                    'http' => 'http',
                 ],
             ])
         ;

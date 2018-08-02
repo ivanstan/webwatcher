@@ -71,6 +71,7 @@ class AuthenticatorController extends Controller
      */
     public function edit(
         Request $request,
+        Project $project,
         AuthenticatorInterface $authenticator,
         SeleniumAuthenticatorService $seleniumAuthenticator
     ): Response

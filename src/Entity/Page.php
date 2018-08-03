@@ -4,8 +4,9 @@ namespace App\Entity;
 
 use App\Entity\Authenticator\Authenticator;
 use App\Entity\Authenticator\HttpBasicAuthenticator;
+use App\Property\Path;
+use App\Property\Protocol;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Constraint;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PageResourceRepository")
@@ -13,45 +14,8 @@ use Symfony\Component\Validator\Constraints as Constraint;
  */
 class Page extends AbstractResource
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="path", type="string", nullable=false)
-     * @Constraint\NotBlank()
-     * @Constraint\Regex(
-     *     pattern="/^\/+?/",
-     *     match=true,
-     *     message="Path must begin with '/'"
-     * )
-     */
-    protected $path;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="protocol", type="string", nullable=false, options={"default":"https"}, columnDefinition="ENUM('http', 'https')")
-     */
-    protected $protocol = 'https';
-
-    public function getProtocol(): ?string
-    {
-        return $this->protocol;
-    }
-
-    public function setProtocol(string $protocol): void
-    {
-        $this->protocol = $protocol;
-    }
-
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function setPath(?string $path)
-    {
-        $this->path = $path;
-    }
+    use Path;
+    use Protocol;
 
     public function getUrl(): string
     {

@@ -5,37 +5,48 @@ namespace App\Service\Selenium;
 use App\Entity\Authenticator\AuthenticatorInterface;
 use Facebook\WebDriver\Cookie;
 use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverElement;
 
 class SeleniumAuthenticatorService {
 
-    private $webDriver;
+    private $driver;
+
+    /** @var WebDriverElement */
+    private $submit;
 
     public function __construct(SeleniumWebDriver $webDriver)
     {
-        $this->webDriver = $webDriver;
+        $this->driver = $webDriver->setup();
+    }
+
+    /**
+     * @param \App\Entity\Authenticator\SeleniumAuthenticator $authenticator
+     */
+    public function prepare(AuthenticatorInterface $authenticator): string
+    {
+        $this->driver->get($authenticator->getUrl());
+
+        return $this->driver->takeScreenshot();
     }
 
     /**
      * @param \App\Entity\Authenticator\SeleniumAuthenticator $authenticator
      * @return Cookie[]
      */
-    public function resolve(AuthenticatorInterface $authenticator) {
-
-        $driver = $this->webDriver->setup();
-
-        $driver->get($authenticator->getUrl());
-
-        $username = $driver->findElement(WebDriverBy::cssSelector($authenticator->getUsernameSelector()));
+    public function getCookies(AuthenticatorInterface $authenticator)
+    {
+        $username = $this->driver->findElement(WebDriverBy::cssSelector($authenticator->getUsernameSelector()));
         $username->sendKeys($authenticator->getUsername());
 
-        $password = $driver->findElement(WebDriverBy::cssSelector($authenticator->getPasswordSelector()));
+        $password = $this->driver->findElement(WebDriverBy::cssSelector($authenticator->getPasswordSelector()));
         $password->sendKeys($authenticator->getPassword());
 
-        $submit = $driver->findElement(WebDriverBy::cssSelector($authenticator->getSubmitSelector()));
+        $this->submit = $this->driver->findElement(WebDriverBy::cssSelector($authenticator->getSubmitSelector()));
 
-        $submit->click();
 
-        $cookies = $driver->manage()->getCookies();
+        $this->submit->click();
+
+        $cookies = $this->driver->manage()->getCookies();
 
         return $cookies;
     }

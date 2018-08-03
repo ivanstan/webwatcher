@@ -16,7 +16,23 @@
 {% endif %}
 
 {{ form_start(form) }}
-{{ form_row(form.url) }}
+
+<div class="form-group">
+    <label for="page_name" class="form-control-label">Path</label>
+    <div class="row">
+        <div class="col-1">
+            {{ form_widget(form.protocol) }}
+        </div>
+
+        <div class="col-3">
+            <input type="text" class="form-control" disabled value="{{ project.domain }}">
+        </div>
+
+        <div class="col-8">
+            {{ form_widget(form.path) }}
+        </div>
+    </div>
+</div>
 
 {{ form_row(form.username) }}
 {{ form_row(form.password) }}

@@ -2,6 +2,8 @@
 
 namespace App\Entity\Authenticator;
 
+use App\Property\Path;
+use App\Property\Protocol;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,12 +12,27 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterface
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="url", type="string", nullable=false)
-     */
-    protected $url;
+    use Path;
+    use Protocol;
+
+    public function getUrl(): string
+    {
+        $build = [
+            'scheme' => $this->getProtocol(),
+            'host' => $this->getProject()->getDomain(),
+            'path' => $this->getPath(),
+        ];
+
+        /** @var Authenticator $authenticator */
+        $authenticator = $this->getProject()->getAuthenticator();
+
+        if ($authenticator && $authenticator instanceof HttpBasicAuthenticator) {
+            $build['user'] = $authenticator->getUsername();
+            $build['pass'] = $authenticator->getPassword();
+        }
+
+        return \GuzzleHttp\Psr7\Uri::fromParts($build);
+    }
 
     /**
      * @var string
@@ -55,16 +72,6 @@ class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterf
     public function getType(): string
     {
         return self::TYPE_SELENIUM;
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(string $url): void
-    {
-        $this->url = $url;
     }
 
     public function getUsername(): ?string

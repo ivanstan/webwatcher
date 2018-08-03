@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Authenticator\Authenticator;
-use App\Entity\Authenticator\AuthenticatorInterface;
 use App\Entity\Project;
 use App\Form\Authenticator\SeleniumAuthenticatorType;
 use App\Service\Factory\AuthenticatorFactory;
@@ -35,6 +34,7 @@ class AuthenticatorController extends Controller
         $form = $this->createForm($factory->getFormType($type), $authenticator);
         $form->handleRequest($request);
         $cookies = [];
+        $screenshot = null;
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -48,7 +48,8 @@ class AuthenticatorController extends Controller
 
             if ($form->get('test')->isClicked()) {
                 try {
-                    $cookies = $seleniumAuthenticator->resolve($authenticator);
+                    $screenshot = $seleniumAuthenticator->prepare($authenticator);
+                    $cookies = $seleniumAuthenticator->getCookies($authenticator);
                 } catch (\Exception $exception) {
                     $this->addFlash('danger', $exception->getMessage());
                 }
@@ -60,9 +61,11 @@ class AuthenticatorController extends Controller
         }
 
         return $this->render('pages/authenticator/new.html.twig', [
+            'project' => $project,
             'authenticator' => $authenticator,
             'form' => $form->createView(),
             'cookies' => $cookies,
+            'screenshot' => $screenshot,
         ]);
     }
 
@@ -72,16 +75,16 @@ class AuthenticatorController extends Controller
     public function edit(
         Request $request,
         Project $project,
-        AuthenticatorInterface $authenticator,
+        Authenticator $authenticator,
         SeleniumAuthenticatorService $seleniumAuthenticator
     ): Response
     {
         $form = $this->createForm(SeleniumAuthenticatorType::class, $authenticator);
         $form->handleRequest($request);
         $cookies = [];
+        $screenshot = null;
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             if ($form->get('save')->isClicked()) {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($authenticator);
@@ -91,7 +94,8 @@ class AuthenticatorController extends Controller
             }
 
             try {
-                $cookies = $seleniumAuthenticator->resolve($authenticator);
+                $screenshot = $seleniumAuthenticator->prepare($authenticator);
+                $cookies = $seleniumAuthenticator->getCookies($authenticator);
             } catch (\Exception $exception) {
                 $this->addFlash('danger', $exception->getMessage());
             }
@@ -102,9 +106,11 @@ class AuthenticatorController extends Controller
         }
 
         return $this->render('pages/authenticator/edit.html.twig', [
+            'project' => $project,
             'authenticator' => $authenticator,
             'form' => $form->createView(),
             'cookies' => $cookies,
+            'screenshot' => $screenshot,
         ]);
     }
 

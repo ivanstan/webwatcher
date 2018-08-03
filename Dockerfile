@@ -1,46 +1,9 @@
-FROM alpine:3.6
+FROM php:7-apache
 
-LABEL maintainer="Vincent Composieux <vincent.composieux@gmail.com>"
+ADD . /var/www/html
 
-RUN apk add --update \
-    php7-fpm \
-    php7-apcu \
-    php7-ctype \
-    php7-curl \
-    php7-dom \
-    php7-gd \
-    php7-iconv \
-    php7-imagick \
-    php7-json \
-    php7-intl \
-    php7-mcrypt \
-    php7-mbstring \
-    php7-opcache \
-    php7-openssl \
-    php7-pdo \
-    php7-pdo_mysql \
-    php7-mysqli \
-    php7-xml \
-    php7-zlib \
-    php7-phar \
-    php7-tokenizer \
-    php7-session \
-    php7-simplexml \
-    make \
-    curl
+RUN a2enmod rewrite
 
-RUN rm -rf /var/cache/apk/* && rm -rf /tmp/*
+EXPOSE 80
 
-RUN curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
-
-ADD docker/php-fpm/symfony.ini /etc/php7/php-fpm.d/
-ADD docker/php-fpm/symfony.ini /etc/php7/cli/conf.d/
-
-ADD docker/php-fpm/symfony.pool.conf /etc/php7/php-fpm.d/
-
-ADD ./ /var/www/symfony
-
-CMD ["php-fpm7", "-F"]
-
-WORKDIR /var/www/symfony
-EXPOSE 9000
+CMD "apache2-foreground"

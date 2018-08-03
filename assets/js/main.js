@@ -98,6 +98,7 @@ $(document).ready(function () {
 
     monaco.editor.createDiffNavigator(diffEditor, {
       followsCaret: true,
+      automaticLayout: true,
       ignoreCharChanges: true,
       scrollBeyondLastLine: false,
     });

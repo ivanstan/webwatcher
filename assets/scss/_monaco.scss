@@ -1,4 +1,13 @@
 .monaco-diff,
 .monaco-editor {
-  //min-height: 300px;
+  //.editor-container {
+  //  height: calc(100% - 35px);
+  //}
+}
+
+.monaco-container {
+  height: calc(100% - 35px);
+  .editor-container {
+    height: calc(100% - 35px);
+  }
 }

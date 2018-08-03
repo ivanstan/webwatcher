@@ -24,8 +24,7 @@ class AuthenticatorController extends Controller
         Request $request,
         Project $project,
         string $type,
-        AuthenticatorFactory $factory,
-        SeleniumAuthenticatorService $seleniumAuthenticator
+        AuthenticatorFactory $factory
     ): Response
     {
         $authenticator = $factory->create($type);
@@ -36,28 +35,15 @@ class AuthenticatorController extends Controller
         $cookies = [];
         $screenshot = null;
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $form->get('save')->isClicked()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($authenticator);
+            $em->flush();
 
-            if ($form->get('save')->isClicked()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($authenticator);
-                $em->flush();
-
-                return $this->redirectToRoute('project_edit', ['project' => $project->getId()]);
-            }
-
-            if ($form->get('test')->isClicked()) {
-                try {
-                    $screenshot = $seleniumAuthenticator->prepare($authenticator);
-                    $cookies = $seleniumAuthenticator->getCookies($authenticator);
-                } catch (\Exception $exception) {
-                    $this->addFlash('danger', $exception->getMessage());
-                }
-
-                if (!empty($cookies)) {
-                    $this->addFlash('success', 'Login finished successfully.');
-                }
-            }
+            return $this->redirectToRoute('authenticator_edit', [
+                'project' => $project->getId(),
+                'id' => $authenticator->getId(),
+            ]);
         }
 
         return $this->render('pages/authenticator/new.html.twig', [
@@ -65,7 +51,7 @@ class AuthenticatorController extends Controller
             'authenticator' => $authenticator,
             'form' => $form->createView(),
             'cookies' => $cookies,
-            'screenshot' => $screenshot,
+            'screenshot' => base64_encode($screenshot),
         ]);
     }
 
@@ -93,15 +79,17 @@ class AuthenticatorController extends Controller
                 return $this->redirectToRoute('project_edit', ['project' => $project->getId()]);
             }
 
-            try {
-                $screenshot = $seleniumAuthenticator->prepare($authenticator);
-                $cookies = $seleniumAuthenticator->getCookies($authenticator);
-            } catch (\Exception $exception) {
-                $this->addFlash('danger', $exception->getMessage());
-            }
+            if ($form->get('test')->isClicked()) {
+                try {
+                    $screenshot = $seleniumAuthenticator->prepare($authenticator);
+                    $cookies = $seleniumAuthenticator->getCookies($authenticator);
+                } catch (\Exception $exception) {
+                    $this->addFlash('danger', $exception->getMessage());
+                }
 
-            if (!empty($cookies)) {
-                $this->addFlash('success', 'Login finished successfully.');
+                if (!empty($cookies)) {
+                    $this->addFlash('success', 'Login finished successfully.');
+                }
             }
         }
 
@@ -110,7 +98,7 @@ class AuthenticatorController extends Controller
             'authenticator' => $authenticator,
             'form' => $form->createView(),
             'cookies' => $cookies,
-            'screenshot' => $screenshot,
+            'screenshot' => base64_encode($screenshot),
         ]);
     }
 

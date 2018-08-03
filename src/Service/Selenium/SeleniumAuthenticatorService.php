@@ -14,6 +14,7 @@ class SeleniumAuthenticatorService {
     /** @var WebDriverElement */
     private $submit;
 
+    // ToDo this should not be in constructor, its called way too often.
     public function __construct(SeleniumWebDriver $webDriver)
     {
         $this->driver = $webDriver->setup();

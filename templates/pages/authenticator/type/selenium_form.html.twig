@@ -17,33 +17,61 @@
 
 {{ form_start(form) }}
 
-<div class="form-group">
-    <label for="page_name" class="form-control-label">Path</label>
-    <div class="row">
-        <div class="col-1">
-            {{ form_widget(form.protocol) }}
+{% if screenshot %}
+<div class="row">
+    <div class="col-7">
+        {% endif %}
+
+        <div class="form-group">
+            <label for="page_name" class="form-control-label">Path</label>
+            <div class="row">
+                <div class="col-1">
+                    {{ form_widget(form.protocol) }}
+                </div>
+
+                <div class="col-3">
+                    <input type="text" class="form-control" disabled value="{{ project.domain }}">
+                </div>
+
+                <div class="col-8">
+                    <div class="input-group">
+                        {{ form_widget(form.path) }}
+
+                        {% if authenticator.id %}
+                            <div class="input-group-append">
+                                <a class="btn btn-secondary" href="{{ authenticator.url }}" target="_blank">
+                                    <i class="fas fa-link"></i>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="col-3">
-            <input type="text" class="form-control" disabled value="{{ project.domain }}">
+        {{ form_row(form.username) }}
+        {{ form_row(form.password) }}
+
+        {{ form_row(form.submitSelector) }}
+        {{ form_row(form.usernameSelector) }}
+        {{ form_row(form.passwordSelector) }}
+
+        <div class="mb-3">
+            {{ form_widget(form.save) }}
+
+            {% if form.test is defined %}
+                {{ form_widget(form.test) }}
+            {% endif %}
         </div>
 
-        <div class="col-8">
-            {{ form_widget(form.path) }}
-        </div>
+        {{ form_end(form) }}
+
+        {% if screenshot %}
+    </div>
+    <div class="col-5">
+        <img src="data:image/png;base64,{{ screenshot }}" width="100%" class="mb-3">
     </div>
 </div>
+{% endif %}
 
-{{ form_row(form.username) }}
-{{ form_row(form.password) }}
 
-{{ form_row(form.submitSelector) }}
-{{ form_row(form.usernameSelector) }}
-{{ form_row(form.passwordSelector) }}
-
-<div class="mb-3">
-{{ form_widget(form.save) }}
-{{ form_widget(form.test) }}
-</div>
-
-{{ form_end(form) }}

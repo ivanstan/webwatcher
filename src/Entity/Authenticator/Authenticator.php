@@ -32,7 +32,7 @@ abstract class Authenticator
     public static function getTypes(): array
     {
         return [
-            self::TYPE_SELENIUM => 'Simulated',
+            self::TYPE_SELENIUM => 'Login Form',
             self::TYPE_HTTP_BASIC => 'Basic HTTP',
         ];
     }

@@ -23,14 +23,6 @@ class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterf
             'path' => $this->getPath(),
         ];
 
-        /** @var Authenticator $authenticator */
-        $authenticator = $this->getProject()->getAuthenticator();
-
-        if ($authenticator && $authenticator instanceof HttpBasicAuthenticator) {
-            $build['user'] = $authenticator->getUsername();
-            $build['pass'] = $authenticator->getPassword();
-        }
-
         return \GuzzleHttp\Psr7\Uri::fromParts($build);
     }
 

@@ -9,8 +9,9 @@ services:
             MYSQL_DATABASE: symfony
             MYSQL_USER: symfony
             MYSQL_PASSWORD: symfony
-    nginx:
+    webwatcher:
         build: .
+        image: ivanstan/webwatcher
         ports:
             - '8080:80'
         volumes:

@@ -12,6 +12,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 class User extends BaseUser
 {
     public const ROLE_ADMIN = 'ROLE_ADMIN';
+    public const ROLE_USER = 'ROLE_USER';
 
     /**
      * @var int
@@ -30,7 +31,11 @@ class User extends BaseUser
 
     public function getPreference(): ?UserPreference
     {
-        return $this->preference;
+        if ($this->preference) {
+            return $this->preference;
+        }
+
+        return new UserPreference();
     }
 
     public function setPreference(UserPreference $preference): void

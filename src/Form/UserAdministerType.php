@@ -49,13 +49,14 @@ class UserAdministerType extends AbstractType
             ->add(
                 'roles', ChoiceType::class, [
                     'choices' => [
-                        'ADMIN' => 'ROLE_ADMIN',
-                        'MANAGER' => 'ROLE_MANAGER',
-                        'VIEWER' => 'ROLE_VIEWER',
-                        'USER' => 'ROLE_USER',
+                        'ADMIN' => User::ROLE_ADMIN,
+                        'USER' => User::ROLE_USER,
                     ],
                     'expanded' => true,
                     'multiple' => true,
+                    'choice_attr' => function($key, $val, $index) {
+                        return $key === User::ROLE_USER ? ['disabled' => 'disabled'] : [];
+                    },
                 ]
             )
             ->add('preference', UserPreferenceType::class, ['label' => false])

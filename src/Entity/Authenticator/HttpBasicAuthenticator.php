@@ -29,6 +29,13 @@ class HttpBasicAuthenticator extends Authenticator implements AuthenticatorInter
         return self::TYPE_HTTP_BASIC;
     }
 
+    public function getTitle(): string
+    {
+        $types = self::getTypes();
+
+        return $types[$this->getType()];
+    }
+
     public function getUsername(): ?string
     {
         return $this->username;

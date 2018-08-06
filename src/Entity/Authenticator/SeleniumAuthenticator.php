@@ -15,17 +15,6 @@ class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterf
     use Path;
     use Protocol;
 
-    public function getUrl(): string
-    {
-        $build = [
-            'scheme' => $this->getProtocol(),
-            'host' => $this->getProject()->getDomain(),
-            'path' => $this->getPath(),
-        ];
-
-        return \GuzzleHttp\Psr7\Uri::fromParts($build);
-    }
-
     /**
      * @var string
      *
@@ -64,6 +53,24 @@ class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterf
     public function getType(): string
     {
         return self::TYPE_SELENIUM;
+    }
+
+    public function getTitle(): string
+    {
+        $types = self::getTypes();
+
+        return $types[$this->getType()];
+    }
+
+    public function getUrl(): string
+    {
+        $build = [
+            'scheme' => $this->getProtocol(),
+            'host' => $this->getProject()->getDomain(),
+            'path' => $this->getPath(),
+        ];
+
+        return \GuzzleHttp\Psr7\Uri::fromParts($build);
     }
 
     public function getUsername(): ?string

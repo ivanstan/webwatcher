@@ -13,7 +13,7 @@ class ProjectType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('domain')
+            ->add('domain', null, ['attr' => ['placeholder' => 'example.org']])
         ;
     }
 

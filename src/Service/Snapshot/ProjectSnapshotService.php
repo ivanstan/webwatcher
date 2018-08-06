@@ -38,8 +38,9 @@ class ProjectSnapshotService
         $this->em->persist($projectSnapshot);
 
         if ($project->getAuthenticator()) {
+            $this->authenticator->prepare($project->getAuthenticator());
             $this->pageSnapshotService->setCookies(
-                $this->authenticator->resolve($project->getAuthenticator())
+                $this->authenticator->getCookies($project->getAuthenticator())
             );
         }
 

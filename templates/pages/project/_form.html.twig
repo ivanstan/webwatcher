@@ -1,5 +1,30 @@
 {{ form_start(form) }}
 {{ form_row(form.name) }}
 {{ form_row(form.domain) }}
+
+{% if project.authenticator is not null %}
+    <table class="table mb-0">
+        <thead>
+        <tr>
+            <td colspan="2" class="pl-0 pr-0">Authenticator</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="pl-0">
+                <a href="{{ path('authenticator_edit', {project: project.id, id: project.authenticator.id}) }}">{{ project.authenticator.title | capitalize }}</a>
+            </td>
+            <td class="pr-0">
+                <a href="{{ path('authenticator_delete', {'project': project.id, 'id': project.authenticator.id}) }}"
+                   class="btn btn-danger float-right"
+                   onclick="return confirm('Are you sure you want to delete this item?');">
+                    <i class="fa fa-trash-alt"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endif %}
+
     <button class="btn btn-primary mb-3">{{ button_label|default('Submit') }}</button>
 {{ form_end(form) }}

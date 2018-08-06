@@ -30,24 +30,6 @@
                 {% endfor %}
             </div>
         </div>
-    {% else %}
-        <table class="table mb-0">
-            <thead>
-            <tr>
-                <td colspan="2" class="pl-0 pr-0">Authenticator</td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="pl-0">
-                    <a href="{{ path('authenticator_edit', {project: project.id, id: project.authenticator.id}) }}">{{ project.authenticator.title | capitalize }}</a>
-                </td>
-                <td class="pr-0">
-                    {{ include('pages/authenticator/_delete_form.html.twig') }}
-                </td>
-            </tr>
-            </tbody>
-        </table>
     {% endif %}
 
     {{ include('pages/project/_form.html.twig', {'project': project}) }}

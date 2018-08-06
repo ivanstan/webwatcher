@@ -19,33 +19,26 @@ services:
         ports:
             - '3303:3306'
         environment:
-            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: symfony
             MYSQL_DATABASE: symfony
             MYSQL_USER: symfony
             MYSQL_PASSWORD: symfony
-    php:
+    webwatcher:
         image: ivanstan/webwatcher
-        volumes:
-            - './:/var/www/symfony:cached'
-            - './var/log/symfony:/var/www/symfony/var/logs:cached'
-        links:
-            - db
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: symfony
-            MYSQL_USER: symfony
-            MYSQL_PASSWORD: symfony
-            PROXY_PORT_RANGE: 9091-9191
-    nginx:
-        image: ivanstan/webwatcher-nginx
         ports:
             - '8080:80'
-        links:
-            - php
-        volumes_from:
-            - php
         volumes:
-            - './var/log/nginx/:/var/log/nginx:cached'
+            - './var/log/apache/:/var/log/apache:cached'
+        environment:
+            MYSQL_ROOT_PASSWORD: symfony
+            MYSQL_DATABASE: symfony
+            MYSQL_USER: symfony
+            MYSQL_PASSWORD: symfony
+            DATABASE_URL: mysql://symfony:symfony@db:3306/symfony
+            PROXY_PORT_RANGE: 9091-9191
+            BROWSERMOB_PROXY: http://browsermob-proxy:9090
+            SELENIUM_HUB: http://selenium-hub:4444/wd/hub
+            PROXY_PORT_RANGE: 9091-9191
     selenium-hub:
         image: 'selenium/hub:3.12.0-boron'
         ports:
@@ -59,22 +52,6 @@ services:
             - 5900
         expose:
             - 80
-        links:
-            - 'selenium-hub'
-        depends_on:
-            - selenium-hub
-        environment:
-            - HUB_HOST=selenium-hub
-            - HUB_PORT=4444
-    firefox-node:
-        image: 'selenium/node-firefox:3.12.0-boron'
-        volumes:
-            - '~/webwatcher/selenium:/e2e/uploads'
-            - '~/webwatcher/selenium/tmp:/e2e/uploads/tmp'
-        ports:
-            - '5900'
-        expose:
-            - '80'
         links:
             - 'selenium-hub'
         depends_on:

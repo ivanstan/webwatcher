@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Authenticator\Authenticator;
+use App\Entity\Page;
 use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Service\Factory\ProjectFactory;
@@ -30,6 +31,33 @@ class ProjectController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            if ($request->get('name') === null && parse_url($project->getDomain(), PHP_URL_HOST)) {
+                $project->setName(parse_url($project->getDomain(), PHP_URL_HOST));
+            }
+
+            $protocol = parse_url($project->getDomain(), PHP_URL_SCHEME);
+            $path = parse_url($project->getDomain(), PHP_URL_PATH);
+
+            $page = new Page();
+            if ($protocol && $path) {
+                $page->setProtocol($protocol);
+                $page->setPath(rtrim($path, '/'));
+                $page->setName(rtrim($path, '/'));
+            } else {
+                $page->setPath('/');
+                $page->setName('Home');
+            }
+
+            $page->setProject($project);
+            $project->setPages([$page]);
+
+            $domain = parse_url($project->getDomain(), PHP_URL_HOST);
+
+            if ($domain) {
+                $project->setDomain($domain);
+            }
+
             $em->persist($project->getPages()[0]);
             $em->flush();
 

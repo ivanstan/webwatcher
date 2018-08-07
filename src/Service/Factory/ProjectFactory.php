@@ -19,12 +19,6 @@ class ProjectFactory {
     public function create(): Project
     {
         $project = new Project();
-        $page = new Page();
-        $page->setPath('/');
-        $page->setName('Home');
-        $page->setProject($project);
-        $project->setPages([$page]);
-
         $user = $this->token->getToken()->getUser();
         $project->setOwner($user);
 

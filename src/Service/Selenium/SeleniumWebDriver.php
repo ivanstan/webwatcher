@@ -33,11 +33,6 @@ class SeleniumWebDriver
             return $this->driver;
         }
 
-        $capabilities = [
-            WebDriverCapabilityType::BROWSER_NAME => WebDriverBrowserType::CHROME,
-            WebDriverCapabilityType::PLATFORM => WebDriverPlatform::ANY,
-        ];
-
         $this->proxy = $this->browserMob->get();
 
         if ($this->proxy) {
@@ -48,11 +43,11 @@ class SeleniumWebDriver
             ];
         }
 
-
-        $this->driver = RemoteWebDriver::create($this->seleniumHubUrl, $capabilities);
+        $this->driver = RemoteWebDriver::create($this->seleniumHubUrl, $this->getDefaultCapabilities());
 
         return $this->driver;
     }
+
 
     public function getDriver(): WebDriver
     {
@@ -62,6 +57,19 @@ class SeleniumWebDriver
     public function getProxy(): Proxy
     {
         return $this->proxy;
+    }
+
+    public function getSeleniumUrl(): string
+    {
+        return $this->seleniumHubUrl;
+    }
+
+    public function getDefaultCapabilities(): array
+    {
+        return [
+            WebDriverCapabilityType::BROWSER_NAME => WebDriverBrowserType::CHROME,
+            WebDriverCapabilityType::PLATFORM => WebDriverPlatform::ANY,
+        ];
     }
 
     public function __destruct()

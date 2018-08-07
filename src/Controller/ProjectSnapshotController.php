@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Authenticator\Authenticator;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Service\Snapshot\ProjectSnapshotService;
+use Facebook\WebDriver\Exception\NoSuchElementException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,7 +49,27 @@ class ProjectSnapshotController extends Controller
      */
     public function new(Project $project, ProjectSnapshotService $service)
     {
-        $snapshot = $service->new($project);
+        try {
+            $snapshot = $service->new($project);
+        } catch (NoSuchElementException $exception) {
+            /** @var Authenticator $authenticator */
+            $url = $this->generateUrl('authenticator_edit', [
+                'project' => $project->getId(),
+                'id' => $project->getAuthenticator()->getId()
+            ]);
+            $message = sprintf("Error executing <a href='$url'>authenticator</a>. {$exception->getMessage()}");
+            $this->addFlash('danger', $message);
+
+            return $this->redirectToRoute('project_show', [
+                'project' => $project->getId(),
+            ]);
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+
+            return $this->redirectToRoute('project_show', [
+                'project' => $project->getId(),
+            ]);
+        }
 
         return $this->redirectToRoute('project_snapshot_show', [
             'project' => $project->getId(),

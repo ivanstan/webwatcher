@@ -45,9 +45,6 @@ services:
             - '4444:4444'
     chrome-node:
         image: 'selenium/node-chrome:3.12.0-boron'
-        volumes:
-            - '~/webwatcher/selenium:/e2e/uploads'
-            - '~/webwatcher/selenium/tmp:/e2e/uploads/tmp'
         ports:
             - 5900
         expose:

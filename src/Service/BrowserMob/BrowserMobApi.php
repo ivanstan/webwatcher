@@ -80,8 +80,6 @@ class BrowserMobApi
 
         $response = $response->getBody()->getContents();
 
-        $response;
-
         return $response;
     }
 

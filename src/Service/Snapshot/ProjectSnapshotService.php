@@ -39,9 +39,9 @@ class ProjectSnapshotService
 
         if ($project->getAuthenticator()) {
             $this->authenticator->prepare($project->getAuthenticator());
-            $this->pageSnapshotService->setCookies(
-                $this->authenticator->getCookies($project->getAuthenticator())
-            );
+            $cookies = $this->authenticator->getCookies($project->getAuthenticator());
+
+            $this->pageSnapshotService->setCookies($cookies);
         }
 
         foreach ($project->getPages() as $resource) {

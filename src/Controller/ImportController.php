@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Authenticator\SeleniumAuthenticator;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Service\Bulk\BulkPage;
+use App\Service\Selenium\SeleniumAuthenticatorService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,13 +29,20 @@ class ImportController extends Controller
      * @Route("/{project}/import", name="project_page_import", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function import(Request $request, Project $project, BulkPage $bulk)
+    public function import(Request $request, Project $project, BulkPage $bulk, SeleniumAuthenticatorService $authenticatorService)
     {
         if ($request->isMethod('POST')) {
             return $this->save($project, $request);
         }
 
         $url = parse_url($request->query->get('url', '/'), PHP_URL_PATH);
+
+        if ($project->getAuthenticator() && $project->getAuthenticator() instanceof SeleniumAuthenticator) {
+            $authenticatorService->prepare($project->getAuthenticator());
+            $cookies = $authenticatorService->getCookies($project->getAuthenticator());
+
+            $bulk->setCookies($cookies);
+        }
 
         $pages = $bulk->extract($project->getBaseUrl() . $url);
 

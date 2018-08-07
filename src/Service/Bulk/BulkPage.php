@@ -2,19 +2,41 @@
 
 namespace App\Service\Bulk;
 
+use Facebook\WebDriver\Cookie;
 use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\CookieJar;
 use Symfony\Component\DomCrawler\Crawler;
 
 class BulkPage
 {
     public const SITEMAP_NAME = 'sitemap.xml';
 
+    private $cookies;
+
+    public function setCookies($cookies)
+    {
+        $this->cookies = $cookies;
+    }
+
     public function extract(string $url): array
     {
         $client = new Client(['verify' => false]);
 
+        $params = [];
+        if ($this->cookies) {
+            $domain = '.';
+            $cookieArray = [];
+            /** @var Cookie $cookie */
+            foreach ($this->cookies as $cookie) {
+                $cookieArray[$cookie->getName()] = $cookie->getValue();
+                $domain = $cookie->getDomain();
+            }
+
+            $params['cookies'] = CookieJar::fromArray($cookieArray, $domain);
+        }
+
         try {
-            $response = $client->get($url);
+            $response = $client->request('GET', $url, $params);
 
             $mime = 'text/html';
             if ($response->hasHeader('Content-Type')) {

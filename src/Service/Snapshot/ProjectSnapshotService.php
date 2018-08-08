@@ -2,6 +2,7 @@
 
 namespace App\Service\Snapshot;
 
+use App\Entity\Authenticator\SeleniumAuthenticator;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Service\Factory\ProjectSnapshotFactory;
@@ -37,16 +38,10 @@ class ProjectSnapshotService
         $projectSnapshot = $this->factory->create($project);
         $this->em->persist($projectSnapshot);
 
-        if ($project->getAuthenticator()) {
-            $this->authenticator->prepare($project->getAuthenticator());
-            $cookies = $this->authenticator->getCookies($project->getAuthenticator());
-
-            $this->pageSnapshotService->setCookies($cookies);
-        }
+        $service = $this->resourceSnapshotService->getPageService();
+        $service->setup($project);
 
         foreach ($project->getPages() as $resource) {
-            $service = $this->resourceSnapshotService->getService($resource);
-
             $snapshot = $service->snapshot($resource);
 
             $snapshot->setTimestamp($projectSnapshot->getTimestamp());

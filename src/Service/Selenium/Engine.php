@@ -7,14 +7,13 @@ use App\Service\BrowserMob\Proxy;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\WebDriverBrowserType;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
-use Facebook\WebDriver\WebDriver;
 use Facebook\WebDriver\WebDriverPlatform;
 
-class SeleniumWebDriver
+class Engine
 {
     private $seleniumHubUrl;
 
-    /** @var WebDriver */
+    /** @var RemoteWebDriver */
     private $driver;
     /** @var BrowserMobApi */
     private $browserMob;
@@ -27,14 +26,15 @@ class SeleniumWebDriver
         $this->browserMob = $browserMob;
     }
 
-    public function setup(): WebDriver
+    public function getDriver(): RemoteWebDriver
     {
-        if ($this->driver !== null) {
+        if ($this->driver) {
             return $this->driver;
         }
 
         $this->proxy = $this->browserMob->get();
 
+        $capabilities = $this->getDefaultCapabilities();
         if ($this->proxy) {
             $capabilities[WebDriverCapabilityType::PROXY] = [
                 'proxyType' => 'manual',
@@ -43,14 +43,8 @@ class SeleniumWebDriver
             ];
         }
 
-        $this->driver = RemoteWebDriver::create($this->seleniumHubUrl, $this->getDefaultCapabilities());
+        $this->driver = RemoteWebDriver::create($this->seleniumHubUrl, $capabilities);
 
-        return $this->driver;
-    }
-
-
-    public function getDriver(): WebDriver
-    {
         return $this->driver;
     }
 

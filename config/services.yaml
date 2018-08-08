@@ -45,5 +45,5 @@ services:
     App\Service\BrowserMob\BrowserMobApi:
         arguments: [ '%env(BROWSERMOB_PROXY)%', '%env(PROXY_PORT_RANGE)%']
 
-    App\Service\Selenium\SeleniumWebDriver:
+    App\Service\Selenium\Engine:
         arguments: ['%env(SELENIUM_HUB)%']

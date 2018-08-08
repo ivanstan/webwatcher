@@ -177,7 +177,9 @@ class PageSnapshot extends AbstractSnapshot
     public function getDetails()
     {
         if ($this->details === null) {
-            $this->details = HttpArchive::fromArray($this->getHar())->getRedirectEntry($this->getPage()->getUrl());
+            $archive = HttpArchive::fromArray($this->getHar());
+
+//            $this->details =  $archive->getEntry($this->getPage()->getUrl());
         }
 
         return $this->details;

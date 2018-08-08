@@ -72,7 +72,7 @@ class Proxy
             'form_params' => [
                 'captureHeaders' => 'true',
                 'captureCookies' => 'true',
-                'captureContent' => 'false',
+                'captureContent' => 'true',
                 'captureBinaryContent' => 'false',
                 'initialPageRef' => $reference,
             ]

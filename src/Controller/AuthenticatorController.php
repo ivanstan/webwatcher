@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\SeleniumAuthenticator;
 use App\Entity\Project;
 use App\Form\Authenticator\SeleniumAuthenticatorType;
 use App\Service\Factory\AuthenticatorFactory;
+use App\Service\Selenium\Engine;
 use App\Service\Selenium\SeleniumAuthenticatorService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,25 +19,30 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AuthenticatorController extends Controller
 {
+    private $factory;
+
+    public function __construct(AuthenticatorFactory $factory)
+    {
+        $this->factory = $factory;
+    }
+
     /**
      * @Route("/{type}/new", name="authenticator_new", methods="GET|POST")
      */
     public function new(
         Request $request,
         Project $project,
-        string $type,
-        AuthenticatorFactory $factory
+        string $type
     ): Response
     {
-        $authenticator = $factory->create($type);
+        $authenticator = $this->factory->create($type);
         $authenticator->setProject($project);
 
-        $form = $this->createForm($factory->getFormType($type), $authenticator);
+        $form = $this->createForm($this->factory->getFormType($authenticator->getType()), $authenticator);
         $form->handleRequest($request);
-        $cookies = [];
         $screenshot = null;
 
-        if ($form->isSubmitted() && $form->isValid() && $form->get('save')->isClicked()) {
+        if ($form->isSubmitted() && $form->isValid() && $form->get('submit')->isClicked()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($authenticator);
             $em->flush();
@@ -50,8 +57,6 @@ class AuthenticatorController extends Controller
             'project' => $project,
             'authenticator' => $authenticator,
             'form' => $form->createView(),
-            'cookies' => $cookies,
-            'screenshot' => base64_encode($screenshot),
         ]);
     }
 
@@ -62,16 +67,17 @@ class AuthenticatorController extends Controller
         Request $request,
         Project $project,
         Authenticator $authenticator,
-        SeleniumAuthenticatorService $seleniumAuthenticator
+        SeleniumAuthenticatorService $seleniumAuthenticator,
+        Engine $engine
     ): Response
     {
-        $form = $this->createForm(SeleniumAuthenticatorType::class, $authenticator);
+        $form = $this->createForm($this->factory->getFormType($authenticator->getType()), $authenticator);
         $form->handleRequest($request);
         $cookies = [];
         $screenshot = null;
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('save')->isClicked()) {
+            if ($form->get('submit')->isClicked()) {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($authenticator);
                 $em->flush();
@@ -79,10 +85,13 @@ class AuthenticatorController extends Controller
                 return $this->redirectToRoute('project_edit', ['project' => $project->getId()]);
             }
 
-            if ($form->get('test')->isClicked()) {
+            if ($form->get('test')->isClicked() && $authenticator instanceof SeleniumAuthenticator) {
+                $driver = $engine->getDriver();
+                $seleniumAuthenticator->setDriver($driver);
+
                 try {
-                    $screenshot = $seleniumAuthenticator->prepare($authenticator);
-                    $cookies = $seleniumAuthenticator->getCookies($authenticator);
+                    $cookies = $seleniumAuthenticator->setup($authenticator)->getCookies();
+                    $screenshot = $seleniumAuthenticator->getScreenshot();
                 } catch (\Exception $exception) {
                     $this->addFlash('danger', $exception->getMessage());
                 }

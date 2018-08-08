@@ -28,4 +28,9 @@ class ResourceSnapshotService
     {
         return $service = $this->getService($resource)->snapshot($resource);
     }
+
+    public function getPageService(): PageSnapshotService
+    {
+        return $this->pageService;
+    }
 }

@@ -2,12 +2,13 @@
 
 namespace App\Service\Selenium;
 
-use Facebook\WebDriver\Cookie;
+use App\Entity\PageSnapshot;
+use App\Service\File\ImageFileManager;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverDimension;
 use Symfony\Component\Templating\EngineInterface;
 
-class WebScreenshotService
+class ScreenshotService
 {
     private $cookies;
 
@@ -15,40 +16,34 @@ class WebScreenshotService
     private $driver;
     /** @var EngineInterface */
     private $template;
+    /** @var ImageFileManager */
+    private $manager;
 
-    public function __construct(SeleniumWebDriver $webDriver, EngineInterface $template)
+    public function __construct(EngineInterface $template, ImageFileManager $manager)
     {
-        $this->driver = $webDriver->setup();
         $this->template = $template;
+        $this->manager = $manager;
     }
 
-    public function setCookies(array $cookies)
+    public function setDriver(RemoteWebDriver $driver)
     {
-        $this->cookies = $cookies;
+        $this->driver = $driver;
     }
 
-    public function getPageScreenShot(string $url): ?string
+    public function getScreenshot(?PageSnapshot $snapshot = null): ?string
     {
-        $this->setupCookies($url);
-
-        $this->driver->get($url);
-
         $this->setWindowDimensions();
 
-        return $this->driver->takeScreenshot();
-    }
+        $image = $this->driver->takeScreenshot();
 
-
-    private function setupCookies(string $url): void
-    {
-        if (!empty($this->cookies)) {
-            /** @var Cookie $cookie */
-            foreach ($this->cookies as $cookie) {
-                $this->driver->manage()->addCookie($cookie->toArray());
-            }
-
-            $this->driver->get($url);
+        if ($snapshot) {
+            $destination = $this->manager->getSnapshotImageDestination($snapshot, 'full-page');
+            $imagePath = $this->manager->getSnapshotImagePath($snapshot, 'full-page');
+            $this->manager->save($destination, $image);
+            $snapshot->setImage($imagePath);
         }
+
+        return $image;
     }
 
     private function setWindowDimensions(): void

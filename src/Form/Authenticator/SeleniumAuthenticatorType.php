@@ -29,7 +29,7 @@ class SeleniumAuthenticatorType extends AbstractType
             ->add('usernameSelector', null, ['attr' => ['placeholder' => '#username']])
             ->add('passwordSelector', null, ['attr' => ['placeholder' => '#password']])
             ->add('submitSelector', null, ['attr' => ['placeholder' => '#submit']])
-            ->add('save', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']])
+            ->add('submit', SubmitType::class, ['attr' => ['class' => 'btn btn-primary']])
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {

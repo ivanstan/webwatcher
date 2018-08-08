@@ -4,6 +4,8 @@ services:
         image: mysql:5.7.22
         ports:
             - 3303:3306
+        volumes:
+            - ./docker/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
         environment:
             MYSQL_ROOT_PASSWORD: symfony
             MYSQL_DATABASE: symfony

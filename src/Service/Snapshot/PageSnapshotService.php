@@ -9,10 +9,10 @@ use App\Entity\Project;
 use App\Service\BrowserMob\Proxy;
 use App\Service\Factory\PageSnapshotFactory;
 use App\Service\HttpArchive\HttpArchive;
+use App\Service\Selenium\Engine;
 use App\Service\Selenium\ScreenshotService;
 use App\Service\Selenium\SeleniumAuthenticatorService;
-use App\Service\Selenium\Engine;
-use Facebook\WebDriver\WebDriver;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
 
 class PageSnapshotService implements SnapshotServiceInterface
 {
@@ -20,9 +20,8 @@ class PageSnapshotService implements SnapshotServiceInterface
 
     private $factory;
 
-    /** @var WebDriver */
+    /** @var RemoteWebDriver */
     private $driver;
-    private $imageFileManager;
     /** @var Engine */
     private $engine;
     /** @var SeleniumAuthenticatorService */
@@ -43,6 +42,11 @@ class PageSnapshotService implements SnapshotServiceInterface
         $this->engine = $engine;
         $this->authenticator = $authenticatorService;
         $this->seleniumService = $seleniumService;
+    }
+
+    public function getDriver(): RemoteWebDriver
+    {
+        return $this->driver;
     }
 
     public function setup(Project $project): self

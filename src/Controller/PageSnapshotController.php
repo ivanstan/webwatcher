@@ -6,9 +6,7 @@ use App\Entity\AbstractSnapshot;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Service\Analytics\KeywordExtractor;
-use App\Service\HttpArchive\HttpArchive;
-use App\Service\Snapshot\ResourceSnapshotService;
-use App\Util\Archive;
+use App\Service\Snapshot\PageSnapshotService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,15 +46,26 @@ class PageSnapshotController extends Controller
      * @Route("/new", name="snapshot_page_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function new(Page $page, ResourceSnapshotService $service)
+    public function new(Page $page, PageSnapshotService $service)
     {
         /** @var AbstractSnapshot $snapshot */
-        $snapshot = $service->snapshot($page);
+        $snapshot = $service->setup($page->getProject())->snapshot($page);
 
         $em = $this->getDoctrine()->getManager();
 
         $em->persist($snapshot);
-        $em->flush();
+
+        try {
+            $em->flush();
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+            $service->getDriver()->quit();
+
+            return $this->redirectToRoute('page_show', [
+                'project' => $page->getProject()->getId(),
+                'page' => $page->getId(),
+            ]);
+        }
 
         return $this->redirectToRoute('page_snapshot_show', [
             'project' => $page->getProject()->getId(),

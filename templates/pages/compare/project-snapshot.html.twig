@@ -56,36 +56,7 @@
             <div class="col-2">
                 <table class="mb-0">
                     <tr>
-                        <td class="pt-2">
-                            {% if item.snapshot1 is defined and item.snapshot2 is defined %}
-                                <a data-toggle="tooltip"
-                                   data-placement="bottom"
-                                   title="Visit page"
-                                   target="_blank" href="{{ page1.url }}">
-                                    <i class="fa fa-external-link-alt"></i>
-                                </a>
-                                <a data-toggle="tooltip"
-                                   data-placement="bottom"
-                                   title="Compare page"
-                                   target="_blank"
-                                   href="{{ path('compare_page_snapshot', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}"><i
-                                            class="fa fa-balance-scale"></i></a>
-                                <a data-toggle="tooltip"
-                                   data-placement="bottom"
-                                   title="View diff"
-                                   target="_blank"
-                                   href="{{ path('editor', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">
-                                    <i class="fas fa-file-code"></i>
-                                </a>
-                                <a data-toggle="tooltip"
-                                   data-placement="bottom"
-                                   title="View diff"
-                                   target="_blank"
-                                   href="{{ path('compare_image', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">
-                                    <i class="fas fa-images"></i>
-                                </a>
-                            {% endif %}
-                        </td>
+
                     </tr>
                 </table>
             </div>
@@ -94,6 +65,30 @@
             <div class="col-5 mb-0">
                 {% if item.snapshot1 is defined %}
                     <table class="table">
+                        <tr>
+                            <td colspan="2">
+                                <a target="_blank"
+                                   data-toggle="tooltip"
+                                   data-placement="bottom"
+                                   title="Show snapshot"
+                                   style="margin-right: 5px"
+                                   href="{{ path('page_snapshot_show', {'project': page1.project.id, 'page': page1.id, 'snapshot': item.snapshot1.id}) }}"
+                                ><i class="fa fa-camera"></i></a>
+                                <a target="_blank"
+                                   data-toggle="tooltip"
+                                   data-placement="bottom"
+                                   title="Show code"
+                                   style="margin-right: 5px"
+                                   href="{{ path('editor', {'snapshot1': item.snapshot1.id}) }}"
+                                ><i class="fa fa-file-code"></i></a>
+                                {#<a target="_blank"#}
+                                {#data-toggle="tooltip"#}
+                                {#data-placement="bottom"#}
+                                {#title="Render in iframe"#}
+                                {#href="{{ path('iframe', {'snapshot': item.snapshot1.id}) }}"#}
+                                {#><i class="icon-browser-small"></i></a>#}
+                            </td>
+                        </tr>
                         <tr>
                             <th>HTTP Response</th>
                             <td>{% include 'components/response-code.html.twig' with {code: item.snapshot1.responseCode} only %}</td>
@@ -106,17 +101,6 @@
                                 </a>
                             </td>
                         </tr>
-                        <tr>
-                            <td colspan="2">
-                                <a target="_blank"
-                                   href="{{ path('page_snapshot_show', {'project': page1.project.id, 'page': page1.id, 'snapshot': item.snapshot1.id}) }}">View
-                                    snapshot</a>
-                                <a target="_blank" href="{{ path('editor', {'snapshot1': item.snapshot1.id}) }}">View
-                                    Source</a>
-                                <a target="_blank"
-                                   href="{{ path('iframe', {'snapshot': item.snapshot1.id}) }}">IFrame</a>
-                            </td>
-                        </tr>
                     </table>
                 {% endif %}
             </div>
@@ -125,19 +109,57 @@
                 {% if item.snapshot1 is defined and item.snapshot2 is defined %}
                     <table class="table text-center">
                         <tr>
-                            <td>
-                                {% if item.snapshot1.responseCode == item.snapshot2.responseCode %}
-                                    <span class="badge badge-success">OK</span>
-                                {% else %}
-                                    <span class="badge badge-warning">NOT</span>
+                            <td colspan="2">
+                                {% if item.snapshot1 is defined and item.snapshot2 is defined %}
+                                    <a data-toggle="tooltip"
+                                       data-placement="bottom"
+                                       title="Compare page"
+                                       target="_blank"
+                                       style="margin-right: 5px"
+                                       href="{{ path('compare_page_snapshot', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}"><i
+                                                class="fa fa-balance-scale"></i></a>
+                                    <a data-toggle="tooltip"
+                                       data-placement="bottom"
+                                       title="View diff"
+                                       target="_blank"
+                                       style="margin-right: 5px"
+                                       href="{{ path('editor', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">
+                                        <i class="fas fa-file-code"></i>
+                                    </a>
+                                    <a data-toggle="tooltip"
+                                       data-placement="bottom"
+                                       title="Image diff"
+                                       target="_blank"
+                                       style="margin-right: 5px"
+                                       href="{{ path('compare_image', {'snapshot1': item.snapshot1.id, 'snapshot2': item.snapshot2.id}) }}">
+                                        <i class="fas fa-images"></i>
+                                    </a>
+                                    <a data-toggle="tooltip"
+                                       data-placement="bottom"
+                                       title="Visit page"
+                                       style="margin-right: 5px"
+                                       target="_blank" href="{{ page1.url }}">
+                                        <i class="fa fa-external-link-alt"></i>
+                                    </a>
                                 {% endif %}
                             </td>
                         </tr>
-                        <tr>
+                        <tr style="text-align: left">
+                            <th>Response code</th>
+
                             <td>
-                                <span>Image mismatch: </span><span class="image-analysis"></span>
+                                {% if item.snapshot1.responseCode == item.snapshot2.responseCode %}
+                                    <span class="badge badge-success">YES</span>
+                                {% else %}
+                                    <span class="badge badge-warning">NO</span>
+                                {% endif %}
                             </td>
                         </tr>
+                        {#<tr>#}
+                            {#<td>#}
+                                {#<span>Image mismatch: </span><span class="image-analysis"></span>#}
+                            {#</td>#}
+                        {#</tr>#}
                     </table>
                 {% endif %}
             </div>
@@ -145,6 +167,30 @@
             <div class="col-5">
                 {% if item.snapshot2 is defined %}
                     <table class="table mb-0">
+                        <tr>
+                            <td colspan="2">
+                                <a target="_blank"
+                                   data-toggle="tooltip"
+                                   data-placement="bottom"
+                                   title="Show snapshot"
+                                   style="margin-right: 5px"
+                                   href="{{ path('page_snapshot_show', {'project': page2.project.id, 'page': page2.id, 'snapshot': item.snapshot2.id}) }}"
+                                ><i class="fa fa-camera"></i></a>
+                                <a target="_blank"
+                                   data-toggle="tooltip"
+                                   data-placement="bottom"
+                                   title="Show code"
+                                   style="margin-right: 5px"
+                                   href="{{ path('editor', {'snapshot1': item.snapshot2.id}) }}"
+                                ><i class="fa fa-file-code"></i></a>
+                                {#<a target="_blank"#}
+                                {#data-toggle="tooltip"#}
+                                {#data-placement="bottom"#}
+                                {#title="Render in iframe"#}
+                                {#href="{{ path('iframe', {'snapshot': item.snapshot2.id}) }}"#}
+                                {#><i class="icon-browser-small"></i></a>#}
+                            </td>
+                        </tr>
                         <tr>
                             <th>HTTP Response</th>
                             <td>{% include 'components/response-code.html.twig' with {code: item.snapshot2.responseCode} only %}</td>
@@ -155,17 +201,6 @@
                                     <img class="img-fluid screenshot-2" data-mh="img-equal-{{ loop.index }}"
                                          src="{{ asset(item.snapshot2.image) }}">
                                 </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <a target="_blank"
-                                   href="{{ path('page_snapshot_show', {'project': page2.project.id, 'page': page2.id, 'snapshot': item.snapshot2.id}) }}">View
-                                    snapshot</a>
-                                <a target="_blank" href="{{ path('editor', {'snapshot1': item.snapshot2.id}) }}">View
-                                    Source</a>
-                                <a target="_blank"
-                                   href="{{ path('iframe', {'snapshot': item.snapshot2.id}) }}">IFrame</a>
                             </td>
                         </tr>
                     </table>

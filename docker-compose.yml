@@ -4,8 +4,7 @@ services:
         image: mysql:5.7.22
         ports:
             - 3303:3306
-        volumes:
-            - ./docker/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+        command: --max_allowed_packet=32MB
         environment:
             MYSQL_ROOT_PASSWORD: symfony
             MYSQL_DATABASE: symfony
@@ -30,25 +29,6 @@ services:
             - 4444:4444
     chrome-node:
         image: selenium/node-chrome:3.12.0-boron
-        volumes:
-            - ~/webwatcher/selenium:/e2e/uploads
-            - ~/webwatcher/selenium/tmp:/e2e/uploads/tmp
-        ports:
-            - 5900
-        expose:
-            - 80
-        links:
-            - selenium-hub
-        depends_on:
-            - selenium-hub
-        environment:
-            - HUB_HOST=selenium-hub
-            - HUB_PORT=4444
-    firefox-node:
-        image: selenium/node-firefox:3.12.0-boron
-        volumes:
-            - ~/webwatcher/selenium:/e2e/uploads
-            - ~/webwatcher/selenium/tmp:/e2e/uploads/tmp
         ports:
             - 5900
         expose:
@@ -70,5 +50,4 @@ services:
             - PORT_RANGE=9091-9191
         links:
             - selenium-hub
-            - firefox-node
             - chrome-node

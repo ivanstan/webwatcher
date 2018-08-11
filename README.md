@@ -18,6 +18,7 @@ services:
         image: mysql:5.7.22
         ports:
             - '3303:3306'
+        command: --max_allowed_packet=32MB
         environment:
             MYSQL_ROOT_PASSWORD: symfony
             MYSQL_DATABASE: symfony
@@ -66,7 +67,6 @@ services:
             - PORT_RANGE=9091-9191
         links:
             - 'selenium-hub'
-            - 'firefox-node'
             - 'chrome-node'
 ```
 - Run `docker-compose up`

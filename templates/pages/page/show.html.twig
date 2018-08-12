@@ -33,8 +33,21 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Path</th>
-                <td>{{ page.path }}</td>
+                <th>
+                    <p class="mt-2 mb-0">Path</p>
+                </th>
+                <td>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" disabled value="{{ page.path }}">
+                            <div class="input-group-append">
+                                <a class="btn btn-secondary" href="{{ page.url }}" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
             </tr>
             {% if page.averageResponseTime %}
                 <tr>

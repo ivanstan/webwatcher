@@ -1,1 +1,16 @@
-<span class="badge badge-{{ (code == 200) ? 'success' : 'danger'}}">{{ code }}</span>
+{% set status = 'info' %}
+{% set digit = (code / 100) % 10 %}
+
+{% if digit == 2 %}
+    {% set status = 'success' %}
+{% endif %}
+
+{% if digit == 3 %}
+    {% set status = 'warning' %}
+{% endif %}
+
+{% if digit >= 4 %}
+    {% set status = 'danger' %}
+{% endif %}
+
+<span class="badge badge-{{ status }}">{{ code }}</span>

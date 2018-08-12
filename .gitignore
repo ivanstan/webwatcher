@@ -10,6 +10,7 @@
 ###> symfony/webpack-encore-pack ###
 /node_modules/
 /public/snapshots/
+/public/build/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-pack ###

@@ -6,15 +6,14 @@ use App\Entity\Page;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Page $page */
-        $page = $builder->getData();
-
         $builder
             ->add('name', null, ['required' => true])
             ->add('path')
@@ -26,9 +25,15 @@ class PageType extends AbstractType
             ])
         ;
 
-        if (count($page->getSnapshots()) > 0) {
-            $builder->add('path', null, ['disabled' => true]);
-        }
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            /** @var Page $page */
+            $page = $event->getData();
+            $form = $event->getForm();
+
+            if (count($page->getSnapshots()) > 0) {
+                $form->add('path', null, ['disabled' => true]);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -12,7 +12,7 @@ ADD src /var/www/symfony/src
 ADD templates /var/www/symfony/templates
 ADD translations /var/www/symfony/translations
 ADD vendor /var/www/symfony/vendor
-ADD .env /var/www/symfony/
+ADD .env.dist /var/www/symfony/.env
 ADD composer.json /var/www/symfony/composer.json
 ADD composer.lock /var/www/symfony/composer.lock
 

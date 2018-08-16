@@ -13,7 +13,10 @@ class ProjectType extends AbstractType
     {
         $builder
             ->add('name', null, ['required' => false])
-            ->add('domain', null, ['attr' => ['placeholder' => 'example.org']])
+            ->add('domain', null, [
+                'help' => 'For instances running on docker use "host.docker.internal" as domain name to access your host machine\'s applications.',
+                'attr' => ['placeholder' => 'example.org']
+            ])
         ;
     }
 

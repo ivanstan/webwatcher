@@ -1,0 +1,86 @@
+{% extends 'content.html.twig' %}
+
+{% block title %}Edit TestAction{% endblock %}
+
+{% set project = resource.project %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-10">
+            <h1>Groups</h1>
+        </div>
+        <div class="col-2">
+            <a data-toggle="tooltip"
+               data-placement="bottom"
+               title="New Group"
+               class="btn btn-primary mt-2 mr-2 float-right "
+               href="{{ path('action_group_new', {'resource': resource.id, 'project': project.id}) }}">
+                <i class="fa fa-plus"></i>
+            </a>
+        </div>
+    </div>
+
+    <table class="table">
+
+        {% for group in groups %}
+
+            <tr>
+                <th>
+                    <a href="{{ path('action_group_edit', {'project': project.id, 'resource': resource.id, 'group': group.id}) }}">{{ group.name }}</a>
+
+                    <div class="dropdown float-right">
+                        <button class="btn btn-secondary dropdown-toggle"
+                                type="button" id="dropdownMenu1" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            {% for type, class in actions %}
+                                <a class="dropdown-item"
+                                   href="{{ path('action_new', {'project': project.id, 'resource': resource.id, 'group': group.id, 'type': type}) }}">{{ type|capitalize }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </th>
+            </tr>
+
+            <tr>
+                <td class="p-0 bt-0">
+
+                    <table class="table">
+
+                        {% for action in group.actions %}
+
+                            <tr>
+                                <td width="100px"></td>
+                                <td>
+                                    {{ action.id }}
+
+                                    {% if action is instanceof('\\App\\Entity\\Action\\TestAction') %}
+                                        Test Action
+
+                                        <a href="{{ path('test_edit', {
+                                            'project': project.id,
+                                            'resource': resource.id,
+                                            'group': group.id,
+                                            'action': action.id
+                                        }) }}">Edit</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </table>
+
+                </td>
+            </tr>
+
+
+
+        {% endfor %}
+
+    </table>
+
+    {#{{ include('pages/test/_delete_form.html.twig') }}#}
+{% endblock %}

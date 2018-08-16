@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Action\ActionGroup;
 use App\Property\Id;
 use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
@@ -39,6 +40,13 @@ abstract class AbstractResource
      */
     protected $snapshots;
 
+    /**
+     * @var ActionGroup[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Action\ActionGroup", mappedBy="resource", cascade={"persist"})
+     */
+    protected $actions;
+
     public function getProject(): ?Project
     {
         return $this->project;
@@ -72,5 +80,21 @@ abstract class AbstractResource
         }
 
         return null;
+    }
+
+    /**
+     * @return ActionGroup[]|Collection
+     */
+    public function getActions()
+    {
+        return $this->actions;
+    }
+
+    /**
+     * @param ActionGroup[]|Collection $actions
+     */
+    public function setActions($actions): void
+    {
+        $this->actions = $actions;
     }
 }

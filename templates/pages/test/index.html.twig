@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TestAction index{% endblock %}
+
+{% block body %}
+    <h1>TestAction index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for test_action in test_actions %}
+            <tr>
+                <td>{{ test_action.id }}</td>
+                <td>
+                    <a href="{{ path('action_test_action_show', {'id': test_action.id}) }}">show</a>
+                    <a href="{{ path('action_test_action_edit', {'id': test_action.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('action_test_action_new') }}">Create new</a>
+{% endblock %}

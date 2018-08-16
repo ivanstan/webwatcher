@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Authenticator\Authenticator;
-use App\Entity\Page;
 use App\Entity\Project;
+use App\Entity\Resource\PageResource;
 use App\Form\ProjectType;
 use App\Service\Factory\ProjectFactory;
 use App\Service\Factory\ResourceFactory;
@@ -40,7 +40,7 @@ class ProjectController extends Controller
             $protocol = parse_url($project->getDomain(), PHP_URL_SCHEME);
             $path = parse_url($project->getDomain(), PHP_URL_PATH);
 
-            $page = new Page();
+            $page = new PageResource();
             if ($protocol && $path) {
                 $page->setProtocol($protocol);
                 $page->setPath(rtrim($path, '/'));
@@ -51,7 +51,7 @@ class ProjectController extends Controller
             }
 
             $page->setProject($project);
-            $project->setPages([$page]);
+            $project->setResources([$page]);
 
             $domain = parse_url($project->getDomain(), PHP_URL_HOST);
 
@@ -59,7 +59,7 @@ class ProjectController extends Controller
                 $project->setDomain($domain);
             }
 
-            $em->persist($project->getPages()[0]);
+            $em->persist($project->getResources()[0]);
             $em->flush();
 
             $url = $this->generateUrl('project_show', ['project' => $project->getId()]);

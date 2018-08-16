@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 
-use App\Entity\Page;
+use App\Entity\Resource\PageResource;
 use App\Entity\PageSnapshot;
 use App\Entity\Project;
 use App\Service\File\FileManager;
@@ -38,7 +38,7 @@ class EntityRemoveEventListener implements EventSubscriber
                 $this->fileManager->remove($this->fileManager->getProjectFolder($entity));
             }
 
-            if ($entity instanceof Page) {
+            if ($entity instanceof PageResource) {
                 $this->fileManager->remove($this->fileManager->getResourceFolder($entity));
             }
 

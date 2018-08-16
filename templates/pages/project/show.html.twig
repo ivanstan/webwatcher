@@ -16,7 +16,7 @@
                href="{{ path('project_edit', {'project': project.id}) }}">
                 <i class="fa fa-edit"></i>
             </a>
-            {% if project.pages|length > 0 %}
+            {% if project.resources|length > 0 %}
                 <a data-toggle="tooltip"
                    data-placement="bottom"
                    title="Create project snapshot"
@@ -43,8 +43,8 @@
 
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" data-toggle="tab" href="#pages" role="tab"
-               aria-controls="nav-pages" aria-selected="true">Pages</a>
+            <a class="nav-item nav-link active" data-toggle="tab" href="#resources" role="tab"
+               aria-controls="nav-pages" aria-selected="true">Resources</a>
             {% if project.snapshots is not empty %}
                 <a class="nav-item nav-link" data-toggle="tab" href="#snapshots" role="tab"
                    aria-controls="nav-snapshots" aria-selected="false">Snapshots</a>
@@ -52,10 +52,10 @@
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="pages" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="tab-pane fade show active" id="resources" role="tabpanel" aria-labelledby="nav-home-tab">
             <div class="row mb-3 mt-3">
                 <div class="col-10">
-                    <h2>Pages</h2>
+                    <h2>Resources</h2>
                 </div>
                 <div class="col-2">
                     <div class="btn-group float-right">
@@ -94,24 +94,24 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for page in project.pages %}
+                {% for resource in project.resources %}
                     <tr>
                         <td>
-                            {% set title = page.name|default(page.path) %}
+                            {% set title = resource.name|default(resource.path) %}
 
-                            <a href="{{ path('page_show', {'project': project.id, 'page': page.id}) }}"
+                            <a href="{{ path('resource_show', {'project': project.id, 'resource': resource.id}) }}"
                                     {% if title|length > 50 %} data-toggle="tooltip" data-placement="bottom" title="{{ title }}"{% endif %}
                             >
                                 {{ (title|length > 50 ? title|slice(0, 50) ~ '…' : title) }}
                             </a>
                         </td>
-                        <td>{{ page.path }}</td>
+                        <td>{{ resource.path }}</td>
                         <td>
                             <a data-toggle="tooltip"
                                data-placement="bottom"
                                title="Edit page"
                                class="mr-1 ml-1"
-                               href="{{ path('page_edit', {'project': project.id, 'page': page.id}) }}">
+                               href="{{ path('resource_edit', {'project': project.id, 'resource': resource.id}) }}">
                                 <i class="fa fa-edit"></i>
                             </a>
                             <a data-toggle="tooltip"
@@ -119,20 +119,20 @@
                                title="Visit page"
                                class="mr-1 ml-1"
                                target="_blank"
-                               href="{{ page.url }}">
+                               href="{{ resource.url }}">
                                 <i class="fa fa-external-link-alt"></i>
                             </a>
                             <a data-toggle="tooltip"
                                data-placement="bottom"
                                title="Import links from this page"
-                               href="{{ path('project_page_import', {"project": project.id, "url": page.path }) }}">
+                               href="{{ path('project_page_import', {"project": project.id, "url": resource.path }) }}">
                                 <i class="fas fa-link"></i>
                             </a>
                         </td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="3" class="text-center">This project has no pages.</td>
+                        <td colspan="3" class="text-center">This project has no resources.</td>
                     </tr>
                 {% endfor %}
                 </tbody>

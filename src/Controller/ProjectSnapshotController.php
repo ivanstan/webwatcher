@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Authenticator\Authenticator;
 use App\Entity\Project;
-use App\Entity\ProjectSnapshot;
+use App\Entity\Snapshot\ProjectSnapshot;
 use App\Service\Snapshot\ProjectSnapshotService;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;

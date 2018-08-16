@@ -2,7 +2,7 @@
 
 namespace App\Service\Factory;
 
-use App\Entity\Page;
+use App\Entity\Resource\PageResource;
 use App\Entity\Project;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 

@@ -2,7 +2,7 @@
 
 namespace App\Form\Resource;
 
-use App\Entity\Page;
+use App\Entity\Resource\PageResource;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PageType extends HttpType
@@ -10,7 +10,7 @@ class PageType extends HttpType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Page::class,
+            'data_class' => PageResource::class,
         ]);
     }
 }

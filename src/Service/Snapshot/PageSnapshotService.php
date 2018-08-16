@@ -3,7 +3,7 @@
 namespace App\Service\Snapshot;
 
 use App\Entity\Authenticator\SeleniumAuthenticator;
-use App\Entity\Page;
+use App\Entity\Resource\PageResource;
 use App\Entity\PageSnapshot;
 use App\Entity\Project;
 use App\Service\BrowserMob\Proxy;
@@ -70,7 +70,7 @@ class PageSnapshotService implements SnapshotServiceInterface
     }
 
     /**
-     * @param Page $page
+     * @param PageResource $page
      */
     public function snapshot($page): PageSnapshot
     {

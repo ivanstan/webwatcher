@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Authenticator\SeleniumAuthenticator;
-use App\Entity\Page;
+use App\Entity\Resource\PageResource;
 use App\Entity\Project;
 use App\Service\Bulk\BulkPage;
 use App\Service\Selenium\Engine;
@@ -85,7 +85,7 @@ class ImportController extends Controller
     private function getProjectPages(Project $project): array
     {
         $result = [];
-        foreach ($project->getPages() as $page) {
+        foreach ($project->getResources() as $page) {
             $result[] = $page->getPath();
         }
 
@@ -102,7 +102,7 @@ class ImportController extends Controller
         foreach ($pages as $path) {
             $path = str_replace($project->getBaseUrl(), '', $path);
 
-            $page = new Page();
+            $page = new PageResource();
             $page->setName($path);
             $page->setPath($path);
             $page->setProject($project);
@@ -117,7 +117,7 @@ class ImportController extends Controller
             $pageMessage = "<a href='$url'>{$page->getName()}</a>";
 
             $this->addFlash('success',
-                $this->translator->transChoice('Page %page% has been created.|Total of %count% pages has been created.',
+                $this->translator->transChoice('PageResource %page% has been created.|Total of %count% pages has been created.',
                     count($pages),
                     [
                         '%count%' => count($pages),

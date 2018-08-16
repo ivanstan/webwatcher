@@ -2,9 +2,9 @@
 
 namespace App\Entity\Resource;
 
-use App\Entity\AbstractResource;
 use App\Entity\Authenticator\Authenticator;
 use App\Entity\Authenticator\HttpBasicAuthenticator;
+use App\Property\Cookies;
 use App\Property\Path;
 use App\Property\Protocol;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,6 +19,7 @@ class HttpResource extends AbstractResource
 
     use Path;
     use Protocol;
+    use Cookies;
 
     public function getUrl(): string
     {

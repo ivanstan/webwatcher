@@ -2,10 +2,10 @@
 
 namespace App\Twig;
 
-use App\Entity\AbstractResource;
+use App\Entity\Resource\AbstractResource;
 use App\Entity\Authenticator\Authenticator;
-use App\Entity\Page;
-use App\Entity\PageSnapshot;
+use App\Entity\Resource\PageResource;
+use App\Entity\Snapshot\PageSnapshot;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Service\System\DateTimeService;
@@ -63,8 +63,8 @@ class BreadcrumbExtension extends AbstractExtension
         }
 
         if ($entity instanceof PageSnapshot) {
-            $project = $entity->getPage()->getProject();
-            $resource = $entity->getPage();
+            $project = $entity->getResource()->getProject();
+            $resource = $entity->getResource();
             $snapshot = $entity;
         }
 
@@ -109,10 +109,10 @@ class BreadcrumbExtension extends AbstractExtension
             $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp());
             $breadcrumbs[] = [
                 'title' => $dateTime->format($dateTimeFormat),
-                'tooltip' => 'Page snapshot',
-                'href' => $this->router->generate('page_snapshot_show', [
+                'tooltip' => 'PageResource snapshot',
+                'href' => $this->router->generate('resource_snapshot_show', [
                     'project' => $project->getId(),
-                    'page' => $resource->getId(),
+                    'resource' => $resource->getId(),
                     'snapshot' => $snapshot->getId()
                 ])
             ];

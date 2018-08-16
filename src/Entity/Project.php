@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Resource\AbstractResource;
+use App\Entity\Resource\PageResource;
+use App\Entity\Snapshot\AbstractSnapshot;
 use App\Property\Id;
 use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
@@ -31,16 +34,16 @@ class Project
     protected $domain;
 
     /**
-     * @var Page[]|Collection
+     * @var PageResource[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\AbstractResource", mappedBy="project", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Resource\AbstractResource", mappedBy="project", cascade={"persist"})
      */
-    protected $pages;
+    protected $resources;
 
     /**
-     * @var Page[]|Collection
+     * @var PageResource[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\ProjectSnapshot", mappedBy="project", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Snapshot\ProjectSnapshot", mappedBy="project", cascade={"persist"})
      * @ORM\OrderBy({"timestamp" = "DESC"})
      */
     protected $snapshots;
@@ -61,17 +64,17 @@ class Project
     /**
      * @return AbstractResource[]|Collection
      */
-    public function getPages()
+    public function getResources()
     {
-        return $this->pages;
+        return $this->resources;
     }
 
     /**
-     * @param AbstractResource[]|Collection $pages
+     * @param AbstractResource[]|Collection $resources
      */
-    public function setPages($pages)
+    public function setResources($resources)
     {
-        $this->pages = $pages;
+        $this->resources = $resources;
     }
 
     /**

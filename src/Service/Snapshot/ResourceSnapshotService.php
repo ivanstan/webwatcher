@@ -2,8 +2,8 @@
 
 namespace App\Service\Snapshot;
 
-use App\Entity\AbstractResource;
-use App\Entity\Page;
+use App\Entity\Resource\AbstractResource;
+use App\Entity\Resource\PageResource;
 
 class ResourceSnapshotService
 {
@@ -17,7 +17,7 @@ class ResourceSnapshotService
 
     public function getService(AbstractResource $resource): SnapshotServiceInterface
     {
-        if ($resource instanceof Page) {
+        if ($resource instanceof PageResource) {
             return $this->pageService;
         }
 

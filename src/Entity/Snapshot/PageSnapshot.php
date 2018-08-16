@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Snapshot;
 
+use App\Entity\Snapshot\HttpResourceSnapshot;
 use App\Service\HttpArchive\HttpArchive;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,16 +13,9 @@ use Mihaeu\HtmlFormatter;
  * @ORM\Entity()
  * @ORM\Table("page_snapshot")
  */
-class PageSnapshot extends AbstractSnapshot
+class PageSnapshot extends HttpResourceSnapshot
 {
     protected $details;
-
-    protected $linkIndex = [];
-
-    public function __construct()
-    {
-        $this->links = new ArrayCollection();
-    }
 
     /**
      * @var array $har
@@ -40,19 +34,6 @@ class PageSnapshot extends AbstractSnapshot
      * @ORM\Column(name="response_time", type="float", nullable=true)
      */
     protected $responseTime;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\PageSnapshotSeo", cascade={"persist"})
-     * @ORM\JoinColumn(name="seo_id", referencedColumnName="id")
-     */
-    protected $seo;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Link", mappedBy="snapshots", cascade={"persist", "merge"})
-     * @ORM\OrderBy({"url"="DESC"})
-     * @ORM\JoinTable(name="page_snapshot_link")
-     */
-    protected $links;
 
     public function getBody(): string
     {
@@ -84,40 +65,6 @@ class PageSnapshot extends AbstractSnapshot
         $this->responseTime = $responseTime;
     }
 
-    public function getSeo(): ?PageSnapshotSeo
-    {
-        return $this->seo;
-    }
-
-    public function setSeo(?PageSnapshotSeo $seo): void
-    {
-        $this->seo = $seo;
-    }
-
-    /**
-     * @return ArrayCollection|PersistentCollection|null
-     */
-    public function getLinks()
-    {
-        return $this->links;
-    }
-
-    public function setLinks(?ArrayCollection $links): void
-    {
-        $this->links = $links;
-
-        /** @var Link $link */
-        foreach ($this->links as $link) {
-            $this->linkIndex[$link->getUrl()] = $link;
-        }
-    }
-
-    public function addLink(Link $link): void
-    {
-        $this->links->add($link);
-        $this->linkIndex[$link->getUrl()] = $link;
-    }
-
     public function linkExists(string $url)
     {
         return isset($this->linkIndex[$url]);
@@ -135,10 +82,10 @@ class PageSnapshot extends AbstractSnapshot
 
     public function getDetails()
     {
-        if ($this->details === null) {
+        if ($this->details === null && $this->getHar()) {
             $archive = HttpArchive::fromArray($this->getHar());
 
-            $this->details =  $archive->getEntry($this->getPage()->getUrl());
+            $this->details =  $archive->getEntry($this->getResource()->getUrl());
         }
 
         return $this->details;

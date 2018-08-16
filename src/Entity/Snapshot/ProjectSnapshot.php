@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Snapshot;
 
+use App\Entity\Project;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,7 +23,7 @@ class ProjectSnapshot extends AbstractSnapshot
     /**
      * @var AbstractSnapshot[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\AbstractSnapshot", mappedBy="snapshot", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Snapshot\AbstractSnapshot", mappedBy="snapshot", cascade={"persist"})
      * @ORM\OrderBy({"timestamp" = "DESC"})
      */
     protected $snapshots;

@@ -41,7 +41,7 @@ class ProjectSnapshotService
         $service = $this->resourceSnapshotService->getPageService();
         $service->setup($project);
 
-        foreach ($project->getPages() as $resource) {
+        foreach ($project->getResources() as $resource) {
             $snapshot = $service->snapshot($resource);
 
             $snapshot->setTimestamp($projectSnapshot->getTimestamp());

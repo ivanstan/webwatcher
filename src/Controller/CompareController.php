@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\PageSnapshot;
-use App\Entity\ProjectSnapshot;
+use App\Entity\Snapshot\AbstractSnapshot;
 use App\Utility\Url;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DomCrawler\Crawler;
@@ -18,7 +17,7 @@ class CompareController extends Controller
     /**
      * @Route("/compare/page-snapshots/{snapshot1}/{snapshot2}", name="compare_page_snapshot")
      */
-    public function snapshot(PageSnapshot $snapshot1, PageSnapshot $snapshot2)
+    public function snapshot(AbstractSnapshot $snapshot1, AbstractSnapshot $snapshot2)
     {
         $this->setFlashMessages($snapshot1, $snapshot2);
         if ($snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
@@ -34,7 +33,7 @@ class CompareController extends Controller
     /**
      * @Route("/compare/project-snapshots/{snapshot1}/{snapshot2}", name="compare_project_snapshot")
      */
-    public function compareProjectSnapshot(ProjectSnapshot $snapshot1, ProjectSnapshot $snapshot2)
+    public function compareProjectSnapshot(AbstractSnapshot $snapshot1, AbstractSnapshot $snapshot2)
     {
         $this->setFlashMessages($snapshot1, $snapshot2);
         if ($snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
@@ -42,13 +41,13 @@ class CompareController extends Controller
         }
 
         $compare = [];
-        /** @var PageSnapshot $pageSnapshot */
+        /** @var AbstractSnapshot $pageSnapshot */
         foreach ($snapshot1->getSnapshots() as $pageSnapshot) {
-            $compare[$pageSnapshot->getPage()->getId()]['snapshot1'] = $pageSnapshot;
+            $compare[$pageSnapshot->getResource()->getId()]['snapshot1'] = $pageSnapshot;
         }
 
         foreach ($snapshot2->getSnapshots() as $pageSnapshot) {
-            $compare[$pageSnapshot->getPage()->getId()]['snapshot2'] = $pageSnapshot;
+            $compare[$pageSnapshot->getResource()->getId()]['snapshot2'] = $pageSnapshot;
         }
 
         return $this->render('pages/compare/project-snapshot.html.twig', [
@@ -61,7 +60,7 @@ class CompareController extends Controller
     /**
      * @Route("/editor/{snapshot1}/{snapshot2}", name="editor", defaults={"snapshot2": null})
      */
-    public function editor(PageSnapshot $snapshot1, ?PageSnapshot $snapshot2)
+    public function editor(AbstractSnapshot $snapshot1, ?AbstractSnapshot $snapshot2)
     {
         $this->setFlashMessages($snapshot1, $snapshot2);
         if ($snapshot2 && $snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
@@ -77,7 +76,7 @@ class CompareController extends Controller
     /**
      * @Route("/image/{snapshot1}/{snapshot2}", name="compare_image")
      */
-    public function image(PageSnapshot $snapshot1, PageSnapshot $snapshot2)
+    public function image(AbstractSnapshot $snapshot1, AbstractSnapshot $snapshot2)
     {
         $this->setFlashMessages($snapshot1, $snapshot2);
         if ($snapshot2 && $snapshot2->getTimestamp() < $snapshot1->getTimestamp()) { // make old one go to left
@@ -93,13 +92,13 @@ class CompareController extends Controller
     /**
      * @Route("/iframe/{snapshot}", name="iframe")
      */
-    public function iframe(PageSnapshot $snapshot)
+    public function iframe(AbstractSnapshot $snapshot)
     {
         $crawler = new Crawler($snapshot->getBody());
 
         $url = [
-            'scheme' => $snapshot->getPage()->getProtocol(),
-            'host' => $snapshot->getPage()->getProject()->getDomain(),
+            'scheme' => $snapshot->getResource()->getProtocol(),
+            'host' => $snapshot->getResource()->getProject()->getDomain(),
         ];
 
         foreach ($crawler->filter('a') as $link) {
@@ -150,7 +149,7 @@ class CompareController extends Controller
     /**
      * @Route("/image-source/{snapshot}", name="image_source")
      */
-    public function imageData(PageSnapshot $snapshot)
+    public function imageData(AbstractSnapshot $snapshot)
     {
         $projectDir = $this->getParameter('kernel.project_dir');
 

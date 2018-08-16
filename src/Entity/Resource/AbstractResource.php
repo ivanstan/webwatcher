@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Resource;
 
-use App\Entity\Resource\HttpResource;
+use App\Entity\Project;
+use App\Entity\Snapshot\AbstractSnapshot;
 use App\Property\Id;
 use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *     Page::RESOURCE_TYPE = "App\Entity\Page",
+ *     PageResource::RESOURCE_TYPE = "App\Entity\Resource\PageResource",
  *     HttpResource::RESOURCE_TYPE = "App\Entity\Resource\HttpResource",
  * })
  */
@@ -26,7 +27,7 @@ abstract class AbstractResource
     /**
      * @var Project
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="pages", cascade={"persist"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="resources", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $project;
@@ -34,7 +35,7 @@ abstract class AbstractResource
     /**
      * @var AbstractSnapshot[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\AbstractSnapshot", mappedBy="page", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Snapshot\AbstractSnapshot", mappedBy="resource", cascade={"persist"})
      * @ORM\OrderBy({"timestamp" = "DESC"})
      */
     protected $snapshots;
@@ -50,7 +51,7 @@ abstract class AbstractResource
     }
 
     /**
-     * @return PageSnapshot[]|Collection
+     * @return AbstractSnapshot[]|Collection
      */
     public function getSnapshots()
     {
@@ -58,14 +59,14 @@ abstract class AbstractResource
     }
 
     /**
-     * @param PageSnapshot[]|Collection $snapshots
+     * @param AbstractSnapshot[]|Collection $snapshots
      */
     public function setSnapshots($snapshots)
     {
         $this->snapshots = $snapshots;
     }
 
-    public function getNewestSnapshot(): ?PageSnapshot
+    public function getNewestSnapshot(): ?AbstractSnapshot
     {
         if (isset($this->snapshots[0])) {
             return $this->snapshots[0];

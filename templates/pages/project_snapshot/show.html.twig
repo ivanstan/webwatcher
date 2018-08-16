@@ -45,7 +45,7 @@
                     </a>
                 </td>
                 <td>
-                    <a href="{{ path('page_snapshot_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}">{{ page_snapshot.timestamp|date(datetime_format()) }}</a>
+                    <a href="{{ path('page_resource_snapshot_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}">{{ page_snapshot.timestamp|date(datetime_format()) }}</a>
                 </td>
                 <td>
                     <a href="{{ path('page_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id} ) }}">{% if page_snapshot.page.name is not empty %}{{ page_snapshot.page.name }}{% else %}{{ page_snapshot.page.path }}{% endif %}</a>

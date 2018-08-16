@@ -30,7 +30,7 @@ $(document).ready(function () {
       data: {
         labels: labels,
         datasets: [{
-          label: 'Page response time',
+          label: 'PageResource response time',
           lineTension: 0,
           type: 'line',
           borderColor: '#537bc4',

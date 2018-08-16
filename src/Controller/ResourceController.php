@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\AbstractResource;
 use App\Entity\Project;
+use App\Entity\Resource\AbstractResource;
 use App\Service\Factory\ResourceFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Resource;
 
 use App\Entity\Authenticator\Authenticator;
 use App\Entity\Authenticator\HttpBasicAuthenticator;
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\PageResourceRepository")
  * @ORM\Table("resource_page")
  */
-class Page extends HttpResource
+class PageResource extends HttpResource
 {
     public const RESOURCE_TYPE = 'page';
 

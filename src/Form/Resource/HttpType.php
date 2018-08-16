@@ -2,7 +2,7 @@
 
 namespace App\Form\Resource;
 
-use App\Entity\Page;
+use App\Entity\Resource\PageResource;
 use App\Entity\Resource\HttpResource;
 use App\Property\Protocol;
 use Symfony\Component\Form\AbstractType;
@@ -14,7 +14,7 @@ class HttpType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Page $page */
+        /** @var PageResource $page */
         $page = $builder->getData();
 
         $builder

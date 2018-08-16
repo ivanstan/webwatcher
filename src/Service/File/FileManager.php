@@ -2,8 +2,8 @@
 
 namespace App\Service\File;
 
-use App\Entity\AbstractSnapshot;
-use App\Entity\Page;
+use App\Entity\Snapshot\AbstractSnapshot;
+use App\Entity\Resource\PageResource;
 use App\Entity\Project;
 use ErrorException;
 
@@ -35,7 +35,7 @@ class FileManager
         return $this->getDataFolder() . '/project-' . $project->getId();
     }
 
-    public function getResourceFolder(Page $page): string
+    public function getResourceFolder(PageResource $page): string
     {
         return $this->getProjectFolder($page->getProject()) . '/resource-' . $page->getId();
     }
@@ -44,7 +44,7 @@ class FileManager
     {
         $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp());
 
-        return $this->getResourceFolder($snapshot->getPage()) . '/' . $dateTime->format(self::SNAPSHOT_FOLDER_FORMAT);
+        return $this->getResourceFolder($snapshot->getResource()) . '/' . $dateTime->format(self::SNAPSHOT_FOLDER_FORMAT);
     }
 
     public function save(string $destination, string $data)

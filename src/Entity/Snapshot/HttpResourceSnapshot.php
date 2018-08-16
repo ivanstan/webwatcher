@@ -2,7 +2,7 @@
 
 namespace App\Entity\Snapshot;
 
-use App\Entity\AbstractSnapshot;
+use App\Property\Headers;
 use Doctrine\ORM\Mapping as ORM;
 use Mihaeu\HtmlFormatter;
 
@@ -12,6 +12,8 @@ use Mihaeu\HtmlFormatter;
  */
 class HttpResourceSnapshot extends AbstractSnapshot
 {
+    use Headers;
+
     /**
      * @var string $content
      * @ORM\Column(name="content", type="text", nullable=true)
@@ -19,20 +21,14 @@ class HttpResourceSnapshot extends AbstractSnapshot
     protected $content;
 
     /**
-     * @var array $headers
-     * @ORM\Column(name="headers", type="json_array", nullable=true)
+     * @var integer $status
+     * @ORM\Column(name="status", type="integer", nullable=true)
      */
-    protected $headers;
-
-    /**
-     * @var integer $code
-     * @ORM\Column(name="code", type="integer")
-     */
-    protected $code;
+    protected $status;
 
     /**
      * @var string $mine
-     * @ORM\Column(name="mime", type="string")
+     * @ORM\Column(name="mime", type="string", nullable=true)
      */
     protected $mime;
 
@@ -44,34 +40,19 @@ class HttpResourceSnapshot extends AbstractSnapshot
         return $body;
     }
 
-    public function getHeaders(): array
+    public function setContent(string $content): void
     {
-        return $this->headers;
+        $this->content = $content;
     }
 
-    public function hasHeader(string $name): bool
+    public function getStatus(): ?int
     {
-        return isset($this->headers[$name]);
+        return $this->status;
     }
 
-    public function setHeaders(array $headers): void
+    public function setStatus(int $status)
     {
-        $this->headers = $headers;
-    }
-
-    public function getHeader(string $header)
-    {
-        return $this->headers[$header] ? $this->headers[$header] : null;
-    }
-
-    public function getResponseCode(): ?int
-    {
-        return $this->code;
-    }
-
-    public function setResponseCode(int $responseCode)
-    {
-        $this->code = $responseCode;
+        $this->status = $status;
     }
 
 }

@@ -1,32 +1,32 @@
 {% extends 'content.html.twig' %}
 
-{% block title %}Page {{ page.name }} | {{ parent() }}{% endblock %}
+{% block title %}Page {{ resource.name }} | {{ parent() }}{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-10">
-            <h1>Page {{ page.name }}</h1>
+            <h1>Page {{ resource.name }}</h1>
         </div>
         <div class="col-2">
-            {{ include('pages/page/_delete_form.html.twig') }}
+            {{ include('pages/resource/_delete_form.html.twig') }}
             <a data-toggle="tooltip"
                data-placement="bottom"
                title="Edit page"
                class="float-right btn btn-primary mt-2 mr-2"
-               href="{{ path('page_edit', {'project': page.project.id, 'page': page.id}) }}">
+               href="{{ path('resource_edit', {'project': resource.project.id, 'resource': resource.id}) }}">
                 <i class="fa fa-edit"></i>
             </a>
             <a data-toggle="tooltip"
                data-placement="bottom"
                title="Create page snapshot"
                class="btn btn-primary float-right mt-2 mr-2"
-               href="{{ path('snapshot_page_new', {'project': page.project.id, 'page': page.id}) }}">
+               href="{{ path('snapshot_page_new', {'project': resource.project.id, 'page': resource.id}) }}">
                 <i class="fa fa-camera"></i>
             </a>
         </div>
     </div>
 
-    {{ breadcrumbs(page)|raw }}
+    {{ breadcrumbs(resource)|raw }}
 
     {% include 'components/flash-messages.html.twig' %}
 
@@ -39,9 +39,9 @@
                 <td>
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" class="form-control" disabled value="{{ page.path }}">
+                            <input type="text" class="form-control" disabled value="{{ resource.path }}">
                             <div class="input-group-append">
-                                <a class="btn btn-secondary" href="{{ page.url }}" target="_blank">
+                                <a class="btn btn-secondary" href="{{ resource.url }}" target="_blank">
                                     <i class="fas fa-external-link-alt"></i>
                                 </a>
                             </div>
@@ -49,24 +49,10 @@
                     </div>
                 </td>
             </tr>
-            {% if page.averageResponseTime %}
-                <tr>
-                    <th>Average Response Time</th>
-                    <td>{{ page.averageResponseTime|number_format(2) }} sec</td>
-                </tr>
-                {% if page.snapshots|length >= 2 %}
-                    <tr>
-                        <td colspan="2">
-                            <canvas class="response-time-chart" id="response-time-chart-1"
-                                    data-chart="{{ page.responseTimeData|json_encode }}" height="50"></canvas>
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endif %}
         </tbody>
     </table>
 
-    {% if page.snapshots is not empty %}
+    {% if resource.snapshots is not empty %}
         <div class="row mb-3">
             <div class="col-12">
                 <h2>Snapshots</h2>
@@ -83,7 +69,7 @@
             </select>
 
             <select class="custom-select" name="snapshot2">
-                {% set newest = page.snapshots[0].timestamp %}
+                {% set newest = resource.snapshots[0].timestamp %}
                 {% for index, snapshot in page.snapshots %}
                     <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date(datetime_format()) }}
                         - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
@@ -102,10 +88,10 @@
             </tr>
             </thead>
             <tbody>
-            {% set newest = page.snapshots[0].timestamp %}
-            {% for index, snapshot in page.snapshots %}
+            {% set newest = resource.snapshots[0].timestamp %}
+            {% for index, snapshot in resource.snapshots %}
                 <tr>
-                    <td><a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.timestamp|date(datetime_format()) }}</a></td>
+                    <td><a href="{{ path('page_snapshot_show', {'project': resource.project.id, 'page': resource.id, 'snapshot': snapshot.id}) }}">{{ snapshot.timestamp|date(datetime_format()) }}</a></td>
                     <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
                     <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
                 </tr>

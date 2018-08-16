@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\AbstractResource;
 use App\Entity\Authenticator\Authenticator;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
@@ -56,14 +57,14 @@ class BreadcrumbExtension extends AbstractExtension
             $project = $entity;
         }
 
-        if ($entity instanceof Page) {
+        if ($entity instanceof AbstractResource) {
             $project = $entity->getProject();
-            $page = $entity;
+            $resource = $entity;
         }
 
         if ($entity instanceof PageSnapshot) {
             $project = $entity->getPage()->getProject();
-            $page = $entity->getPage();
+            $resource = $entity->getPage();
             $snapshot = $entity;
         }
 
@@ -93,25 +94,25 @@ class BreadcrumbExtension extends AbstractExtension
             ];
         }
 
-        if (isset($project) && isset($page)) {
+        if (isset($project) && isset($resource)) {
             $breadcrumbs[] = [
-                'title' => $page->getName() ?? $page->getPath(),
-                'tooltip' => 'Page',
-                'href' => $this->router->generate('page_show', [
+                'title' => $resource->getName() ?? $resource->getPath(),
+                'tooltip' => ucfirst($resource->getType()) . ' resource',
+                'href' => $this->router->generate('resource_show', [
                     'project' => $project->getId(),
-                    'page' => $page->getId()
+                    'resource' => $resource->getId()
                 ])
             ];
         }
 
-        if (isset($project) && isset($page) && isset($snapshot)) {
+        if (isset($project) && isset($resource) && isset($snapshot)) {
             $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp());
             $breadcrumbs[] = [
                 'title' => $dateTime->format($dateTimeFormat),
                 'tooltip' => 'Page snapshot',
                 'href' => $this->router->generate('page_snapshot_show', [
                     'project' => $project->getId(),
-                    'page' => $page->getId(),
+                    'page' => $resource->getId(),
                     'snapshot' => $snapshot->getId()
                 ])
             ];

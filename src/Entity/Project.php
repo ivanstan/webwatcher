@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Project
 {
+    public const RESOURCE_TYPE = 'project';
+
     use Id;
     use Name;
 

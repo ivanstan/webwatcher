@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Resource;
 
 use App\Entity\Page;
+use App\Entity\Resource\HttpResource;
+use App\Property\Protocol;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PageType extends AbstractType
+class HttpType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -18,12 +20,7 @@ class PageType extends AbstractType
         $builder
             ->add('name', null, ['required' => true])
             ->add('path')
-            ->add('protocol', ChoiceType::class, [
-                'choices'  => [
-                    'https' => 'https',
-                    'http' => 'http',
-                ],
-            ])
+            ->add('protocol', ChoiceType::class, ['choices' => Protocol::enum()])
         ;
 
         if (count($page->getSnapshots()) > 0) {
@@ -34,7 +31,7 @@ class PageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Page::class,
+            'data_class' => HttpResource::class,
         ]);
     }
 }

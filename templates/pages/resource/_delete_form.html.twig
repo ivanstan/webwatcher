@@ -1,12 +1,12 @@
 <form method="post"
       class="float-right mt-2"
-      action="{{ path('page_delete', {'project': page.project.id, 'page': page.id}) }}"
+      action="{{ path('resource_delete', {'project': resource.project.id, 'resource': resource.id}) }}"
       onsubmit="return confirm('Are you sure you want to delete this item?');">
     <input type="hidden" name="_method" value="DELETE">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ page.id) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ resource.id) }}">
     <button data-toggle="tooltip"
             data-placement="bottom"
-            title="Delete page"
+            title="Delete resource"
             class="btn btn-danger">
         <i class="fa fa-trash-alt"></i>
     </button>

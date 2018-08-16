@@ -30,22 +30,10 @@ class PageSnapshot extends AbstractSnapshot
     protected $har;
 
     /**
-     * @var array $headers
-     * @ORM\Column(name="headers", type="json_array", nullable=true)
-     */
-    protected $headers;
-
-    /**
      * @var string $image
      * @ORM\Column(name="image", type="string", nullable=true)
      */
     protected $image;
-
-    /**
-     * @var integer $responseCode
-     * @ORM\Column(name="response_code", type="integer")
-     */
-    protected $responseCode;
 
     /**
      * @var float $responseTime
@@ -76,25 +64,6 @@ class PageSnapshot extends AbstractSnapshot
         return $body;
     }
 
-    public function getHeaders(): array
-    {
-        return $this->headers;
-    }
-
-    public function hasHeader(string $name): bool
-    {
-        return isset($this->headers[$name]);
-    }
-
-    public function setHeaders(array $headers): void
-    {
-        $this->headers = $headers;
-    }
-
-    public function getHeader(string $header) {
-        return $this->headers[$header] ? $this->headers[$header] : null;
-    }
-
     public function getImage()
     {
         return $this->image;
@@ -103,16 +72,6 @@ class PageSnapshot extends AbstractSnapshot
     public function setImage(string $image): void
     {
         $this->image = $image;
-    }
-
-    public function getResponseCode(): ?int
-    {
-        return $this->responseCode;
-    }
-
-    public function setResponseCode(int $responseCode)
-    {
-        $this->responseCode = $responseCode;
     }
 
     public function getResponseTime(): ?float

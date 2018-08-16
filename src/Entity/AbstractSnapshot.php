@@ -6,6 +6,7 @@ namespace App\Entity;
 use App\Property\Id;
 use App\Property\Timestamp;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Resource\HttpResource;
 
 /**
  * @ORM\Entity
@@ -13,8 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *     AbstractResource::RESOURCE_TYPE_PAGE = "App\Entity\PageSnapshot",
- *     "project" = "App\Entity\ProjectSnapshot",
+ *     Project::RESOURCE_TYPE = "App\Entity\ProjectSnapshot",
+ *     HttpResource::RESOURCE_TYPE = "App\Entity\Snapshot\HttpResourceSnapshot",
+ *     Page::RESOURCE_TYPE = "App\Entity\PageSnapshot",
  * })
  */
 abstract class AbstractSnapshot

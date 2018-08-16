@@ -20,4 +20,12 @@ trait Protocol
     {
         $this->protocol = $protocol;
     }
+
+    public static function enum()
+    {
+        return [
+            'https' => 'https',
+            'http' => 'http',
+        ];
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Resource\HttpResource;
 use App\Property\Id;
 use App\Property\Name;
 use Doctrine\Common\Collections\Collection;
@@ -13,13 +14,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *     AbstractResource::RESOURCE_TYPE_PAGE = "App\Entity\Page",
+ *     Page::RESOURCE_TYPE = "App\Entity\Page",
+ *     HttpResource::RESOURCE_TYPE = "App\Entity\Resource\HttpResource",
  * })
  */
 abstract class AbstractResource
 {
-    public const RESOURCE_TYPE_PAGE = 'page';
-
     use Name;
     use Id;
 

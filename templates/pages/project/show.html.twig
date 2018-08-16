@@ -59,8 +59,7 @@
                 </div>
                 <div class="col-2">
                     <div class="btn-group float-right">
-                        <button type="button" class="btn btn-primary"
-                                onclick="location.href='{{ path('page_new', {'project': project.id}) }}';">
+                        <button type="button" class="btn btn-primary">
                             <i class="fa fa-plus-square"></i>
                         </button>
                         <button type="button"
@@ -71,6 +70,13 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
+
+                            {% for name, type  in resource_types %}
+
+                                <a class="dropdown-item"
+                                   href="{{ path('resource_new', {'project': project.id, 'type': type}) }}">{{ name }}</a>
+
+                            {% endfor %}
                             <a class="dropdown-item"
                                href="{{ path('project_page_import', {'project': project.id}) }}">Import</a>
                         </div>

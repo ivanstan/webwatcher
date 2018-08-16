@@ -7,6 +7,7 @@ use App\Entity\Page;
 use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Service\Factory\ProjectFactory;
+use App\Service\Factory\ResourceFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -82,7 +83,10 @@ class ProjectController extends Controller
      */
     public function show(Project $project): Response
     {
-        return $this->render('pages/project/show.html.twig', ['project' => $project]);
+        return $this->render('pages/project/show.html.twig', [
+            'project' => $project,
+            'resource_types' => ResourceFactory::list()
+        ]);
     }
 
     /**

@@ -141,10 +141,6 @@ class BreadcrumbExtension extends AbstractExtension
             }
         }
 
-        if ($routeName === 'project_bulk_add') {
-
-        }
-
         return $this->template->render('components/breadcrumbs.html.twig', [
             'breadcrumbs' => $breadcrumbs,
             'suffix' => $suffix,

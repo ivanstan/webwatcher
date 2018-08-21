@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Entity("authenticator_selenium")
+ * @ORM\Table("authenticator_selenium")
  */
 class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterface
 {

@@ -51,20 +51,16 @@ class ProjectSnapshotController extends Controller
     {
         try {
             $snapshot = $service->new($project);
-        } catch (NoSuchElementException $exception) {
+        } catch (\Exception $exception) {
             /** @var Authenticator $authenticator */
+            $authenticator = $project->getAuthenticator();
+
             $url = $this->generateUrl('authenticator_edit', [
                 'project' => $project->getId(),
-                'id' => $project->getAuthenticator()->getId()
+                'id' => $authenticator->getId()
             ]);
             $message = sprintf("Error executing <a href='$url'>authenticator</a>. {$exception->getMessage()}");
             $this->addFlash('danger', $message);
-
-            return $this->redirectToRoute('project_show', [
-                'project' => $project->getId(),
-            ]);
-        } catch (\Exception $exception) {
-            $this->addFlash('danger', $exception->getMessage());
 
             return $this->redirectToRoute('project_show', [
                 'project' => $project->getId(),

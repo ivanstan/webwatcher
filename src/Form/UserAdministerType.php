@@ -7,7 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -54,7 +53,7 @@ class UserAdministerType extends AbstractType
                     ],
                     'expanded' => true,
                     'multiple' => true,
-                    'choice_attr' => function($key, $val, $index) {
+                    'choice_attr' => function($key) {
                         return $key === User::ROLE_USER ? ['disabled' => 'disabled'] : [];
                     },
                 ]

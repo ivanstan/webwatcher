@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Authenticator\Authenticator;
 use App\Entity\Authenticator\SeleniumAuthenticator;
 use App\Entity\Project;
-use App\Form\Authenticator\SeleniumAuthenticatorType;
 use App\Service\Factory\AuthenticatorFactory;
 use App\Service\Selenium\Engine;
 use App\Service\Selenium\SeleniumAuthenticatorService;

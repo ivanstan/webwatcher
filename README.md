@@ -12,7 +12,7 @@ Via docker:
 - Create a `docker-compose.yaml` file with following contents
 
 ```
-version: '2'
+version: '3'
 services:
     db:
         image: mysql:5.7.22
@@ -39,7 +39,6 @@ services:
             PROXY_PORT_RANGE: 9091-9191
             BROWSERMOB_PROXY: http://browsermob-proxy:9090
             SELENIUM_HUB: http://selenium-hub:4444/wd/hub
-            PROXY_PORT_RANGE: 9091-9191
     selenium-hub:
         image: 'selenium/hub:3.12.0-boron'
         ports:

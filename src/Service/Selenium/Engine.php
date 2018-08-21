@@ -66,9 +66,16 @@ class Engine
         ];
     }
 
+    public function quit()
+    {
+        if ($this->driver) {
+            $this->driver->quit();
+            unset($this->driver);
+        }
+    }
+
     public function __destruct()
     {
-        $this->driver->quit();
-        unset($this->driver);
+        $this->quit();
     }
 }

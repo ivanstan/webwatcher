@@ -28,12 +28,10 @@ class InstallController extends Controller
      */
     public function install(Request $request, KernelInterface $kernel)
     {
-        $user = null;
-
         try {
             $user = $this->manager->getRepository(User::class)->findAll();
         } catch (\Exception $exception) {
-            $this->addFlash('danger', $exception->getMessage());
+            $user = null;
         }
 
         if ($user) {

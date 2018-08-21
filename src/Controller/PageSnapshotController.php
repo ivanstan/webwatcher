@@ -17,8 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PageSnapshotController extends Controller
 {
-    public const MAX_KEYWORDS = 10;
-
     /**
      * @Route("/{snapshot}", name="page_snapshot_show", methods="GET", requirements={"snapshot"="\d+"})
      */

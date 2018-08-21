@@ -6,7 +6,6 @@ use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Service\Snapshot\ProjectSnapshotService;
-use Facebook\WebDriver\Exception\NoSuchElementException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;

@@ -9,7 +9,7 @@ use App\Property\Protocol;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PageResourceRepository")
+ * @ORM\Entity()
  * @ORM\Table("resource_page")
  */
 class Page extends AbstractResource
@@ -50,7 +50,7 @@ class Page extends AbstractResource
 
         $sum = 0;
         foreach ($snapshots as $snapshot) {
-            $sum += $snapshot->getResponseTime();
+            $sum += $snapshot->getTime();
         }
 
         return $sum / count($snapshots);
@@ -63,7 +63,7 @@ class Page extends AbstractResource
         foreach ($this->getSnapshots() as $snapshot) {
             $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp())->format('d/m/Y H:i:s');
 
-            $result[$dateTime] = number_format($snapshot->getResponseTime(), 2);
+            $result[$dateTime] = number_format($snapshot->getTime(), 2);
         }
 
         return array_reverse($result);

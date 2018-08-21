@@ -50,7 +50,7 @@
                 <td>
                     <a href="{{ path('page_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id} ) }}">{% if page_snapshot.page.name is not empty %}{{ page_snapshot.page.name }}{% else %}{{ page_snapshot.page.path }}{% endif %}</a>
                 </td>
-                <td>{% include 'components/response-code.html.twig' with {code: page_snapshot.responseCode} only %}</td>
+                <td>{% include 'components/response-code.html.twig' with {code: page_snapshot.status} only %}</td>
                 <td>
                     <a data-toggle="tooltip"
                        data-placement="bottom"

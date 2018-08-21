@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Property\Headers;
 use App\Service\HttpArchive\HttpArchive;
 use Doctrine\ORM\Mapping as ORM;
 use Mihaeu\HtmlFormatter;
@@ -12,6 +13,8 @@ use Mihaeu\HtmlFormatter;
  */
 class PageSnapshot extends AbstractSnapshot
 {
+    use Headers;
+
     protected $details;
 
     /**
@@ -19,12 +22,6 @@ class PageSnapshot extends AbstractSnapshot
      * @ORM\Column(name="har", type="json", nullable=true)
      */
     protected $har;
-
-    /**
-     * @var array $headers
-     * @ORM\Column(name="headers", type="json_array", nullable=true)
-     */
-    protected $headers;
 
     /**
      * @var string $image
@@ -51,26 +48,8 @@ class PageSnapshot extends AbstractSnapshot
         $body = $details['response']['content']['text'] ?? '';
         $body = @HtmlFormatter::format($body);
         $body = preg_replace('/^[ \t]*[\r\n]+/m', '', $body);
+
         return $body;
-    }
-
-    public function getHeaders(): array
-    {
-        return $this->headers;
-    }
-
-    public function hasHeader(string $name): bool
-    {
-        return isset($this->headers[$name]);
-    }
-
-    public function setHeaders(array $headers): void
-    {
-        $this->headers = $headers;
-    }
-
-    public function getHeader(string $header) {
-        return $this->headers[$header] ? $this->headers[$header] : null;
     }
 
     public function getImage()

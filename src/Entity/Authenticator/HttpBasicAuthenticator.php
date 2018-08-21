@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table("authenticator_http_basic")
  */
-class HttpBasicAuthenticator extends Authenticator implements AuthenticatorInterface
+class HttpBasicAuthenticator extends AbstractAuthenticator implements AuthenticatorInterface
 {
-    public const TYPE = 'selenium';
+    public const TYPE = 'http';
 
     /**
      * @var string

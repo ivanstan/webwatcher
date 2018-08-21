@@ -2,7 +2,7 @@
 
 namespace App\Form\Authenticator;
 
-use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Authenticator\SeleniumAuthenticator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,7 +33,7 @@ class SeleniumAuthenticatorType extends AbstractType
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            /** @var Authenticator $authenticator */
+            /** @var AbstractAuthenticator $authenticator */
             $authenticator = $event->getData();
             $form = $event->getForm();
 

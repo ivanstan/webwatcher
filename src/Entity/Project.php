@@ -44,7 +44,7 @@ class Project
     protected $snapshots;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Authenticator\Authenticator", mappedBy="project", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Authenticator\AbstractAuthenticator", mappedBy="project", cascade={"persist"})
      */
     protected $authenticator;
 

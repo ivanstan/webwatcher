@@ -39,9 +39,9 @@ class FileManager
         return $this->getDataFolder() . '/project-' . $project->getId();
     }
 
-    public function getResourceFolder(AbstractResource $page): string
+    public function getResourceFolder(AbstractResource $resource): string
     {
-        return $this->getProjectFolder($page->getProject()) . '/resource-' . $page->getId();
+        return $this->getProjectFolder($resource->getProject()) . '/resource-' . $resource->getId();
     }
 
     public function getSnapshotFolder(AbstractSnapshot $snapshot)

@@ -10,9 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table("authenticator_selenium")
  */
-class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterface
+class SeleniumAuthenticator extends AbstractAuthenticator implements AuthenticatorInterface
 {
-    public const TYPE = 'http';
+    public const TYPE = 'selenium';
 
     use Path;
     use Protocol;

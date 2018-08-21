@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Form\ProjectType;
@@ -100,7 +100,7 @@ class ProjectController extends Controller
         }
 
         return $this->render('pages/project/edit.html.twig', [
-            'authenticator_types' => Authenticator::getTypes(),
+            'authenticator_types' => AbstractAuthenticator::getTypes(),
             'project' => $project,
             'form' => $form->createView(),
         ]);

@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     HttpBasicAuthenticator::TYPE = "App\Entity\Authenticator\HttpBasicAuthenticator"
  * })
  */
-abstract class Authenticator
+abstract class AbstractAuthenticator
 {
     use Id;
 

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Service\Snapshot\ProjectSnapshotService;
@@ -52,7 +52,7 @@ class ProjectSnapshotController extends Controller
         try {
             $snapshot = $service->new($project);
         } catch (\Exception $exception) {
-            /** @var Authenticator $authenticator */
+            /** @var AbstractAuthenticator $authenticator */
             $authenticator = $project->getAuthenticator();
 
             $url = $this->generateUrl('authenticator_edit', [

@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProjectSnapshot extends AbstractSnapshot
 {
+    public const TYPE = 'project';
+
     /**
      * @var Project
      *

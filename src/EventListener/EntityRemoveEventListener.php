@@ -5,6 +5,7 @@ namespace App\EventListener;
 use App\Entity\AbstractResource;
 use App\Entity\AbstractSnapshot;
 use App\Entity\Project;
+use App\Entity\ProjectSnapshot;
 use App\Service\File\FileManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -40,8 +41,14 @@ class EntityRemoveEventListener implements EventSubscriber
                 $this->fileManager->remove($this->fileManager->getResourceFolder($entity));
             }
 
-            if ($entity instanceof AbstractSnapshot) {
+            if ($entity instanceof AbstractSnapshot && !$entity instanceof ProjectSnapshot) {
                 $this->fileManager->remove($this->fileManager->getSnapshotFolder($entity));
+            }
+
+            if ($entity instanceof ProjectSnapshot) {
+                foreach ($entity->getSnapshots() as $snapshot) {
+                    $this->fileManager->remove($this->fileManager->getSnapshotFolder($snapshot));
+                }
             }
         }
     }

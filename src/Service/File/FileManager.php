@@ -2,16 +2,15 @@
 
 namespace App\Service\File;
 
+use App\Entity\AbstractResource;
 use App\Entity\AbstractSnapshot;
-use App\Entity\Page;
 use App\Entity\Project;
-use ErrorException;
 
 class FileManager
 {
     public const DATA_FOLDER_NAME = 'data';
     public const PUBLIC_FOLDER_NAME = 'public';
-    public const SNAPSHOT_FOLDER_FORMAT = 'YmdHis';
+    public const SNAPSHOT_FOLDER_FORMAT = 'Ymd-His';
 
     protected $projectDir;
 
@@ -20,14 +19,19 @@ class FileManager
         $this->projectDir = $projectDir;
     }
 
-    public function getDataFolder(): string
+    public function getProjectDir(): string
     {
-        return $this->getPublicFolder() . '/' . self::DATA_FOLDER_NAME;
+        return $this->projectDir;
     }
 
     public function getPublicFolder(): string
     {
-        return $this->projectDir . '/' . self::PUBLIC_FOLDER_NAME;
+        return $this->getProjectDir() . '/' . self::PUBLIC_FOLDER_NAME;
+    }
+
+    public function getDataFolder(): string
+    {
+        return $this->getPublicFolder() . '/' . self::DATA_FOLDER_NAME;
     }
 
     public function getProjectFolder(Project $project): string
@@ -35,9 +39,9 @@ class FileManager
         return $this->getDataFolder() . '/project-' . $project->getId();
     }
 
-    public function getResourceFolder(Page $page): string
+    public function getResourceFolder(AbstractResource $resource): string
     {
-        return $this->getProjectFolder($page->getProject()) . '/resource-' . $page->getId();
+        return $this->getProjectFolder($resource->getProject()) . '/resource-' . $resource->getId();
     }
 
     public function getSnapshotFolder(AbstractSnapshot $snapshot)
@@ -61,7 +65,7 @@ class FileManager
     {
         try {
             $files = array_diff(scandir($directory), ['.', '..']);
-        } catch (ErrorException $exception) {
+        } catch (\Exception $exception) {
             $files = [];
         }
 
@@ -75,7 +79,7 @@ class FileManager
 
         try {
             return rmdir($directory);
-        } catch (ErrorException $exception) {
+        } catch (\Exception $exception) {
             return false;
         }
     }

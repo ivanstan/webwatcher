@@ -2,19 +2,18 @@
 
 namespace App\EventListener;
 
-use App\Entity\Page;
-use App\Entity\PageSnapshot;
+use App\Entity\AbstractResource;
+use App\Entity\AbstractSnapshot;
 use App\Entity\Project;
+use App\Entity\ProjectSnapshot;
 use App\Service\File\FileManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 
 class EntityRemoveEventListener implements EventSubscriber
 {
     private $fileManager;
-    private $remove = [];
 
     public function __construct(FileManager $fileManager)
     {
@@ -38,12 +37,18 @@ class EntityRemoveEventListener implements EventSubscriber
                 $this->fileManager->remove($this->fileManager->getProjectFolder($entity));
             }
 
-            if ($entity instanceof Page) {
+            if ($entity instanceof AbstractResource) {
                 $this->fileManager->remove($this->fileManager->getResourceFolder($entity));
             }
 
-            if ($entity instanceof PageSnapshot) {
+            if ($entity instanceof AbstractSnapshot && !$entity instanceof ProjectSnapshot) {
                 $this->fileManager->remove($this->fileManager->getSnapshotFolder($entity));
+            }
+
+            if ($entity instanceof ProjectSnapshot) {
+                foreach ($entity->getSnapshots() as $snapshot) {
+                    $this->fileManager->remove($this->fileManager->getSnapshotFolder($snapshot));
+                }
             }
         }
     }

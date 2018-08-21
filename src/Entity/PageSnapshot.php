@@ -2,26 +2,20 @@
 
 namespace App\Entity;
 
+use App\Property\Headers;
 use App\Service\HttpArchive\HttpArchive;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 use Mihaeu\HtmlFormatter;
 
 /**
  * @ORM\Entity()
- * @ORM\Table("page_snapshot")
+ * @ORM\Table("snapshot_page")
  */
 class PageSnapshot extends AbstractSnapshot
 {
+    use Headers;
+
     protected $details;
-
-    protected $linkIndex = [];
-
-    public function __construct()
-    {
-        $this->links = new ArrayCollection();
-    }
 
     /**
      * @var array $har
@@ -30,41 +24,22 @@ class PageSnapshot extends AbstractSnapshot
     protected $har;
 
     /**
-     * @var array $headers
-     * @ORM\Column(name="headers", type="json_array", nullable=true)
-     */
-    protected $headers;
-
-    /**
      * @var string $image
      * @ORM\Column(name="image", type="string", nullable=true)
      */
     protected $image;
 
     /**
-     * @var integer $responseCode
-     * @ORM\Column(name="response_code", type="integer")
+     * @var integer $status
+     * @ORM\Column(name="status", type="integer", nullable=true)
      */
-    protected $responseCode;
+    protected $status;
 
     /**
-     * @var float $responseTime
-     * @ORM\Column(name="response_time", type="float", nullable=true)
+     * @var float $time
+     * @ORM\Column(name="time", type="float", nullable=true)
      */
-    protected $responseTime;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\PageSnapshotSeo", cascade={"persist"})
-     * @ORM\JoinColumn(name="seo_id", referencedColumnName="id")
-     */
-    protected $seo;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Link", mappedBy="snapshots", cascade={"persist", "merge"})
-     * @ORM\OrderBy({"url"="DESC"})
-     * @ORM\JoinTable(name="page_snapshot_link")
-     */
-    protected $links;
+    protected $time;
 
     public function getBody(): string
     {
@@ -73,26 +48,8 @@ class PageSnapshot extends AbstractSnapshot
         $body = $details['response']['content']['text'] ?? '';
         $body = @HtmlFormatter::format($body);
         $body = preg_replace('/^[ \t]*[\r\n]+/m', '', $body);
+
         return $body;
-    }
-
-    public function getHeaders(): array
-    {
-        return $this->headers;
-    }
-
-    public function hasHeader(string $name): bool
-    {
-        return isset($this->headers[$name]);
-    }
-
-    public function setHeaders(array $headers): void
-    {
-        $this->headers = $headers;
-    }
-
-    public function getHeader(string $header) {
-        return $this->headers[$header] ? $this->headers[$header] : null;
     }
 
     public function getImage()
@@ -105,63 +62,24 @@ class PageSnapshot extends AbstractSnapshot
         $this->image = $image;
     }
 
-    public function getResponseCode(): ?int
+    public function getStatus(): ?int
     {
-        return $this->responseCode;
+        return $this->status;
     }
 
-    public function setResponseCode(int $responseCode)
+    public function setStatus(?int $status)
     {
-        $this->responseCode = $responseCode;
+        $this->status = $status;
     }
 
-    public function getResponseTime(): ?float
+    public function getTime(): ?float
     {
-        return $this->responseTime;
+        return $this->time;
     }
 
-    public function setResponseTime(float $responseTime): void
+    public function setTime(float $time): void
     {
-        $this->responseTime = $responseTime;
-    }
-
-    public function getSeo(): ?PageSnapshotSeo
-    {
-        return $this->seo;
-    }
-
-    public function setSeo(?PageSnapshotSeo $seo): void
-    {
-        $this->seo = $seo;
-    }
-
-    /**
-     * @return ArrayCollection|PersistentCollection|null
-     */
-    public function getLinks()
-    {
-        return $this->links;
-    }
-
-    public function setLinks(?ArrayCollection $links): void
-    {
-        $this->links = $links;
-
-        /** @var Link $link */
-        foreach ($this->links as $link) {
-            $this->linkIndex[$link->getUrl()] = $link;
-        }
-    }
-
-    public function addLink(Link $link): void
-    {
-        $this->links->add($link);
-        $this->linkIndex[$link->getUrl()] = $link;
-    }
-
-    public function linkExists(string $url)
-    {
-        return isset($this->linkIndex[$url]);
+        $this->time = $time;
     }
 
     public function getHar(): ?array

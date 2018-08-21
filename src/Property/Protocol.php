@@ -7,7 +7,7 @@ trait Protocol
     /**
      * @var string
      *
-     * @ORM\Column(name="protocol", type="string", nullable=false, options={"default":"https"}, columnDefinition="ENUM('http', 'https')")
+     * @ORM\Column(name="scheme", type="string", nullable=false, options={"default":"https"}, columnDefinition="ENUM('http', 'https')")
      */
     protected $protocol = 'https';
 

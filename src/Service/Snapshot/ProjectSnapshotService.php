@@ -2,7 +2,6 @@
 
 namespace App\Service\Snapshot;
 
-use App\Entity\Authenticator\SeleniumAuthenticator;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Service\Factory\ProjectSnapshotFactory;

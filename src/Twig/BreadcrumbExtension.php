@@ -2,7 +2,7 @@
 
 namespace App\Twig;
 
-use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Entity\Project;
@@ -72,7 +72,7 @@ class BreadcrumbExtension extends AbstractExtension
             $projectSnapshot = $entity;
         }
 
-        if (is_subclass_of($entity, Authenticator::class)) {
+        if (is_subclass_of($entity, AbstractAuthenticator::class)) {
             $project = $entity->getProject();
             $authenticator = $entity;
         }
@@ -139,10 +139,6 @@ class BreadcrumbExtension extends AbstractExtension
                     ]),
                 ];
             }
-        }
-
-        if ($routeName === 'project_bulk_add') {
-
         }
 
         return $this->template->render('components/breadcrumbs.html.twig', [

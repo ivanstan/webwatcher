@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\AbstractSnapshot;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
-use App\Service\Analytics\KeywordExtractor;
 use App\Service\Snapshot\PageSnapshotService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,22 +22,10 @@ class PageSnapshotController extends Controller
     /**
      * @Route("/{snapshot}", name="page_snapshot_show", methods="GET", requirements={"snapshot"="\d+"})
      */
-    public function show(PageSnapshot $snapshot, KeywordExtractor $extractor): Response
+    public function show(PageSnapshot $snapshot): Response
     {
-        if ($snapshot->getSeo()) {
-            $content = $snapshot->getSeo()->getContent();
-            $language = $snapshot->getSeo()->getLanguage() ?? 'en';
-
-            $freq = $extractor
-                ->setTokenFilter($language)
-                ->setContentFilters()
-                ->getOccurrenceNumber($content, self::MAX_KEYWORDS);
-        }
-
         return $this->render('pages/page_snapshot/show.html.twig', [
             'snapshot' => $snapshot,
-            'statistics' => null,
-            'freq' => $freq ?? null,
         ]);
     }
 

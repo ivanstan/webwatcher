@@ -2,11 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Form\ProjectType;
-use App\Service\Factory\ProjectFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,9 +21,9 @@ class ProjectController extends Controller
      * @Route("/new", name="project_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function new(Request $request, ProjectFactory $factory): Response
+    public function new(Request $request): Response
     {
-        $project = $factory->create();
+        $project = new Project();
 
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
@@ -101,7 +100,7 @@ class ProjectController extends Controller
         }
 
         return $this->render('pages/project/edit.html.twig', [
-            'authenticator_types' => Authenticator::getTypes(),
+            'authenticator_types' => AbstractAuthenticator::getTypes(),
             'project' => $project,
             'form' => $form->createView(),
         ]);

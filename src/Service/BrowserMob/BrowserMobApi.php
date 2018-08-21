@@ -83,7 +83,7 @@ class BrowserMobApi
         return $response;
     }
 
-    public function delete($port)
+    public function delete()
     {
         $response = $this->client->delete('/proxy');
 

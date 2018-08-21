@@ -89,10 +89,8 @@ class PageSnapshotService implements SnapshotServiceInterface
         $har = HttpArchive::fromString($har);
         $entry = $har->getEntry($page->getUrl());
 
-        $snapshot->setResponseCode(0);
-
         if ($entry) {
-            $snapshot->setResponseCode($entry['response']['status']);
+            $snapshot->setStatus($entry['response']['status']);
             $snapshot->setHeaders($entry['response']['headers']);
         }
 

@@ -60,13 +60,17 @@ class ImportController extends Controller
             $bulk->setCookies($cookies);
         }
 
-        $pages = $bulk->extract($project->getBaseUrl() . $url);
+        try {
+            $pages = $bulk->extract($project->getBaseUrl() . $url);
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+        }
 
         return $this->render('pages/import/index.html.twig', [
             'project' => $project,
             'url' => $url,
             'suggestions' => $this->getSuggestions($project),
-            'pages' => array_diff($pages, $this->getProjectPages($project)),
+            'pages' => array_diff($pages ?? [], $this->getProjectPages($project)),
         ]);
     }
 

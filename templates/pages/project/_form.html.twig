@@ -1,11 +1,6 @@
 {{ form_start(form) }}
 {{ form_row(form.name) }}
-<div class="form-group"><label for="project_domain" class="required">Domain</label>
-    {{ form_widget(form.domain) }}
-    <small class="text-muted">For instances running on docker use "host.docker.internal" as domain name to access your host
-        machine's applications.
-    </small>
-</div>
+{{ form_row(form.domain) }}
 
 {% if project.authenticator is not null %}
     <table class="table mb-0">

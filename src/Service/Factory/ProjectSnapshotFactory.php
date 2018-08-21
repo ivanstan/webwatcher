@@ -9,9 +9,8 @@ class ProjectSnapshotFactory
 {
     public function create(Project $project): ProjectSnapshot
     {
-        $dateTime = new \DateTime();
         $snapshot = new ProjectSnapshot();
-        $snapshot->setTimestamp($dateTime->getTimestamp());
+        $snapshot->setTimestamp(time());
         $snapshot->setProject($project);
 
         return $snapshot;

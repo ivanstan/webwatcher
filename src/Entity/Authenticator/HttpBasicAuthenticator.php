@@ -8,8 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\Table("authenticator_http_basic")
  */
-class HttpBasicAuthenticator extends Authenticator implements AuthenticatorInterface
+class HttpBasicAuthenticator extends AbstractAuthenticator implements AuthenticatorInterface
 {
+    public const TYPE = 'http';
+
     /**
      * @var string
      *
@@ -26,7 +28,7 @@ class HttpBasicAuthenticator extends Authenticator implements AuthenticatorInter
 
     public function getType(): string
     {
-        return self::TYPE_HTTP_BASIC;
+        return self::TYPE;
     }
 
     public function getTitle(): string

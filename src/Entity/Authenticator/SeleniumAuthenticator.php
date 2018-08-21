@@ -8,10 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Entity("authenticator_selenium")
+ * @ORM\Table("authenticator_selenium")
  */
-class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterface
+class SeleniumAuthenticator extends AbstractAuthenticator implements AuthenticatorInterface
 {
+    public const TYPE = 'selenium';
+
     use Path;
     use Protocol;
 
@@ -52,7 +54,7 @@ class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterf
 
     public function getType(): string
     {
-        return self::TYPE_SELENIUM;
+        return self::TYPE;
     }
 
     public function getTitle(): string

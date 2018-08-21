@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Entity;
 
 use App\Property\Id;
@@ -13,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *     AbstractResource::RESOURCE_TYPE_PAGE = "App\Entity\PageSnapshot",
- *     "project" = "App\Entity\ProjectSnapshot",
+ *     Page::TYPE = "App\Entity\PageSnapshot",
+ *     ProjectSnapshot::TYPE = "App\Entity\ProjectSnapshot",
  * })
  */
 abstract class AbstractSnapshot

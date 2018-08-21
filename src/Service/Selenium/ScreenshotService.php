@@ -10,8 +10,6 @@ use Symfony\Component\Templating\EngineInterface;
 
 class ScreenshotService
 {
-    private $cookies;
-
     /** @var RemoteWebDriver */
     private $driver;
     /** @var EngineInterface */

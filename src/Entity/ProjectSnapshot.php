@@ -6,11 +6,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProjectSnapshotRepository")
- * @ORM\Table("project_snapshot")
+ * @ORM\Entity()
+ * @ORM\Table("snapshot_project")
  */
 class ProjectSnapshot extends AbstractSnapshot
 {
+    public const TYPE = 'project';
+
     /**
      * @var Project
      *

@@ -49,20 +49,6 @@
                     </div>
                 </td>
             </tr>
-            {% if page.averageResponseTime %}
-                <tr>
-                    <th>Average Response Time</th>
-                    <td>{{ page.averageResponseTime|number_format(2) }} sec</td>
-                </tr>
-                {% if page.snapshots|length >= 2 %}
-                    <tr>
-                        <td colspan="2">
-                            <canvas class="response-time-chart" id="response-time-chart-1"
-                                    data-chart="{{ page.responseTimeData|json_encode }}" height="50"></canvas>
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endif %}
         </tbody>
     </table>
 
@@ -107,7 +93,7 @@
                 <tr>
                     <td><a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.timestamp|date(datetime_format()) }}</a></td>
                     <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
-                    <td>{% include 'components/response-code.html.twig' with {code: snapshot.responseCode} only %}</td>
+                    <td>{% include 'components/response-code.html.twig' with {code: snapshot.status} only %}</td>
                 </tr>
             {% else %}
                 <tr>

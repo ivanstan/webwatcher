@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\AbstractSnapshot;
 use App\Entity\PageSnapshot;
 use App\Entity\ProjectSnapshot;
 use App\Utility\Url;
@@ -137,10 +138,6 @@ class CompareController extends Controller
             $html = '';
         }
 
-        if ($snapshot->hasHeader('Content-Type')) {
-            // ToDo replace hardcoded content type with one from header
-        }
-
         return $this->render('pages/compare/iframe.html.twig', [
             'snapshot1' => $snapshot,
             'html' => $html,
@@ -157,7 +154,7 @@ class CompareController extends Controller
         return BinaryFileResponse::create($projectDir . '/public/' . $snapshot->getImage());
     }
 
-    private function setFlashMessages($snapshot1, $snapshot2): void
+    private function setFlashMessages(AbstractSnapshot $snapshot1, AbstractSnapshot $snapshot2): void
     {
         if ($snapshot2 && $snapshot1->getId() === $snapshot2->getId()) {
             $this->addFlash(

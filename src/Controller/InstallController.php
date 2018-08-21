@@ -28,12 +28,10 @@ class InstallController extends Controller
      */
     public function install(Request $request, KernelInterface $kernel)
     {
-        $user = null;
-
         try {
             $user = $this->manager->getRepository(User::class)->findAll();
         } catch (\Exception $exception) {
-
+            $user = null;
         }
 
         if ($user) {
@@ -46,10 +44,14 @@ class InstallController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            $this->migrate($kernel);
-            $this->createAdmin($data);
+            try {
+                $this->migrate($kernel);
+                $this->createAdmin($data);
+            } catch (\Exception $exception) {
+                $this->addFlash('danger', $exception->getMessage());
+            }
 
-            $this->addFlash('success', sprintf('Created new admin user: %s', $data['email']));
+            $this->addFlash('success', \sprintf('Created new admin user: %s', $data['email']));
 
             return $this->redirectToRoute('fos_user_security_login');
         }

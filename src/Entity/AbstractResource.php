@@ -14,13 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *     AbstractResource::RESOURCE_TYPE_PAGE = "App\Entity\Page",
+ *     Page::TYPE = "App\Entity\Page",
  * })
  */
 abstract class AbstractResource
 {
-    public const RESOURCE_TYPE_PAGE = 'page';
-
     use Name;
     use Id;
 

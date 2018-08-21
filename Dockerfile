@@ -12,7 +12,7 @@ ADD src /var/www/symfony/src
 ADD templates /var/www/symfony/templates
 ADD translations /var/www/symfony/translations
 ADD vendor /var/www/symfony/vendor
-ADD .env /var/www/symfony/
+ADD .env.dist /var/www/symfony/.env
 ADD composer.json /var/www/symfony/composer.json
 ADD composer.lock /var/www/symfony/composer.lock
 
@@ -28,6 +28,8 @@ RUN chmod 777 /var/www/symfony/public/data
 ENV APACHE_DOCUMENT_ROOT /var/www/symfony/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+RUN echo 'memory_limit = 512M;' > /usr/local/etc/php/conf.d/webwatcher-php.ini
 
 RUN a2enmod rewrite
 

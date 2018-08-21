@@ -2,10 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Authenticator\SeleniumAuthenticator;
 use App\Entity\Project;
-use App\Form\Authenticator\SeleniumAuthenticatorType;
 use App\Service\Factory\AuthenticatorFactory;
 use App\Service\Selenium\Engine;
 use App\Service\Selenium\SeleniumAuthenticatorService;
@@ -29,16 +28,12 @@ class AuthenticatorController extends Controller
     /**
      * @Route("/{type}/new", name="authenticator_new", methods="GET|POST")
      */
-    public function new(
-        Request $request,
-        Project $project,
-        string $type
-    ): Response
+    public function new(Request $request, Project $project, string $type): Response
     {
         $authenticator = $this->factory->create($type);
         $authenticator->setProject($project);
 
-        $form = $this->createForm($this->factory->getFormType($authenticator->getType()), $authenticator);
+        $form = $this->factory->getForm($authenticator);
         $form->handleRequest($request);
         $screenshot = null;
 
@@ -66,12 +61,12 @@ class AuthenticatorController extends Controller
     public function edit(
         Request $request,
         Project $project,
-        Authenticator $authenticator,
-        SeleniumAuthenticatorService $seleniumAuthenticator,
+        AbstractAuthenticator $authenticator,
+        SeleniumAuthenticatorService $service,
         Engine $engine
     ): Response
     {
-        $form = $this->createForm($this->factory->getFormType($authenticator->getType()), $authenticator);
+        $form = $this->factory->getForm($authenticator);
         $form->handleRequest($request);
         $cookies = [];
         $screenshot = null;
@@ -87,11 +82,11 @@ class AuthenticatorController extends Controller
 
             if ($form->get('test')->isClicked() && $authenticator instanceof SeleniumAuthenticator) {
                 $driver = $engine->getDriver();
-                $seleniumAuthenticator->setDriver($driver);
+                $service->setDriver($driver);
 
                 try {
-                    $cookies = $seleniumAuthenticator->setup($authenticator)->getCookies();
-                    $screenshot = $seleniumAuthenticator->getScreenshot();
+                    $cookies = $service->setup($authenticator)->getCookies();
+                    $screenshot = $service->getScreenshot();
                 } catch (\Exception $exception) {
                     $this->addFlash('danger', $exception->getMessage());
                 }
@@ -114,7 +109,7 @@ class AuthenticatorController extends Controller
     /**
      * @Route("/{id}", name="authenticator_delete", methods="DELETE")
      */
-    public function delete(Request $request, Authenticator $authenticator, Project $project): Response
+    public function delete(Request $request, AbstractAuthenticator $authenticator, Project $project): Response
     {
         if ($this->isCsrfTokenValid('delete' . $authenticator->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
+ * @ORM\Entity()
  * @ORM\Table("project")
  */
 class Project
@@ -44,15 +44,7 @@ class Project
     protected $snapshots;
 
     /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="owner", referencedColumnName="id", nullable=true)
-     */
-    protected $owner;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Authenticator\Authenticator", mappedBy="project", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Authenticator\AbstractAuthenticator", mappedBy="project", cascade={"persist"})
      */
     protected $authenticator;
 
@@ -98,16 +90,6 @@ class Project
         $this->domain = $domain;
     }
 
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): void
-    {
-        $this->owner = $owner;
-    }
-
     public function getAuthenticator()
     {
         return $this->authenticator;
@@ -118,7 +100,6 @@ class Project
         $this->authenticator = $authenticator;
     }
 
-    // ToDo: remove this function
     public function getBaseUrl()
     {
         return 'http://' . $this->getDomain();

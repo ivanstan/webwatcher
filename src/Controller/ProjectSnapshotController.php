@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Service\Snapshot\ProjectSnapshotService;
@@ -51,20 +51,16 @@ class ProjectSnapshotController extends Controller
     {
         try {
             $snapshot = $service->new($project);
-        } catch (NoSuchElementException $exception) {
-            /** @var Authenticator $authenticator */
+        } catch (\Exception $exception) {
+            /** @var AbstractAuthenticator $authenticator */
+            $authenticator = $project->getAuthenticator();
+
             $url = $this->generateUrl('authenticator_edit', [
                 'project' => $project->getId(),
-                'id' => $project->getAuthenticator()->getId()
+                'id' => $authenticator->getId()
             ]);
             $message = sprintf("Error executing <a href='$url'>authenticator</a>. {$exception->getMessage()}");
             $this->addFlash('danger', $message);
-
-            return $this->redirectToRoute('project_show', [
-                'project' => $project->getId(),
-            ]);
-        } catch (\Exception $exception) {
-            $this->addFlash('danger', $exception->getMessage());
 
             return $this->redirectToRoute('project_show', [
                 'project' => $project->getId(),

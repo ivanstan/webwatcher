@@ -91,7 +91,7 @@
                         </tr>
                         <tr>
                             <th>HTTP Response</th>
-                            <td>{% include 'components/response-code.html.twig' with {code: item.snapshot1.responseCode} only %}</td>
+                            <td>{% include 'components/response-code.html.twig' with {code: item.snapshot1.status} only %}</td>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -148,7 +148,7 @@
                             <th>Response code</th>
 
                             <td>
-                                {% if item.snapshot1.responseCode == item.snapshot2.responseCode %}
+                                {% if item.snapshot1.status == item.snapshot2.status %}
                                     <span class="badge badge-success">YES</span>
                                 {% else %}
                                     <span class="badge badge-warning">NO</span>
@@ -193,7 +193,7 @@
                         </tr>
                         <tr>
                             <th>HTTP Response</th>
-                            <td>{% include 'components/response-code.html.twig' with {code: item.snapshot2.responseCode} only %}</td>
+                            <td>{% include 'components/response-code.html.twig' with {code: item.snapshot2.status} only %}</td>
                         </tr>
                         <tr>
                             <td colspan="2">

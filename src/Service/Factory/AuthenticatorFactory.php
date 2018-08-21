@@ -1,39 +1,52 @@
 <?php
 
-
 namespace App\Service\Factory;
 
-
-use App\Entity\Authenticator\Authenticator;
+use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Authenticator\HttpBasicAuthenticator;
 use App\Entity\Authenticator\SeleniumAuthenticator;
 use App\Form\Authenticator\HttpBasicAuthenticatorType;
 use App\Form\Authenticator\SeleniumAuthenticatorType;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\InvalidArgumentException;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 
 class AuthenticatorFactory
 {
-    public function create(string $type)
+    private $factory;
+    private $map;
+
+    public function __construct(EntityManagerInterface $manager, FormFactoryInterface $factory)
     {
-        switch ($type) {
-            case Authenticator::TYPE_SELENIUM:
-                return new SeleniumAuthenticator();
-            case Authenticator::TYPE_HTTP_BASIC:
-                return new HttpBasicAuthenticator();
-            default:
-                throw new InvalidArgumentException(sprintf('Authenticator of type %s does not exist.', $type));
-        }
+        $this->map = $manager->getClassMetadata(AbstractAuthenticator::class)->discriminatorMap;
+        $this->factory = $factory;
     }
 
-    public function getFormType($type)
+    public function create(string $type)
     {
-        switch ($type) {
-            case Authenticator::TYPE_SELENIUM:
-                return SeleniumAuthenticatorType::class;
-            case Authenticator::TYPE_HTTP_BASIC:
-                return HttpBasicAuthenticatorType::class;
-            default:
-                throw new InvalidArgumentException(sprintf('Authenticator form of type %s does not exist.', $type));
+        if (!isset($this->map[$type])) {
+            throw new InvalidArgumentException(sprintf('Authenticator of type %s does not exist.', $type));
         }
+
+        return new $this->map[$type]();
+    }
+
+    public function getForm($authenticator, $options = []): FormInterface
+    {
+        switch (get_class($authenticator)) {
+            case SeleniumAuthenticator::class:
+                $type = SeleniumAuthenticatorType::class;
+                break;
+            case HttpBasicAuthenticator::class:
+                $type = HttpBasicAuthenticatorType::class;
+                break;
+            default:
+                throw new InvalidArgumentException(
+                    \sprintf('Unable to find form for entity %s', get_class($authenticator))
+                );
+        }
+
+        return $this->factory->create($type, $authenticator, $options);
     }
 }

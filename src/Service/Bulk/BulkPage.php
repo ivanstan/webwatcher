@@ -5,6 +5,7 @@ namespace App\Service\Bulk;
 use Facebook\WebDriver\Cookie;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Exception\ConnectException;
 use Symfony\Component\DomCrawler\Crawler;
 
 class BulkPage
@@ -45,6 +46,8 @@ class BulkPage
                     $mime = $header[0][0];
                 }
             }
+        } catch (ConnectException $exception) {
+            throw new \Exception($exception->getHandlerContext()['error']);
         } catch (\Exception $exception) {
             return [];
         }

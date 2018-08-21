@@ -94,7 +94,7 @@ class CompareController extends Controller
      */
     public function iframe(AbstractSnapshot $snapshot)
     {
-        $crawler = new Crawler($snapshot->getBody());
+        $crawler = new Crawler($snapshot->getContent());
 
         $url = [
             'scheme' => $snapshot->getResource()->getProtocol(),

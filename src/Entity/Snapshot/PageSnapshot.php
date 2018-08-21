@@ -2,11 +2,8 @@
 
 namespace App\Entity\Snapshot;
 
-use App\Entity\Snapshot\HttpResourceSnapshot;
 use App\Service\HttpArchive\HttpArchive;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 use Mihaeu\HtmlFormatter;
 
 /**
@@ -30,18 +27,19 @@ class PageSnapshot extends HttpResourceSnapshot
     protected $image;
 
     /**
-     * @var float $responseTime
-     * @ORM\Column(name="response_time", type="float", nullable=true)
+     * @var float $time
+     * @ORM\Column(name="time", type="float", nullable=true)
      */
-    protected $responseTime;
+    protected $time;
 
-    public function getBody(): string
+    public function getContent(): string
     {
         $details = $this->getDetails();
 
         $body = $details['response']['content']['text'] ?? '';
         $body = @HtmlFormatter::format($body);
         $body = preg_replace('/^[ \t]*[\r\n]+/m', '', $body);
+
         return $body;
     }
 
@@ -55,14 +53,14 @@ class PageSnapshot extends HttpResourceSnapshot
         $this->image = $image;
     }
 
-    public function getResponseTime(): ?float
+    public function getTime(): ?float
     {
-        return $this->responseTime;
+        return $this->time;
     }
 
-    public function setResponseTime(float $responseTime): void
+    public function setTime(float $time): void
     {
-        $this->responseTime = $responseTime;
+        $this->time = $time;
     }
 
     public function linkExists(string $url)

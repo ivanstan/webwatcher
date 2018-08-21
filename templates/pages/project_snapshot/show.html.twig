@@ -36,34 +36,38 @@
         </tr>
         </thead>
         <tbody>
-        {% for page_snapshot in project_snapshot.snapshots %}
+        {% for resource_snapshot in project_snapshot.snapshots %}
             <tr>
                 <td>
-                    <a target="_blank" class="cursor-zoom-in" href="{{ asset(page_snapshot.image) }}">
-                        <img width="200px" alt="{{ page_snapshot.timestamp|date(datetime_format()) }} snapshot"
-                             src="{{ asset(page_snapshot.image) }}">
-                    </a>
+                    {% if resource_snapshot.image is defined %}
+
+                        <a target="_blank" class="cursor-zoom-in" href="{{ asset(resource_snapshot.image) }}">
+                            <img width="200px" alt="{{ resource_snapshot.timestamp|date(datetime_format()) }} snapshot"
+                                 src="{{ asset(resource_snapshot.image) }}">
+                        </a>
+
+                    {% endif %}
                 </td>
                 <td>
-                    <a href="{{ path('page_resource_snapshot_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}">{{ page_snapshot.timestamp|date(datetime_format()) }}</a>
+                    <a href="{{ path('resource_snapshot_show', {'project': project_snapshot.project.id, 'resource': resource_snapshot.resource.id, 'snapshot': resource_snapshot.id}) }}">{{ resource_snapshot.timestamp|date(datetime_format()) }}</a>
                 </td>
                 <td>
-                    <a href="{{ path('page_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id} ) }}">{% if page_snapshot.page.name is not empty %}{{ page_snapshot.page.name }}{% else %}{{ page_snapshot.page.path }}{% endif %}</a>
+                    <a href="{{ path('resource_show', {'project': project_snapshot.project.id, 'resource': resource_snapshot.resource.id} ) }}">{% if resource_snapshot.resource.name is not empty %}{{ resource_snapshot.resource.name }}{% else %}{{ resource_snapshot.resource.path }}{% endif %}</a>
                 </td>
-                <td>{% include 'components/response-code.html.twig' with {code: page_snapshot.responseCode} only %}</td>
+                <td>{% include 'components/response-code.html.twig' with {code: resource_snapshot.status} only %}</td>
                 <td>
                     <a data-toggle="tooltip"
                        data-placement="bottom"
                        title="Visit page"
                        target="_blank"
-                       href="{{ page_snapshot.page.url }}">
+                       href="{{ resource_snapshot.resource.url }}">
                         <i class="fa fa-external-link-alt"></i>
                     </a>
                     <a data-toggle="tooltip"
                        data-placement="bottom"
                        title="Show code"
                        target="_blank"
-                       href="{{ path('editor', {'snapshot1': page_snapshot.id}) }}">
+                       href="{{ path('editor', {'snapshot1': resource_snapshot.id}) }}">
                         <i class="fa fa-file-code"></i>
                     </a>
                 </td>

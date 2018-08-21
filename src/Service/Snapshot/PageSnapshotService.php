@@ -7,7 +7,7 @@ use App\Entity\Resource\PageResource;
 use App\Entity\PageSnapshot;
 use App\Entity\Project;
 use App\Service\BrowserMob\Proxy;
-use App\Service\Factory\PageSnapshotFactory;
+use App\Service\Factory\SnapshotFactory;
 use App\Service\HttpArchive\HttpArchive;
 use App\Service\Selenium\Engine;
 use App\Service\Selenium\ScreenshotService;
@@ -34,7 +34,7 @@ class PageSnapshotService implements SnapshotServiceInterface
 
     public function __construct(
         ScreenshotService $seleniumService,
-        PageSnapshotFactory $factory,
+        SnapshotFactory $factory,
         Engine $engine,
         SeleniumAuthenticatorService $authenticatorService
     ) {

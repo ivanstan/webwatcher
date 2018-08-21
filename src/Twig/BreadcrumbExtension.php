@@ -2,12 +2,12 @@
 
 namespace App\Twig;
 
-use App\Entity\Resource\AbstractResource;
 use App\Entity\Authenticator\Authenticator;
-use App\Entity\Resource\PageResource;
-use App\Entity\Snapshot\PageSnapshot;
 use App\Entity\Project;
-use App\Entity\ProjectSnapshot;
+use App\Entity\Resource\AbstractResource;
+use App\Entity\Snapshot\AbstractSnapshot;
+use App\Entity\Snapshot\PageSnapshot;
+use App\Entity\Snapshot\ProjectSnapshot;
 use App\Service\System\DateTimeService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
@@ -62,8 +62,8 @@ class BreadcrumbExtension extends AbstractExtension
             $resource = $entity;
         }
 
-        if ($entity instanceof PageSnapshot) {
-            $project = $entity->getResource()->getProject();
+        if ($entity instanceof AbstractSnapshot) {
+//            $project = $entity->getResource()->getProject();
             $resource = $entity->getResource();
             $snapshot = $entity;
         }
@@ -109,7 +109,7 @@ class BreadcrumbExtension extends AbstractExtension
             $dateTime = (new \DateTime())->setTimestamp($snapshot->getTimestamp());
             $breadcrumbs[] = [
                 'title' => $dateTime->format($dateTimeFormat),
-                'tooltip' => 'PageResource snapshot',
+                'tooltip' => ucfirst($resource->getType()) . ' resource snapshot',
                 'href' => $this->router->generate('resource_snapshot_show', [
                     'project' => $project->getId(),
                     'resource' => $resource->getId(),

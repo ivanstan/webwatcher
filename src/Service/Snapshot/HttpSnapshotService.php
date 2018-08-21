@@ -26,7 +26,7 @@ class HttpSnapshotService implements SnapshotServiceInterface
 
         $response = $client->request('GET', $resource->getUrl());
 
-        $snapshot->setStatusCode($response->getStatusCode());
+        $snapshot->setStatus($response->getStatusCode());
         $snapshot->setHeaders($response->getHeaders());
         $snapshot->setContent($response->getBody());
 

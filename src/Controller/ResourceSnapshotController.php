@@ -32,28 +32,23 @@ class ResourceSnapshotController extends Controller
      */
     public function new(AbstractResource $resource, ResourceFactory $factory)
     {
-        $snapshot = $factory->snapshot($resource);
-
-
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($snapshot);
-
         try {
+            $snapshot = $factory->snapshot($resource);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($snapshot);
+
             $em->flush();
         } catch (\Exception $exception) {
-
-
             $this->addFlash('danger', $exception->getMessage());
-
+// ToDo: this goes to exception handler and request shutdown event.
 //            /** @var AbstractSnapshot $snapshot */
 //            $service->setup($resource->getProject())->snapshot($resource);
 //            $service->getDriver()->quit();
 
-            return $this->redirectToRoute('resource_snapshot_show', [
+            return $this->redirectToRoute('resource_show', [
                 'project' => $resource->getProject()->getId(),
                 'resource' => $resource->getId(),
-                'snapshot' => $snapshot->getId(),
             ]);
         }
 

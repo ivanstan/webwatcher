@@ -2,9 +2,10 @@
 
 namespace App\Service\Snapshot;
 
-use App\Entity\Authenticator\SeleniumAuthenticator;
 use App\Entity\Project;
-use App\Entity\ProjectSnapshot;
+use App\Entity\Resource\HttpResource;
+use App\Entity\Resource\PageResource;
+use App\Entity\Snapshot\ProjectSnapshot;
 use App\Service\Factory\ProjectSnapshotFactory;
 use App\Service\Selenium\SeleniumAuthenticatorService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,13 +18,16 @@ class ProjectSnapshotService
     private $authenticator;
     /** @var ResourceSnapshotService */
     private $resourceSnapshotService;
+    /** @var HttpSnapshotService */
+    private $httpSnapshotService;
 
     public function __construct(
         EntityManagerInterface $em,
         ProjectSnapshotFactory $factory,
         PageSnapshotService $pageSnapshotService,
         SeleniumAuthenticatorService $authenticator,
-        ResourceSnapshotService $resourceSnapshotService
+        ResourceSnapshotService $resourceSnapshotService,
+        HttpSnapshotService $httpSnapshotService
     )
     {
         $this->em = $em;
@@ -31,6 +35,7 @@ class ProjectSnapshotService
         $this->pageSnapshotService = $pageSnapshotService;
         $this->authenticator = $authenticator;
         $this->resourceSnapshotService = $resourceSnapshotService;
+        $this->httpSnapshotService = $httpSnapshotService;
     }
 
     public function new(Project $project): ProjectSnapshot
@@ -38,11 +43,18 @@ class ProjectSnapshotService
         $projectSnapshot = $this->factory->create($project);
         $this->em->persist($projectSnapshot);
 
-        $service = $this->resourceSnapshotService->getPageService();
-        $service->setup($project);
+        $pageService = $this->resourceSnapshotService->getPageService();
+        $pageService->setup($project);
 
         foreach ($project->getResources() as $resource) {
-            $snapshot = $service->snapshot($resource);
+
+            if ($resource instanceof PageResource) {
+                $snapshot = $pageService->snapshot($resource);
+            }
+
+            if ($resource instanceof HttpResource) {
+                $snapshot = $this->httpSnapshotService->snapshot($resource);
+            }
 
             $snapshot->setTimestamp($projectSnapshot->getTimestamp());
             $snapshot->setProjectSnapshot($projectSnapshot);

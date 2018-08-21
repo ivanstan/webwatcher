@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\ProjectSnapshot;
+use App\Entity\Snapshot\ProjectSnapshot;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;

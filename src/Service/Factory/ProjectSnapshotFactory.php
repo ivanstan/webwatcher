@@ -3,7 +3,7 @@
 namespace App\Service\Factory;
 
 use App\Entity\Project;
-use App\Entity\ProjectSnapshot;
+use App\Entity\Snapshot\ProjectSnapshot;
 
 class ProjectSnapshotFactory
 {

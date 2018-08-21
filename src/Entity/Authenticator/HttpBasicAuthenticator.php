@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class HttpBasicAuthenticator extends Authenticator implements AuthenticatorInterface
 {
+    public const TYPE = 'selenium';
+
     /**
      * @var string
      *
@@ -26,7 +28,7 @@ class HttpBasicAuthenticator extends Authenticator implements AuthenticatorInter
 
     public function getType(): string
     {
-        return self::TYPE_HTTP_BASIC;
+        return self::TYPE;
     }
 
     public function getTitle(): string

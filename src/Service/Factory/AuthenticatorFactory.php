@@ -16,9 +16,9 @@ class AuthenticatorFactory
     public function create(string $type)
     {
         switch ($type) {
-            case Authenticator::TYPE_SELENIUM:
+            case SeleniumAuthenticator::TYPE:
                 return new SeleniumAuthenticator();
-            case Authenticator::TYPE_HTTP_BASIC:
+            case HttpBasicAuthenticator::TYPE:
                 return new HttpBasicAuthenticator();
             default:
                 throw new InvalidArgumentException(sprintf('Authenticator of type %s does not exist.', $type));
@@ -28,9 +28,9 @@ class AuthenticatorFactory
     public function getFormType($type)
     {
         switch ($type) {
-            case Authenticator::TYPE_SELENIUM:
+            case SeleniumAuthenticator::TYPE:
                 return SeleniumAuthenticatorType::class;
-            case Authenticator::TYPE_HTTP_BASIC:
+            case HttpBasicAuthenticator::TYPE:
                 return HttpBasicAuthenticatorType::class;
             default:
                 throw new InvalidArgumentException(sprintf('Authenticator form of type %s does not exist.', $type));

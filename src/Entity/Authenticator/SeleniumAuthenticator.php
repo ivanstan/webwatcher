@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterface
 {
+    public const TYPE = 'http';
+
     use Path;
     use Protocol;
 
@@ -52,7 +54,7 @@ class SeleniumAuthenticator extends Authenticator implements AuthenticatorInterf
 
     public function getType(): string
     {
-        return self::TYPE_SELENIUM;
+        return self::TYPE;
     }
 
     public function getTitle(): string

@@ -8,7 +8,7 @@ use Mihaeu\HtmlFormatter;
 
 /**
  * @ORM\Entity()
- * @ORM\Table("page_snapshot")
+ * @ORM\Table("snapshot_page")
  */
 class PageSnapshot extends AbstractSnapshot
 {

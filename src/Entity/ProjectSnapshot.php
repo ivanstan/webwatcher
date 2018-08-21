@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table("project_snapshot")
+ * @ORM\Table("snapshot_project")
  */
 class ProjectSnapshot extends AbstractSnapshot
 {

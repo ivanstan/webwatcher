@@ -66,7 +66,7 @@ class AuthenticatorController extends Controller
         Engine $engine
     ): Response
     {
-        $form = $this->createForm($this->factory->getFormType($authenticator->getType()), $authenticator);
+        $form = $this->factory->getForm($authenticator);
         $form->handleRequest($request);
         $cookies = [];
         $screenshot = null;

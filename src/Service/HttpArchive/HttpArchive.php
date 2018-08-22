@@ -2,6 +2,8 @@
 
 namespace App\Service\HttpArchive;
 
+use App\Utility\Url;
+
 class HttpArchive
 {
     private $entries;
@@ -48,22 +50,38 @@ class HttpArchive
         return $result;
     }
 
-    public function getEntry(string $url)
-    {
-        $parsed = parse_url($url);
-        $result = null;
+    public function getEntryMap() {
+        $result = [];
 
         foreach($this->entries as $entry) {
-            if ($url === $entry['request']['url']) {
-                $result = $entry;
+            if (isset($entry['request']) && $entry['request']['url']) {
+                $url = Url::stripScheme($entry['request']['url']);
+
+                $result[$url] = $entry;
             }
         }
 
-        if ($result === null) { // try with different scheme (case of internal redirection)
-            $scheme = parse_url($url, PHP_URL_SCHEME) === 'http' ? 'https' : 'http';
-            $parsed['scheme'] = $scheme;
+        return $result;
+    }
 
-            return $this->getRedirectEntry(\GuzzleHttp\Psr7\Uri::fromParts($parsed));
+    public function getEntry(string $url)
+    {
+        $map = $this->getEntryMap();
+        $result = null;
+
+        foreach($map as $url => $entry) {
+            if ($url === Url::stripScheme($entry['request']['url'])) {
+
+                if (isset($entry['response']) && isset($entry['response']['redirectURL']) && $entry['response']['redirectURL']) {
+                    $redirect = Url::stripScheme($entry['response']['redirectURL']);
+
+                    if (isset($map[$redirect])) {
+                        $result = $map[$redirect];
+                    }
+                }
+
+                $result = $entry;
+            }
         }
 
         return $result;

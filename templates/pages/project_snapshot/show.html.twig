@@ -39,10 +39,12 @@
         {% for page_snapshot in project_snapshot.snapshots %}
             <tr>
                 <td>
-                    <a target="_blank" class="cursor-zoom-in" href="{{ asset(page_snapshot.image) }}">
-                        <img width="200px" alt="{{ page_snapshot.timestamp|date(datetime_format()) }} snapshot"
-                             src="{{ asset(page_snapshot.image) }}">
-                    </a>
+                    {% if page_snapshot.image %}
+                        <a target="_blank" class="cursor-zoom-in" href="{{ asset(page_snapshot.image) }}">
+                            <img width="200px" alt="{{ page_snapshot.timestamp|date(datetime_format()) }} snapshot"
+                                 src="{{ asset(page_snapshot.image) }}">
+                        </a>
+                    {% else %}-{% endif %}
                 </td>
                 <td>
                     <a href="{{ path('page_snapshot_show', {'project': project_snapshot.project.id, 'page': page_snapshot.page.id, 'snapshot': page_snapshot.id}) }}">{{ page_snapshot.timestamp|date(datetime_format()) }}</a>

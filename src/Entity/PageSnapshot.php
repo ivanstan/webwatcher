@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Property\Headers;
-use App\Service\HttpArchive\HttpArchive;
+use App\Service\Har\Archive;
 use Doctrine\ORM\Mapping as ORM;
 use Mihaeu\HtmlFormatter;
 
@@ -95,7 +95,7 @@ class PageSnapshot extends AbstractSnapshot
     public function getDetails()
     {
         if ($this->details === null) {
-            $archive = HttpArchive::fromArray($this->getHar());
+            $archive = Archive::fromArray($this->getHar());
 
             $this->details =  $archive->getEntry($this->getPage()->getUrl());
         }

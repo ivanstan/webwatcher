@@ -154,7 +154,7 @@ class CompareController extends Controller
         return BinaryFileResponse::create($projectDir . '/public/' . $snapshot->getImage());
     }
 
-    private function setFlashMessages(AbstractSnapshot $snapshot1, AbstractSnapshot $snapshot2): void
+    private function setFlashMessages(AbstractSnapshot $snapshot1, ?AbstractSnapshot $snapshot2): void
     {
         if ($snapshot2 && $snapshot1->getId() === $snapshot2->getId()) {
             $this->addFlash(

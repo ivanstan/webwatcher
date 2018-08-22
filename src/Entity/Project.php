@@ -14,6 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Project
 {
+    public const DRIVER_TYPE_SELENIUM = 'selenium';
+    public const DRIVER_TYPE_GUZZLE = 'guzzle';
+
     use Id;
     use Name;
 
@@ -47,6 +50,13 @@ class Project
      * @ORM\OneToOne(targetEntity="App\Entity\Authenticator\AbstractAuthenticator", mappedBy="project", cascade={"persist"})
      */
     protected $authenticator;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="driver", type="string", nullable=false, options={"default":"selenium"}, columnDefinition="ENUM('selenium', 'guzzle')")
+     */
+    protected $driver;
 
     /**
      * @return AbstractResource[]|Collection
@@ -98,6 +108,16 @@ class Project
     public function setAuthenticator($authenticator): void
     {
         $this->authenticator = $authenticator;
+    }
+
+    public function getDriver(): string
+    {
+        return $this->driver ?? self::DRIVER_TYPE_SELENIUM;
+    }
+
+    public function setDriver(string $driver): void
+    {
+        $this->driver = $driver;
     }
 
     public function getBaseUrl()

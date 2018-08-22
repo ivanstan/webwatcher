@@ -8,16 +8,14 @@ use App\Entity\PageSnapshot;
 use App\Entity\Project;
 use App\Service\BrowserMob\Proxy;
 use App\Service\Factory\PageSnapshotFactory;
-use App\Service\HttpArchive\HttpArchive;
+use App\Service\Har\Archive;
 use App\Service\Selenium\Engine;
 use App\Service\Selenium\ScreenshotService;
 use App\Service\Selenium\SeleniumAuthenticatorService;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 
-class PageSnapshotService implements SnapshotServiceInterface
+class SeleniumSnapshotService implements SnapshotServiceInterface
 {
-    public const MAX_TIMEOUT_SEC = 10;
-
     private $factory;
 
     /** @var RemoteWebDriver */
@@ -86,7 +84,7 @@ class PageSnapshotService implements SnapshotServiceInterface
 
         $snapshot->setHar(json_decode($har, true));
 
-        $har = HttpArchive::fromString($har);
+        $har = Archive::fromString($har);
         $entry = $har->getEntry($page->getUrl());
 
         if ($entry) {

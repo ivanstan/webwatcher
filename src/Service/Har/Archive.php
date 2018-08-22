@@ -1,17 +1,43 @@
 <?php
 
-namespace App\Service\HttpArchive;
+namespace App\Service\Har;
 
-class HttpArchive
+class Archive
 {
     private $entries;
 
-    private $har;
+    private $log;
+
+    public static function new()
+    {
+        $instance = new self();
+        $instance->log = [];
+        $instance->log['pages'] = [];
+        $instance->log['comment'] = '';
+        $instance->log['creator'] = [];
+        $instance->log['creator']['name'] = '';
+        $instance->log['creator']['comment'] = '';
+        $instance->log['creator']['version'] = '';
+        $instance->log['entries'] = [];
+        $instance->log['version'] = '1.2';
+
+        return $instance;
+    }
+
+    public function addPage(Page $page)
+    {
+        $this->log['pages'][] = $page;
+    }
+
+    public function addEntry(Entry $entry)
+    {
+        $this->log['entries'][] = $entry;
+    }
 
     public static function fromString(string $har): self
     {
         $instance = new self();
-        $instance->setHar(json_decode($har, true));
+        $instance->setLog(json_decode($har, true));
 
         return $instance;
     }
@@ -19,21 +45,21 @@ class HttpArchive
     public static function fromArray(array $har): self
     {
         $instance = new self();
-        $instance->setHar($har);
+        $instance->setLog($har);
 
         return $instance;
     }
 
-    public function getHar() {
-        return $this->har;
+    public function getLog() {
+        return $this->log;
     }
 
-    public function setHar($har): void
+    public function setLog($log): void
     {
-        $this->har = $har;
+        $this->log = $log;
 
-        if (isset($har['log']) && isset($har['log']['entries'])) {
-            $this->entries = $har['log']['entries'];
+        if (isset($log['log']) && isset($log['log']['entries'])) {
+            $this->entries = $log['log']['entries'];
         }
     }
 
@@ -63,7 +89,7 @@ class HttpArchive
             $scheme = parse_url($url, PHP_URL_SCHEME) === 'http' ? 'https' : 'http';
             $parsed['scheme'] = $scheme;
 
-            return $this->getRedirectEntry(\GuzzleHttp\Psr7\Uri::fromParts($parsed));
+//            return $this->getRedirectEntry(\GuzzleHttp\Psr7\Uri::fromParts($parsed));
         }
 
         return $result;

@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
 use App\Service\Selenium\Engine;
 use App\Service\Snapshot\ProjectSnapshotService;
+use Facebook\WebDriver\Exception\WebDriverCurlException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,18 +51,22 @@ class ProjectSnapshotController extends Controller
     {
         try {
             $snapshot = $service->new($project);
+            $engine->quit();
+
+            return $this->redirectToRoute('project_snapshot_show', [
+                'project' => $project->getId(),
+                'snapshot' => $snapshot->getId(),
+            ]);
+
+        } catch (WebDriverCurlException $exception) {
+            $this->addFlash('danger', $exception->getMessage());
         } catch (\Exception $exception) {
             $this->addFlash('danger', $exception->getMessage());
             $engine->quit();
-
-            return $this->redirectToRoute('project_show', [
-                'project' => $project->getId(),
-            ]);
         }
 
-        return $this->redirectToRoute('project_snapshot_show', [
+        return $this->redirectToRoute('project_show', [
             'project' => $project->getId(),
-            'snapshot' => $snapshot->getId(),
         ]);
     }
 }

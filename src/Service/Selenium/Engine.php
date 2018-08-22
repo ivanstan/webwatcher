@@ -8,6 +8,7 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\WebDriverBrowserType;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
 use Facebook\WebDriver\WebDriverPlatform;
+use Psr\Log\LoggerInterface;
 
 class Engine
 {
@@ -19,11 +20,14 @@ class Engine
     private $browserMob;
     /** @var Proxy */
     private $proxy;
+    /** @var LoggerInterface */
+    private $logger;
 
-    public function __construct(string $seleniumHubUrl, BrowserMobApi $browserMob)
+    public function __construct(string $seleniumHubUrl, BrowserMobApi $browserMob, LoggerInterface $logger)
     {
         $this->seleniumHubUrl = $seleniumHubUrl;
         $this->browserMob = $browserMob;
+        $this->logger = $logger;
     }
 
     public function getDriver(): RemoteWebDriver
@@ -69,8 +73,12 @@ class Engine
     public function quit()
     {
         if ($this->driver) {
-            $this->driver->quit();
-            unset($this->driver);
+            try {
+                $this->driver->quit();
+                unset($this->driver);
+            } catch (\Exception $exception) {
+                $this->logger->error($exception->getMessage());
+            }
         }
     }
 

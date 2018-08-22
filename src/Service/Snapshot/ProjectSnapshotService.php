@@ -36,6 +36,7 @@ class ProjectSnapshotService
     {
         $projectSnapshot = $this->factory->create($project);
         $this->em->persist($projectSnapshot);
+        $this->em->flush();
 
         $service = $this->resourceSnapshotService->getPageService();
         $service->setup($project);
@@ -52,9 +53,9 @@ class ProjectSnapshotService
             } catch (\Exception $exception) {
                 continue;
             }
-
-            $this->em->flush();
         }
+
+        $this->em->flush();
 
         return $projectSnapshot;
     }

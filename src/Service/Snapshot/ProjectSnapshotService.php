@@ -41,12 +41,18 @@ class ProjectSnapshotService
         $service->setup($project);
 
         foreach ($project->getPages() as $resource) {
-            $snapshot = $service->snapshot($resource);
 
-            $snapshot->setTimestamp($projectSnapshot->getTimestamp());
-            $snapshot->setProjectSnapshot($projectSnapshot);
+            try {
+                $snapshot = $service->snapshot($resource);
 
-            $this->em->persist($snapshot);
+                $snapshot->setTimestamp($projectSnapshot->getTimestamp());
+                $snapshot->setProjectSnapshot($projectSnapshot);
+
+                $this->em->persist($snapshot);
+            } catch (\Exception $exception) {
+                continue;
+            }
+
             $this->em->flush();
         }
 

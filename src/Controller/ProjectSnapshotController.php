@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Project;
 use App\Entity\ProjectSnapshot;
+use App\Service\Selenium\Engine;
 use App\Service\Snapshot\ProjectSnapshotService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -46,20 +46,13 @@ class ProjectSnapshotController extends Controller
      * @Route("/new", name="project_snapshot_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
-    public function new(Project $project, ProjectSnapshotService $service)
+    public function new(Project $project, ProjectSnapshotService $service, Engine $engine)
     {
         try {
             $snapshot = $service->new($project);
         } catch (\Exception $exception) {
-            /** @var AbstractAuthenticator $authenticator */
-            $authenticator = $project->getAuthenticator();
-
-            $url = $this->generateUrl('authenticator_edit', [
-                'project' => $project->getId(),
-                'id' => $authenticator->getId()
-            ]);
-            $message = sprintf("Error executing <a href='$url'>authenticator</a>. {$exception->getMessage()}");
-            $this->addFlash('danger', $message);
+            $this->addFlash('danger', $exception->getMessage());
+            $engine->quit();
 
             return $this->redirectToRoute('project_show', [
                 'project' => $project->getId(),

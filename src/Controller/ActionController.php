@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\AbstractResource;
 use App\Entity\Action\AbstractAction;
 use App\Entity\Action\ActionGroup;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -40,5 +41,23 @@ class ActionController extends Controller
                 'action' => $action->getId(),
             ]);
         }
+    }
+
+    /**
+     * @Route("/{id}", name="action_delete", methods="DELETE")
+     */
+    public function delete(Request $request, AbstractAction $action): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $action->getId(), $request->request->get('_token'))) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($action);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('page_show', [
+            'project' => $action->getGroup()->getResource()->getProject()->getId(),
+            'page' => $action->getGroup()->getResource()->getId(),
+            '_fragment' => 'actions'
+        ]);
     }
 }

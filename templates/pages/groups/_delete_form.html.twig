@@ -1,0 +1,17 @@
+{% set path = path('group_delete', {
+    'project': group.resource.project.id,
+    'resource': group.resource.id,
+    'group': group.id,
+}) %}
+
+<form method="post" class="float-right mt-2" action="{{ path }}"
+      onsubmit="return confirm('Are you sure you want to delete this item?')">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ group.id) }}">
+    <button data-toggle="tooltip"
+            data-placement="left"
+            title="Delete action"
+            class="btn btn-danger">
+        <i class="fa fa-trash-alt"></i>
+    </button>
+</form>

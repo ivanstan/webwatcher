@@ -33,10 +33,20 @@ class TestRunner
                 $passed = $assert->getCode() === $snapshot->getStatus();
             }
 
+            $comment = null;
+            if (!$passed) {
+                $comment = \sprintf(
+                    'Failed asserting HTTP status code %s equals expected %s',
+                    $snapshot->getStatus(),
+                    $assert->getCode()
+                );
+            }
+
             $assertResult = new AssertResult();
             $assertResult->setAssert($assert);
             $assertResult->setResult($result);
             $assertResult->setPassed($passed);
+            $assertResult->setComment($comment);
 
             $this->manager->persist($assertResult);
         }

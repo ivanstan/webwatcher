@@ -3,6 +3,7 @@
 namespace App\Entity\Action;
 
 use App\Entity\Assert\AbstractAssert;
+use App\Entity\TestResult;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,9 +18,16 @@ class TestAction extends AbstractAction
     /**
      * @var AbstractAssert[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Assert\AbstractAssert", mappedBy="test", cascade={"persist"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="App\Entity\Assert\AbstractAssert", mappedBy="test", cascade={"persist"})
      */
     protected $asserts;
+
+    /**
+     * @var TestResult[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\TestResult", mappedBy="test", cascade={"persist"}, fetch="EAGER")
+     */
+    protected $results;
 
     /**
      * @return AbstractAssert[]|Collection
@@ -32,13 +40,24 @@ class TestAction extends AbstractAction
     /**
      * @param AbstractAssert[]|Collection $asserts
      */
-    public function setAsserts($asserts): void
+    public function setAsserts(array $asserts): void
     {
         $this->asserts = $asserts;
     }
 
-    public function __toString(): string
+    /**
+     * @return TestResult[]|Collection
+     */
+    public function getResults()
     {
-        return $this->getId();
+        return $this->results;
+    }
+
+    /**
+     * @param TestResult[]|Collection $results
+     */
+    public function setResults(array $results): void
+    {
+        $this->results = $results;
     }
 }

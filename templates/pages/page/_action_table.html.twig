@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mb-3 mt-3">
     <div class="col-10">
         <h2>Groups</h2>
     </div>
@@ -13,13 +13,17 @@
     </div>
 </div>
 
-<table class="table">
-
+<table class="table mb-4">
     {% for id, group in page.actions %}
-        <tr>
-            <th>
-                <a href="{{ path('action_group_edit', {'project': page.project.id, 'resource': page.id, 'group': group.id}) }}">{{ group.name }}</a>
-
+        <tr class="table-secondary">
+            <td>
+                <div class="row">
+                    <div class="col-10">
+                        <p class="mb-0 mt-1">
+                            <a href="{{ path('action_group_edit', {'project': page.project.id, 'resource': page.id, 'group': group.id}) }}">{{ group.name }}</a>
+                        </p>
+                    </div>
+                    <div class="col-2">
                 <div class="dropdown float-right"
                      data-toggle="tooltip"
                      data-placement="left"
@@ -36,35 +40,57 @@
                         {% endfor %}
                     </div>
                 </div>
-            </th>
+                    </div>
+                </div>
+            </td>
         </tr>
 
         <tr>
             <td class="p-0 bt-0">
-                <table class="table">
-                    {% for action in group.actions %}
-                        <tr>
-                            <td width="100px"></td>
-                            <td>
-                                {{ action.id }}
-
-                                {% if action is instanceof('\\App\\Entity\\Action\\TestAction') %}
-                                    Test Action
-
-                                    <a href="{{ path('test_edit', {
-                                        'project': page.project.id,
-                                        'resource': page.id,
-                                        'group': group.id,
-                                        'action': action.id
-                                    }) }}">Edit</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-
-                    {% endfor %}
-
-                </table>
-
+                {% for action in group.actions %}
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-11">
+                            {% if action is instanceof('\\App\\Entity\\Action\\TestAction') %}
+                                <table class="table mt-3 mb-0">
+                                    <thead>
+                                    <tr>
+                                        <td colspan="3">
+                                            <a href="{{ path('test_edit', {
+                                                'project': page.project.id,
+                                                'resource': page.id,
+                                                'group': group.id,
+                                                'action': action.id
+                                            }) }}"><span>Test suite</span></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Snapshot</td>
+                                        <td colspan="2">Result</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for result in action.results %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ path('page_snapshot_show', {'project': result.snapshot.page.project.id, 'page': result.snapshot.page.id, 'snapshot': result.snapshot.id}) }}">{{ result.snapshot.timestamp|date(datetime_format()) }}</a>
+                                            </td>
+                                            <td>
+                                                -
+                                            </td>
+                                            <td>
+                                                <div class="float-right">
+                                                    {{ include('components/passed-indicator.html.twig', {'passed': result.passed}) }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
             </td>
         </tr>
     {% endfor %}

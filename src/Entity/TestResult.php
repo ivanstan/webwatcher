@@ -21,7 +21,7 @@ class TestResult
     /**
      * @var TestAction
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Action\TestAction", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Action\TestAction", inversedBy="results", cascade={"persist"})
      * @ORM\JoinColumn(name="test_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $test;
@@ -67,12 +67,12 @@ class TestResult
         $this->snapshot = $snapshot;
     }
 
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
 
-    public function setComment(string $comment): void
+    public function setComment(?string $comment): void
     {
         $this->comment = $comment;
     }
@@ -91,5 +91,16 @@ class TestResult
     public function setAsserts($asserts): void
     {
         $this->asserts = $asserts;
+    }
+
+    public function hasPassed(): bool
+    {
+        foreach ($this->getAsserts() as $assert) {
+            if ($assert->hasPassed() === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

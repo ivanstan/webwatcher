@@ -2,14 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Action\AbstractAction;
-use App\Entity\Action\ActionGroup;
+use App\Entity\AbstractResource;
 use App\Entity\Action\TestAction;
 use App\Entity\Assert\AbstractAssert;
 use App\Entity\Assert\HTTP\AssertHttpCode;
 use App\Entity\Page;
 use App\Form\Assert\AssertSelectType;
-use App\Service\System\FormFactory;
+use App\Form\FormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,13 +43,9 @@ class TestController extends Controller
     /**
      * @Route("/action/{action}", name="test_edit", methods="GET|POST")
      */
-    public function list(
-        Request $request,
-        Page $page,
-        TestAction $action,
-        \App\Form\FormFactory $factory
-    ): Response {
-        $form = $this->createForm(AssertSelectType::class, $page);
+    public function list(Request $request, AbstractResource $resource, TestAction $action, FormFactory $factory): Response
+    {
+        $form = $this->createForm(AssertSelectType::class, $resource);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -107,7 +102,7 @@ class TestController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="action_test_action_delete", methods="DELETE")
+     * @Route("/{id}", name="test_delete", methods="DELETE")
      */
     public function delete(Request $request, TestAction $action): Response
     {

@@ -53,8 +53,10 @@
             <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
             <td>{% include 'components/response-code.html.twig' with {code: snapshot.status} only %}</td>
             <td>
-                <a href="{{ path('page_snapshot_run', {'project': snapshot.page.project.id, 'page': snapshot.page.id, 'snapshot': snapshot.id}) }}"><i
-                            class="fas fa-play"></i></a>
+                <a data-toggle="tooltip"
+                   data-placement="left"
+                   title="Execute actions"
+                   href="{{ path('page_snapshot_run', {'project': snapshot.page.project.id, 'page': snapshot.page.id, 'snapshot': snapshot.id}) }}"><i class="fas fa-play"></i></a>
             </td>
         </tr>
     {% else %}

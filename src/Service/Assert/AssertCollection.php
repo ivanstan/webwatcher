@@ -14,7 +14,7 @@ class AssertCollection
 
         switch (get_class($resource)) {
             case Page::class:
-                $asserts['Assert http code'] = AssertHttpCode::class;
+                $asserts['Assert HTTP status'] = AssertHttpCode::class;
         }
 
         return $asserts;

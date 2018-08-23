@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\AbstractResource;
-use App\Entity\Action\AbstractAction;
 use App\Entity\Action\ActionGroup;
 use App\Form\FormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -30,9 +30,10 @@ class ActionGroupsController extends Controller
             $this->getDoctrine()->getManager()->persist($group);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('action_group_index', [
+            return $this->redirectToRoute('page_show', [
                 'project' => $resource->getProject()->getId(),
-                'resource' => $resource->getId(),
+                'page' => $resource->getId(),
+                '_fragment' => 'actions',
             ]);
         }
 
@@ -44,7 +45,7 @@ class ActionGroupsController extends Controller
     /**
      * @Route("/{group}/edit", name="action_group_edit", methods="GET|POST")
      */
-    public function edit(Request $request, AbstractResource $resource, ActionGroup $group, FormFactory $factory)
+    public function edit(Request $request, ActionGroup $group, FormFactory $factory)
     {
         $form = $factory->create($group);
         $form->handleRequest($request);
@@ -53,14 +54,34 @@ class ActionGroupsController extends Controller
             $this->getDoctrine()->getManager()->persist($group);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('action_group_index', [
-                'project' => $resource->getProject()->getId(),
-                'resource' => $resource->getId(),
+            return $this->redirectToRoute('page_show', [
+                'project' => $group->getResource()->getProject()->getId(),
+                'page' => $group->getResource()->getId(),
+                '_fragment' => 'actions',
             ]);
         }
 
         return $this->render('pages/groups/edit.html.twig', [
             'form' => $form->createView(),
+            'group' => $group
+        ]);
+    }
+
+    /**
+     * @Route("/", name="group_delete", methods="DELETE")
+     */
+    public function delete(Request $request, ActionGroup $group): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $group->getId(), $request->request->get('_token'))) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($group);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('page_show', [
+            'project' => $group->getResource()->getProject()->getId(),
+            'page' => $group->getResource()->getId(),
+            '_fragment' => 'actions'
         ]);
     }
 }

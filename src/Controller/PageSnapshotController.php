@@ -6,6 +6,8 @@ use App\Entity\AbstractSnapshot;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Service\Snapshot\PageSnapshotService;
+use Facebook\WebDriver\Exception\UnknownServerException;
+use Facebook\WebDriver\Exception\WebDriverCurlException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,8 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PageSnapshotController extends Controller
 {
-    public const MAX_KEYWORDS = 10;
-
     /**
      * @Route("/{snapshot}", name="page_snapshot_show", methods="GET", requirements={"snapshot"="\d+"})
      */
@@ -36,28 +36,36 @@ class PageSnapshotController extends Controller
     public function new(Page $page, PageSnapshotService $service)
     {
         /** @var AbstractSnapshot $snapshot */
-        $snapshot = $service->setup($page->getProject())->snapshot($page);
-
         $em = $this->getDoctrine()->getManager();
 
-        $em->persist($snapshot);
+        $snapshot = $service->setup($page->getProject());
 
         try {
+            $service->snapshot($page);
+            $em->persist($snapshot);
+
             $em->flush();
+
+            return $this->redirectToRoute('page_snapshot_show', [
+                'project' => $page->getProject()->getId(),
+                'page' => $page->getId(),
+                'snapshot' => $snapshot->getId()
+            ]);
+
+        } catch (UnknownServerException $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+            $service->getDriver()->quit();
+        } catch (WebDriverCurlException $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+            $service->getDriver()->quit();
         } catch (\Exception $exception) {
             $this->addFlash('danger', $exception->getMessage());
             $service->getDriver()->quit();
-
-            return $this->redirectToRoute('page_show', [
-                'project' => $page->getProject()->getId(),
-                'page' => $page->getId(),
-            ]);
         }
 
-        return $this->redirectToRoute('page_snapshot_show', [
+        return $this->redirectToRoute('page_show', [
             'project' => $page->getProject()->getId(),
             'page' => $page->getId(),
-            'snapshot' => $snapshot->getId()
         ]);
     }
 

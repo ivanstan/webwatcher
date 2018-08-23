@@ -1,11 +1,11 @@
 {% extends 'content.html.twig' %}
 
-{% block title %}New Project | {{ parent() }}{% endblock %}
+{% block title %}Import Pages | {{ parent() }}{% endblock %}
 
 {% block content %}
         <div class="row">
             <div class="col-10">
-                <h1>Import</h1>
+                <h1>Import Pages</h1>
             </div>
         </div>
 
@@ -15,8 +15,11 @@
 
     <form action="{{ path('project_page_import', {'project': project.id}) }}" method="get">
         <div class="row">
-            <div class="col-11">
-                <div class="form-group">
+            <div class="col-4">
+                <input class="form-control" type="text" name="base-url" value="{{ project.baseUrl }}" disabled>
+            </div>
+            <div class="col-8">
+                <div class="input-group">
                     <input class="form-control" type="text" name="url" list="pages" value="{{ url }}"
                            autocomplete="off">
                     <datalist id="pages">
@@ -24,16 +27,18 @@
                         <option value="{{ page }}">
                             {% endfor %}
                     </datalist>
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
+                    </div>
                 </div>
-            </div>
-            <div class="col-1">
-                <input type="submit" class="btn btn-primary" value="Submit">
             </div>
         </div>
     </form>
 
     <form method="post" action="{{ path(app.request.attributes.get('_route'), {'project': project.id}) }}">
-        <button class="btn btn-primary mt-3 mb-2" type="submit">Import</button>
+        <div>
+            <button class="btn btn-primary mt-3 mb-3 float-right" type="submit">Import</button>
+        </div>
         <table class="table">
             <thead>
             <tr>

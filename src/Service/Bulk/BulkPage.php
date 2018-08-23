@@ -13,6 +13,7 @@ class BulkPage
     public const SITEMAP_NAME = 'sitemap.xml';
 
     private $cookies;
+    private $hostname;
 
     public function setCookies($cookies)
     {
@@ -21,6 +22,7 @@ class BulkPage
 
     public function extract(string $url): array
     {
+        $this->hostname = parse_url($url, PHP_URL_HOST);
         $client = new Client(['verify' => false]);
 
         $params = [];
@@ -57,16 +59,39 @@ class BulkPage
 
         if ($mime === 'text/html') {
             foreach ($crawler->filter('a') as $url) {
-                $result[] = $url->getAttribute('href');
+                if ($this->includeUrl($url->getAttribute('href'))) {
+                    $result[] = $url->getAttribute('href');
+                }
             }
         }
 
         if ($mime === 'application/xml' || $mime === 'text/xml') {
             foreach ($crawler->filter('url loc') as $url) {
-                $result[] = $url->textContent;
+                if ($this->includeUrl($url->textContent)) {
+                    $result[] = $url->textContent;
+                }
             }
         }
 
         return array_filter(array_unique($result));
+    }
+
+    private function includeUrl($url): bool
+    {
+        $parse = parse_url($url);
+
+        if (isset($parse['scheme']) && ($parse['scheme'] !== 'http' && $parse['scheme'] !== 'https')) {
+            return false;
+        }
+
+        if (isset($parse['host']) && $parse['host'] !== $this->hostname) {
+            return false;
+        }
+
+        if (isset($parse['fragment']) && !isset($parse['path'])) {
+            return false;
+        }
+
+        return true;
     }
 }

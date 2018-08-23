@@ -16,20 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ActionGroupsController extends Controller
 {
     /**
-     * @Route("/", name="action_group_index", methods="GET")
-     */
-    public function index(AbstractResource $resource)
-    {
-        $map = $this->getDoctrine()->getManager()->getClassMetadata(AbstractAction::class)->discriminatorMap;
-
-        return $this->render('pages/groups/list.html.twig', [
-            'groups' => $resource->getActions(),
-            'resource' => $resource,
-            'actions' => $map
-        ]);
-    }
-
-    /**
      * @Route("/new", name="action_group_new", methods="GET|POST")
      */
     public function new(Request $request, AbstractResource $resource, FormFactory $factory)
@@ -56,7 +42,7 @@ class ActionGroupsController extends Controller
     }
 
     /**
-     * @Route("/edit/{group}", name="action_group_edit", methods="GET|POST")
+     * @Route("/{group}/edit", name="action_group_edit", methods="GET|POST")
      */
     public function edit(Request $request, AbstractResource $resource, ActionGroup $group, FormFactory $factory)
     {

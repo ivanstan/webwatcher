@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ActionController extends Controller
 {
     /**
-     * @Route("/new/{type}", name="action_new", methods="GET|POST")
+     * @Route("/{type}/new", name="action_new", methods="GET|POST")
      */
     public function new(ActionGroup $group, string $type)
     {

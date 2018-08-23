@@ -10,7 +10,12 @@ require('./pie-chart');
 $(document).ready(function () {
   $('[data-toggle="popover"]').popover();
   $('[data-toggle="tooltip"]').tooltip();
-  // $('.data-table').DataTable();
+
+  let url = window.location.href;
+  if (url.indexOf("#") > 0){
+    let activeTab = url.substring(url.indexOf("#") + 1);
+    $('.nav[role="tablist"] a[href="#'+activeTab+'"]').click();
+  }
 
   $('.response-time-chart').each((index, element) => {
     let $element = $(element);

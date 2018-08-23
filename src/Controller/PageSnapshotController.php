@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\AbstractSnapshot;
+use App\Entity\Action\TestAction;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Service\Snapshot\PageSnapshotService;
-use Facebook\WebDriver\Exception\UnknownServerException;
-use Facebook\WebDriver\Exception\WebDriverCurlException;
+use App\Service\TestRunner;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +27,21 @@ class PageSnapshotController extends Controller
         return $this->render('pages/page_snapshot/show.html.twig', [
             'snapshot' => $snapshot,
         ]);
+    }
+
+    /**
+     * @Route("/{snapshot}/run", name="page_snapshot_run", methods="GET", requirements={"snapshot"="\d+"})
+     */
+    public function run(PageSnapshot $snapshot, TestRunner $runner): Response
+    {
+        foreach ($snapshot->getPage()->getActions() as $group) {
+            foreach ($group->getActions() as $action) {
+
+                if ($action instanceof TestAction) {
+                    $runner->execute($snapshot, $action);
+                }
+            }
+        }
     }
 
     /**
@@ -51,13 +66,6 @@ class PageSnapshotController extends Controller
                 'page' => $page->getId(),
                 'snapshot' => $snapshot->getId()
             ]);
-
-        } catch (UnknownServerException $exception) {
-            $this->addFlash('danger', $exception->getMessage());
-            $service->getDriver()->quit();
-        } catch (WebDriverCurlException $exception) {
-            $this->addFlash('danger', $exception->getMessage());
-            $service->getDriver()->quit();
         } catch (\Exception $exception) {
             $this->addFlash('danger', $exception->getMessage());
             $service->getDriver()->quit();

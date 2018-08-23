@@ -1,0 +1,66 @@
+<div class="row mb-3 mt-3">
+    <div class="col-10">
+        <h2>Snapshots</h2>
+    </div>
+    <div class="col-2">
+        <a data-toggle="tooltip"
+           data-placement="bottom"
+           title="Create page snapshot"
+           class="btn btn-primary float-right mt-1 mr-1"
+           href="{{ path('snapshot_page_new', {'project': page.project.id, 'page': page.id}) }}">
+            <i class="fa fa-camera"></i>
+        </a>
+    </div>
+</div>
+
+<div class="compare-selector compare-page-snapshots-selector mb-3"
+     data-path="{{ path('compare_page_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
+    <select class="custom-select" name="snapshot1">
+        {% set newest = page.snapshots[0].timestamp %}
+        {% for index, snapshot in page.snapshots %}
+            <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date(datetime_format()) }}
+                - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
+        {% endfor %}
+    </select>
+
+    <select class="custom-select" name="snapshot2">
+        {% set newest = page.snapshots[0].timestamp %}
+        {% for index, snapshot in page.snapshots %}
+            <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date(datetime_format()) }}
+                - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
+        {% endfor %}
+    </select>
+
+    <button class="btn btn-primary" type="button">Compare</button>
+</div>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Timestamp</th>
+        <th>Delta Time</th>
+        <th>HTTP Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set newest = page.snapshots[0].timestamp %}
+    {% for index, snapshot in page.snapshots %}
+        <tr>
+            <td>
+                <a href="{{ path('page_snapshot_show', {'project': page.project.id, 'page': page.id, 'snapshot': snapshot.id}) }}">{{ snapshot.timestamp|date(datetime_format()) }}</a>
+            </td>
+            <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
+            <td>{% include 'components/response-code.html.twig' with {code: snapshot.status} only %}</td>
+            <td>
+                <a href="{{ path('page_snapshot_run', {'project': snapshot.page.project.id, 'page': snapshot.page.id, 'snapshot': snapshot.id}) }}"><i
+                            class="fas fa-play"></i></a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3" class="text-center">No page screenshots here.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

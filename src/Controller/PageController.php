@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Action\AbstractAction;
 use App\Entity\Page;
 use App\Entity\Project;
 use App\Form\PageType;
@@ -55,7 +56,10 @@ class PageController extends Controller
      */
     public function show(Page $page): Response
     {
-        return $this->render('pages/page/show.html.twig', ['page' => $page]);
+        return $this->render('pages/page/show.html.twig', [
+            'page' => $page,
+            'actions' => $this->getDoctrine()->getManager()->getClassMetadata(AbstractAction::class)->discriminatorMap,
+        ]);
     }
 
     /**

@@ -16,15 +16,6 @@
                href="{{ path('project_edit', {'project': project.id}) }}">
                 <i class="fa fa-edit"></i>
             </a>
-            {% if project.pages|length > 0 %}
-                <a data-toggle="tooltip"
-                   data-placement="bottom"
-                   title="Create project snapshot"
-                   class="btn btn-primary mt-2 mr-2 float-right"
-                   href="{{ path('project_snapshot_new', {"project": project.id}) }}">
-                    <i class="fa fa-camera"></i>
-                </a>
-            {% endif %}
         </div>
     </div>
 
@@ -58,7 +49,10 @@
                     <h2>Pages</h2>
                 </div>
                 <div class="col-2">
-                    <div class="btn-group float-right">
+                    <div data-toggle="tooltip"
+                         data-placement="left"
+                         title="Create page resource"
+                         class="btn-group float-right">
                         <button type="button" class="btn btn-primary"
                                 onclick="location.href='{{ path('page_new', {'project': project.id}) }}';">
                             <i class="fa fa-plus-square"></i>
@@ -75,7 +69,6 @@
                                href="{{ path('project_page_import', {'project': project.id}) }}">Import</a>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -134,8 +127,22 @@
         </div>
         <div class="tab-pane fade" id="snapshots" role="tab" aria-labelledby="nav-profile-tab">
             {% if project.snapshots is not empty %}
-                <h2 class="mb-3 mt-3">Snapshots</h2>
-
+                <div class="row mb-3 mt-3">
+                    <div class="col-10">
+                        <h2>Snapshots</h2>
+                    </div>
+                    <div class="col-2">
+                        {% if project.pages|length > 0 %}
+                            <a data-toggle="tooltip"
+                               data-placement="left"
+                               title="Create project snapshot"
+                               class="btn btn-primary mt-1 mr-1 float-right"
+                               href="{{ path('project_snapshot_new', {"project": project.id}) }}">
+                                <i class="fa fa-camera"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="compare-selector compare-project-snapshots-selector mb-3"
                      data-path="{{ path('compare_project_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
                     <select class="custom-select" name="snapshot1">

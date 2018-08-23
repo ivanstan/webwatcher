@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Property\Id;
 use App\Property\Timestamp;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Collection;
 
 /**
  * @ORM\Entity
@@ -37,6 +38,14 @@ abstract class AbstractSnapshot
      */
     protected $snapshot;
 
+    /**
+     * @var TestResult[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\TestResult", mappedBy="snapshot", cascade={"persist"})
+     * @ORM\OrderBy({"timestamp" = "DESC"})
+     */
+    protected $results;
+
     public function getPage(): ?Page
     {
         return $this->page;
@@ -55,5 +64,21 @@ abstract class AbstractSnapshot
     public function setProjectSnapshot(?ProjectSnapshot $snapshot): void
     {
         $this->snapshot = $snapshot;
+    }
+
+    /**
+     * @return TestResult[]|Collection
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    /**
+     * @param TestResult[]|Collection $results
+     */
+    public function setResults($results): void
+    {
+        $this->results = $results;
     }
 }

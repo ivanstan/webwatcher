@@ -15,7 +15,7 @@
 
 <table class="table mb-4">
     {% for id, group in page.actions %}
-        <tr class="table-secondary">
+        <tr class="bt-1 bb-1">
             <td>
                 <div class="row">
                     <div class="col-10">
@@ -55,7 +55,7 @@
                                 <table class="table mt-3 mb-0">
                                     <thead>
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="4">
                                             <a href="{{ path('test_edit', {
                                                 'project': page.project.id,
                                                 'resource': page.id,
@@ -66,7 +66,8 @@
                                     </tr>
                                     <tr>
                                         <td>Snapshot</td>
-                                        <td colspan="2">Result</td>
+                                        <td>Result</td>
+                                        <td colspan="2">Run on</td>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -77,6 +78,9 @@
                                             </td>
                                             <td>
                                                 -
+                                            </td>
+                                            <td>
+                                                {{ result.timestamp|date(datetime_format()) }}
                                             </td>
                                             <td>
                                                 <div class="float-right">

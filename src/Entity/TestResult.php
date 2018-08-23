@@ -29,7 +29,7 @@ class TestResult
     /**
      * @var AbstractSnapshot
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\AbstractSnapshot", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\AbstractSnapshot", inversedBy="results", cascade={"persist"})
      * @ORM\JoinColumn(name="snapshot_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $snapshot;

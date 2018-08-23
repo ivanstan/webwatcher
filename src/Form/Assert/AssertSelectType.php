@@ -13,6 +13,7 @@ class AssertSelectType extends AbstractType
     {
         $builder->add('type', ChoiceType::class, [
             'mapped' => false,
+            'label' => 'Assert type',
             'choices' => AssertCollection::get($options['data'])
         ]);
     }

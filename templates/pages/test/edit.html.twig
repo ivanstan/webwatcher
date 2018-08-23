@@ -1,19 +1,31 @@
 {% extends 'content.html.twig' %}
 
-{% block title %}Edit TestAction{% endblock %}
+{% block title %}Edit Test Suite | {{ parent() }}{% endblock %}
 
 {% block content %}
-    <h1>Edit TestAction</h1>
+    <h1>Edit Test Suite</h1>
 
-    {{ include('pages/test/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ breadcrumbs(action)|raw }}
+
+    {{ include('pages/test/_form.html.twig') }}
 
     {% if forms is defined %}
 
-        {% for form in forms %}
+        <hr>
 
-            {{ include('pages/test/_form.html.twig', {'button_label': 'Update'}) }}
+        <div>
 
-        {% endfor %}
+            {% for form in forms %}
+
+                {% if form.vars.name == 'assert_http_code' %}
+
+                    {{ include('pages/test/asserts/http_code.html.twig', {'button_label': 'Update'}) }}
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
 
     {% endif %}
 

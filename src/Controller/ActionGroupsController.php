@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/project/{project}/page/{resource}/groups")
+ * @Route("/project/{project}/resource/{resource}/groups")
  */
 class ActionGroupsController extends Controller
 {
@@ -50,7 +50,7 @@ class ActionGroupsController extends Controller
             ]);
         }
 
-        return $this->render('pages/groups/edit.html.twig', [
+        return $this->render('pages/groups/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }

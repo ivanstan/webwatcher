@@ -1,6 +1,6 @@
 {% extends 'content.html.twig' %}
 
-{% block title %}Edit TestAction{% endblock %}
+{% block title %}Groups | {{ parent() }}{% endblock %}
 
 {% set project = resource.project %}
 
@@ -15,26 +15,30 @@
                title="New Group"
                class="btn btn-primary mt-2 mr-2 float-right "
                href="{{ path('action_group_new', {'resource': resource.id, 'project': project.id}) }}">
-                <i class="fa fa-plus"></i>
+                <i class="fa fa-plus-square"></i>
             </a>
         </div>
     </div>
 
+    {{ breadcrumbs(resource)|raw }}
+
     <table class="table">
 
-        {% for group in groups %}
-
+        {% for id, group in groups %}
             <tr>
                 <th>
                     <a href="{{ path('action_group_edit', {'project': project.id, 'resource': resource.id, 'group': group.id}) }}">{{ group.name }}</a>
 
-                    <div class="dropdown float-right">
+                    <div class="dropdown float-right"
+                         data-toggle="tooltip"
+                         data-placement="left"
+                         title="Add Action">
                         <button class="btn btn-secondary dropdown-toggle"
-                                type="button" id="dropdownMenu1" data-toggle="dropdown"
+                                type="button" id="add-action-{{ id }}" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-plus"></i>
+                            <i class="fa fa-plus-square"></i>
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="add-action-{{ id }}">
                             {% for type, class in actions %}
                                 <a class="dropdown-item"
                                    href="{{ path('action_new', {'project': project.id, 'resource': resource.id, 'group': group.id, 'type': type}) }}">{{ type|capitalize }}</a>
@@ -46,11 +50,8 @@
 
             <tr>
                 <td class="p-0 bt-0">
-
                     <table class="table">
-
                         {% for action in group.actions %}
-
                             <tr>
                                 <td width="100px"></td>
                                 <td>
@@ -75,11 +76,7 @@
 
                 </td>
             </tr>
-
-
-
         {% endfor %}
-
     </table>
 
     {#{{ include('pages/test/_delete_form.html.twig') }}#}

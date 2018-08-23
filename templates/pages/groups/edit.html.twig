@@ -3,7 +3,9 @@
 {% block title %}Edit TestAction{% endblock %}
 
 {% block content %}
-    <h1>Edit Groups</h1>
+    <h1>Edit Group</h1>
+
+    {{ breadcrumbs() }}
 
     {{ include('pages/groups/_form.html.twig') }}
 {% endblock %}

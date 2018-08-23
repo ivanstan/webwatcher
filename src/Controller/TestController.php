@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Action\AbstractAction;
 use App\Entity\Action\ActionGroup;
 use App\Entity\Action\TestAction;
 use App\Entity\Assert\AbstractAssert;
+use App\Entity\Assert\HTTP\AssertHttpCode;
 use App\Entity\Page;
 use App\Form\Assert\AssertSelectType;
 use App\Service\System\FormFactory;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/project/{project}/page/{resource}/group/{group}")
+ * @Route("/project/{project}/resource/{resource}/group/{group}")
  */
 class TestController extends Controller
 {
@@ -24,23 +25,31 @@ class TestController extends Controller
     /**
      * @Route("/new/{type}", name="test_new_assert", methods="GET|POST")
      */
-    public function newAssert(Request $request, Page $page, string $type): Response
+    public function new(): Response
     {
-        $test = new TestAction();
+        $action = new TestAction();
 
         $em = $this->getDoctrine()->getManager();
-        $em->persist($test);
+        $em->persist($action);
         $em->flush();
 
-
-        return $this->redirectToRoute('action_test_action_index');
+        return $this->redirectToRoute('test_edit', [
+            'project' => $action->getGroup()->getResource()->getProject()->getId(),
+            'resource' => $action->getGroup()->getResource()->getId(),
+            'group' => $action->getGroup()->getId(),
+            'action' => $action->getId(),
+        ]);
     }
 
     /**
-     * @Route("/{action}", name="test_edit", methods="GET|POST")
+     * @Route("/action/{action}", name="test_edit", methods="GET|POST")
      */
-    public function list(Request $request, Page $page, TestAction $test, \App\Form\FormFactory $factory): Response
-    {
+    public function list(
+        Request $request,
+        Page $page,
+        TestAction $action,
+        \App\Form\FormFactory $factory
+    ): Response {
         $form = $this->createForm(AssertSelectType::class, $page);
         $form->handleRequest($request);
 
@@ -53,22 +62,26 @@ class TestController extends Controller
                 throw new NotFoundHttpException(\sprintf('Invalid assert class: ' . $type));
             }
 
-            $assert->setCode(200);
-            $assert->setTest($test);
-            $this->getDoctrine()->getManager()->persist($assert);
+            if ($assert instanceof AssertHttpCode) {
+                $assert->setCode(200);
+            }
 
+            $assert->setTest($action);
+            $this->getDoctrine()->getManager()->persist($assert);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('action_test_action_edit', [
-                'project' => $page->getProject()->getId(),
-                'page' => $page->getId(),
+            return $this->redirectToRoute('test_edit', [
+                'project' => $action->getGroup()->getResource()->getProject()->getId(),
+                'resource' => $action->getGroup()->getResource()->getId(),
+                'group' => $action->getGroup()->getId(),
+                'action' => $action->getId(),
             ]);
         }
 
         $forms = [];
         $formViews = [];
 
-        foreach ($test->getAsserts() as $key => $assert) {
+        foreach ($action->getAsserts() as $key => $assert) {
             $forms[$key] = $factory->create($assert);
             $forms[$key]->handleRequest($request);
 
@@ -77,35 +90,38 @@ class TestController extends Controller
             if ($forms[$key]->isSubmitted() && $forms[$key]->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('action_test_action_edit', [
-                    'project' => $page->getProject()->getId(),
-                    'page' => $page->getId(),
+                return $this->redirectToRoute('test_edit', [
+                    'project' => $action->getGroup()->getResource()->getProject()->getId(),
+                    'resource' => $action->getGroup()->getResource()->getId(),
+                    'group' => $action->getGroup()->getId(),
+                    'action' => $action->getId(),
                 ]);
             }
         }
 
         return $this->render('pages/test/edit.html.twig', [
-//            'test_action' => $testAction,
             'forms' => $formViews,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'action' => $action,
         ]);
     }
 
     /**
-     * @Route("/", name="action_test_action_edit", methods="GET|POST")
-     */
-
-    /**
      * @Route("/{id}", name="action_test_action_delete", methods="DELETE")
      */
-    public function delete(Request $request, TestAction $testAction): Response
+    public function delete(Request $request, TestAction $action): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $testAction->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $action->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($testAction);
+            $em->remove($action);
             $em->flush();
         }
 
-        return $this->redirectToRoute('action_test_action_index');
+        return $this->redirectToRoute('test_edit', [
+            'project' => $action->getGroup()->getResource()->getProject()->getId(),
+            'resource' => $action->getGroup()->getResource()->getId(),
+            'group' => $action->getGroup()->getId(),
+            'action' => $action->getId(),
+        ]);
     }
 }

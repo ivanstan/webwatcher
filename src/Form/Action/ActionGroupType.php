@@ -12,7 +12,7 @@ class ActionGroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', null, ['help' => 'asd']);;
+            ->add('name', null, ['help' => 'Descriptive name e.g. "Execute tests"']);;
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+<div class="row mb-2">
+    <div class="col-5">
+        <p class="mt-2 mb-2">Assert HTTP response code equals</p>
+    </div>
+    <div class="col-6">
+        {{ form_widget(form.code) }}
+    </div>
+    <div class="col-1">
+        <button class="btn btn-secondary">{{ button_label|default('Save') }}</button>
+    </div>
+</div>
+{{ form_end(form) }}

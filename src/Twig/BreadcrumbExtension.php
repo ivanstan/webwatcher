@@ -2,6 +2,8 @@
 
 namespace App\Twig;
 
+use App\Entity\Action\AbstractAction;
+use App\Entity\Action\ActionGroup;
 use App\Entity\Authenticator\AbstractAuthenticator;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
@@ -72,6 +74,13 @@ class BreadcrumbExtension extends AbstractExtension
             $projectSnapshot = $entity;
         }
 
+        if (is_subclass_of($entity, AbstractAction::class)) {
+            $project = $entity->getGroup()->getResource()->getProject();
+            $page = $entity->getGroup()->getResource();
+            $group = $entity->getGroup();
+            $action = $entity;
+        }
+
         if (is_subclass_of($entity, AbstractAuthenticator::class)) {
             $project = $entity->getProject();
             $authenticator = $entity;
@@ -140,6 +149,41 @@ class BreadcrumbExtension extends AbstractExtension
                 ];
             }
         }
+
+        if (isset($project) && isset($page) && isset($group) && isset($action)) {
+            $breadcrumbs[] = [
+                'title' => $group->getName(),
+                'tooltip' => 'Action Group',
+                'href' => $this->router->generate('action_group_edit', [
+                    'project' => $project->getId(),
+                    'resource' => $page->getId(),
+                    'group' => $group->getId(),
+                ]),
+            ];
+
+            $breadcrumbs[] = [
+                'title' => 'Action',
+                'tooltip' => 'Action',
+                'href' => $this->router->generate('test_edit', [
+                    'project' => $project->getId(),
+                    'resource' => $page->getId(),
+                    'group' => $group->getId(),
+                    'action' => $action->getId(),
+                ]),
+            ];
+        }
+
+        if ($routeName === 'action_group_index' && isset($project) && isset($page)) {
+            $breadcrumbs[] = [
+                'title' => 'Groups',
+                'tooltip' => 'Action Groups',
+                'href' => $this->router->generate('action_group_index', [
+                    'project' => $project->getId(),
+                    'resource' => $page->getId(),
+                ])
+            ];
+        }
+
 
         return $this->template->render('components/breadcrumbs.html.twig', [
             'breadcrumbs' => $breadcrumbs,

@@ -76,7 +76,7 @@ class HttpArchive
                     $redirect = Url::stripScheme($entry['response']['redirectURL']);
 
                     if (isset($map[$redirect])) {
-                        $result = $map[$redirect];
+                        return $map[$redirect];
                     }
                 }
 

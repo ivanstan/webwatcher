@@ -2,6 +2,9 @@
 
 {% block title %}Page snapshot {{ snapshot.timestamp|date(datetime_format()) }} | {{ parent() }}{% endblock %}
 
+{% set request = snapshot.details.request|default(null) %}
+{% set response = snapshot.details.response|default(null) %}
+
 {% block content %}
     <div class="row">
         <div class="col-10">
@@ -32,19 +35,7 @@
 
     {% include 'components/flash-messages.html.twig' %}
 
-    <div class="row">
-        <div class="col-6">
-            {% include 'components/page-snapshot-details.html.twig' %}
-        </div>
-        <div class="col-6">
-            {% if snapshot.image %}
-                <td>
-                    <a target="_blank" class="cursor-zoom-in" href="{{ asset(snapshot.image) }}">
-                        <img class="img-fluid" alt="{{ snapshot.timestamp | date(datetime_format()) }}" src="{{ asset(snapshot.image) }}">
-                    </a>
-                </td>
-            {% endif %}
-        </div>
-    </div>
+    {% include 'pages/page_snapshot/_response.html.twig' with {response: response, snapshot: snapshot} only %}
+    {% include 'pages/page_snapshot/_request.html.twig' with {request: request} only %}
 
 {% endblock %}

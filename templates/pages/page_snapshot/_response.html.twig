@@ -1,0 +1,131 @@
+{% if response %}
+    {% set headers = response.headers|default([]) %}
+    {% set cookies = response.cookies|default([]) %}
+
+    <hr>
+
+    <h2>Response</h2>
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" data-toggle="tab" href="#response-general" role="tab">General</a>
+            <a class="nav-item nav-link" data-toggle="tab" href="#response-headers" role="tab">Headers</a>
+            <a class="nav-item nav-link" data-toggle="tab" href="#response-cookies" role="tab">Cookies</a>
+        </div>
+    </nav>
+
+    <div class="tab-content mb-4">
+        <div class="tab-pane fade show active" id="response-general" role="tabpanel">
+
+            <div class="row">
+                <div class="{% if snapshot.image %}col-8{% else %}col-12{% endif %}">
+                    <table class="table mt-4">
+                        <tr>
+                            <td>Status</td>
+                            <td>
+                                {% include 'components/response-code.html.twig' with {code: response.status} only %}
+                            </td>
+                        </tr>
+
+                        {% if response.redirectURL %}
+                            <tr>
+                                <td>Redirect</td>
+                                <td>{{ response.redirectURL }}</td>
+                            </tr>
+                        {% endif %}
+
+                        {% if response.content %}
+                            <tr>
+                                <td>Content Size</td>
+                                <td>{{ response.content.size }} bytes</td>
+                            </tr>
+                            <tr>
+                                <td>MIME Type</td>
+                                <td>{{ response.content.mimeType }}</td>
+                            </tr>
+                        {% endif %}
+
+                        <tr>
+                            <td>Request time</td>
+                            <td>
+                                {{ snapshot.details.time }} milliseconds
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Headers size</td>
+                            <td>{{ response.headersSize }} bytes</td>
+                        </tr>
+                        <tr>
+                            <td>Body size</td>
+                            <td>{{ response.bodySize }} bytes</td>
+                        </tr>
+                    </table>
+                </div>
+                {% if snapshot.image %}
+                    <div class="col-4"
+                         style="max-height: 400px; overflow: hidden"
+                    >
+                        <td>
+                            <a target="_blank"
+                               class="cursor-zoom-in"
+                               href="{{ asset(snapshot.image) }}"
+                            >
+                                <img class="img-fluid" alt="{{ snapshot.timestamp | date(datetime_format()) }}"
+                                     src="{{ asset(snapshot.image) }}">
+                            </a>
+                        </td>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="tab-pane fade show" id="response-headers" role="tabpanel">
+            <table class="table mt-4">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for header in headers %}
+                    <tr>
+                        <td>{{ header.name }}</td>
+                        <td>{{ header.value }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">
+                            <p class="text-center">No headers found.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade show" id="response-cookies" role="tabpanel">
+            <table class="table mt-4">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for cookie in cookies %}
+                    <tr>
+                        <td>{{ cookie.name }}</td>
+                        <td>{{ cookie.value }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">
+                            <p class="text-center">No cookies found.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}

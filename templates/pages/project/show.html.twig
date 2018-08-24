@@ -34,16 +34,14 @@
 
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-item nav-link active" data-toggle="tab" href="#pages" role="tab"
-               aria-controls="nav-pages" aria-selected="true">Pages</a>
+            <a class="nav-item nav-link active" data-toggle="tab" href="#pages" role="tab">Pages</a>
             {% if project.snapshots is not empty %}
-                <a class="nav-item nav-link" data-toggle="tab" href="#snapshots" role="tab"
-                   aria-controls="nav-snapshots" aria-selected="false">Snapshots</a>
+                <a class="nav-item nav-link" data-toggle="tab" href="#snapshots" role="tab">Snapshots</a>
             {% endif %}
         </div>
     </nav>
-    <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="pages" role="tabpanel" aria-labelledby="nav-home-tab">
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="pages" role="tabpanel">
             <div class="row mb-3 mt-3">
                 <div class="col-10">
                     <h2>Pages</h2>

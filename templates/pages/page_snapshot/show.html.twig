@@ -38,7 +38,7 @@
     {% include 'pages/page_snapshot/_response.html.twig' with {response: response, snapshot: snapshot} only %}
     {% include 'pages/page_snapshot/_request.html.twig' with {request: request} only %}
 
-    {% if snapshot.result is not empty %}
+    {% for result in snapshot.results %}
 
         <h2>Test Runs</h2>
 
@@ -51,8 +51,6 @@
             </tr>
             </thead>
             <tbody>
-
-            {% set result = snapshot.result|default(null) %}
 
             {% if result %}
                 <tr>
@@ -85,6 +83,6 @@
             </tbody>
         </table>
 
-    {% endif %}
+    {% endfor %}
 
 {% endblock %}

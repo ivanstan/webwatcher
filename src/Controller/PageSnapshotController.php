@@ -9,6 +9,8 @@ use App\Entity\PageSnapshot;
 use App\Entity\TestResult;
 use App\Service\Snapshot\PageSnapshotService;
 use App\Service\TestRunner;
+use Facebook\WebDriver\Exception\UnknownServerException;
+use Facebook\WebDriver\Exception\WebDriverCurlException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,10 +63,10 @@ class PageSnapshotController extends Controller
         /** @var AbstractSnapshot $snapshot */
         $em = $this->getDoctrine()->getManager();
 
-        $snapshot = $service->setup($page->getProject());
+        $service->setup($page->getProject());
 
         try {
-            $service->snapshot($page);
+            $snapshot = $service->snapshot($page);
             $em->persist($snapshot);
 
             $em->flush();

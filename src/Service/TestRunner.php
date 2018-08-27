@@ -22,16 +22,11 @@ class TestRunner
 
     public function execute(AbstractSnapshot $snapshot, TestAction $test)
     {
-        if ($snapshot->getResult()) {
-            $this->manager->remove($snapshot->getResult());
-            $this->manager->flush();
-        }
-
         $result = new TestResult();
         $result->setTimestamp(time());
         $result->setSnapshot($snapshot);
         $result->setTest($test);
-        $snapshot->setResult($result);
+        $snapshot->setResults([$result]);
 
         foreach ($test->getAsserts() as $assert) {
             $service = $this->service->getService($assert);
@@ -46,7 +41,9 @@ class TestRunner
             $this->manager->persist($assertResult);
         }
 
-        $this->manager->persist($result);
+        if (!$snapshot->getResults()) {
+            $this->manager->persist($result);
+        }
         $this->manager->flush();
 
         return $result;

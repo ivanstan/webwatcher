@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Property\Id;
 use App\Property\Timestamp;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,12 +39,12 @@ abstract class AbstractSnapshot
     protected $snapshot;
 
     /**
-     * @var TestResult
+     * @var TestResult[]|Collection
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\TestResult", mappedBy="snapshot", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\TestResult", mappedBy="snapshot", cascade={"persist"})
      * @ORM\OrderBy({"timestamp" = "DESC"})
      */
-    protected $result;
+    protected $results;
 
     public function getPage(): ?Page
     {
@@ -65,13 +66,19 @@ abstract class AbstractSnapshot
         $this->snapshot = $snapshot;
     }
 
-    public function getResult(): ?TestResult
+    /**
+     * @return TestResult[]|Collection
+     */
+    public function getResults()
     {
-        return $this->result;
+        return $this->results;
     }
 
-    public function setResult(?TestResult $result): void
+    /**
+     * @param TestResult[]|Collection $results
+     */
+    public function setResults($results): void
     {
-        $this->result = $result;
+        $this->results = $results;
     }
 }

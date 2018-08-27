@@ -6,8 +6,6 @@ use App\Entity\AbstractSnapshot;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
 use App\Service\Snapshot\PageSnapshotService;
-use Facebook\WebDriver\Exception\UnknownServerException;
-use Facebook\WebDriver\Exception\WebDriverCurlException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,10 +36,10 @@ class PageSnapshotController extends Controller
         /** @var AbstractSnapshot $snapshot */
         $em = $this->getDoctrine()->getManager();
 
-        $snapshot = $service->setup($page->getProject());
+        $service->setup($page->getProject());
 
         try {
-            $service->snapshot($page);
+            $snapshot = $service->snapshot($page);
             $em->persist($snapshot);
 
             $em->flush();
@@ -51,13 +49,6 @@ class PageSnapshotController extends Controller
                 'page' => $page->getId(),
                 'snapshot' => $snapshot->getId()
             ]);
-
-        } catch (UnknownServerException $exception) {
-            $this->addFlash('danger', $exception->getMessage());
-            $service->getDriver()->quit();
-        } catch (WebDriverCurlException $exception) {
-            $this->addFlash('danger', $exception->getMessage());
-            $service->getDriver()->quit();
         } catch (\Exception $exception) {
             $this->addFlash('danger', $exception->getMessage());
             $service->getDriver()->quit();

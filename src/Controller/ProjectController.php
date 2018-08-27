@@ -18,14 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProjectController extends Controller
 {
     /**
-     * @Route("/{project}", name="project_show", methods="GET")
-     */
-    public function show(Project $project): Response
-    {
-        return $this->render('pages/project/show.html.twig', ['project' => $project]);
-    }
-
-    /**
      * @Route("/new", name="project_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
@@ -81,6 +73,14 @@ class ProjectController extends Controller
             'project' => $project,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{project}", name="project_show", methods="GET")
+     */
+    public function show(Project $project): Response
+    {
+        return $this->render('pages/project/show.html.twig', ['project' => $project]);
     }
 
     /**

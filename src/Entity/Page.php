@@ -35,6 +35,6 @@ class Page extends AbstractResource
             $build['pass'] = $authenticator->getPassword();
         }
 
-        return \GuzzleHttp\Psr7\Uri::fromParts($build);
+        return urldecode(\GuzzleHttp\Psr7\Uri::fromParts($build));
     }
 }

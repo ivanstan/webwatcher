@@ -69,19 +69,20 @@ class HttpArchive
         $map = $this->getEntryMap();
         $result = null;
 
-        foreach($map as $url => $entry) {
-            if ($url === Url::stripScheme($entry['request']['url'])) {
-
-                if (isset($entry['response']) && isset($entry['response']['redirectURL']) && $entry['response']['redirectURL']) {
-                    $redirect = Url::stripScheme($entry['response']['redirectURL']);
-
-                    if (isset($map[$redirect])) {
-                        return $map[$redirect];
-                    }
-                }
-
-                $result = $entry;
+        foreach ($map as $entry) {
+            if (Url::stripScheme($url) !== Url::stripScheme($entry['request']['url'])) {
+                continue;
             }
+
+            if (isset($entry['response']) && isset($entry['response']['redirectURL']) && $entry['response']['redirectURL']) {
+                $redirect = Url::stripScheme($entry['response']['redirectURL']);
+
+                if (isset($map[$redirect])) {
+                    return $map[$redirect];
+                }
+            }
+
+            $result = $entry;
         }
 
         return $result;

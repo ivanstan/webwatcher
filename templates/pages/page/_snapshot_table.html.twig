@@ -7,32 +7,34 @@
            data-placement="bottom"
            title="Create page snapshot"
            class="btn btn-primary float-right mt-1 mr-1"
-           href="{{ path('snapshot_page_new', {'project': page.project.id, 'page': page.id}) }}">
+           href="{{ path('page_snapshot_new', {'project': page.project.id, 'page': page.id}) }}">
             <i class="fa fa-camera"></i>
         </a>
     </div>
 </div>
 
-<div class="compare-selector compare-page-snapshots-selector mb-3"
-     data-path="{{ path('compare_page_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
-    <select class="custom-select" name="snapshot1">
-        {% set newest = page.snapshots[0].timestamp %}
-        {% for index, snapshot in page.snapshots %}
-            <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date(datetime_format()) }}
-                - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
-        {% endfor %}
-    </select>
+{% if page.snapshots|length > 0 %}
+    <div class="compare-selector compare-page-snapshots-selector mb-3"
+         data-path="{{ path('compare_page_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
+        <select class="custom-select" name="snapshot1">
+            {% set newest = page.snapshots[0].timestamp %}
+            {% for index, snapshot in page.snapshots %}
+                <option value="{{ snapshot.id }}">{{ snapshot.timestamp|date(datetime_format()) }}
+                    - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
+            {% endfor %}
+        </select>
 
-    <select class="custom-select" name="snapshot2">
-        {% set newest = page.snapshots[0].timestamp %}
-        {% for index, snapshot in page.snapshots %}
-            <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date(datetime_format()) }}
-                - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
-        {% endfor %}
-    </select>
+        <select class="custom-select" name="snapshot2">
+            {% set newest = page.snapshots[0].timestamp %}
+            {% for index, snapshot in page.snapshots %}
+                <option value="{{ snapshot.id }}" {{ (index == 1) ? 'selected' : '' }}>{{ snapshot.timestamp|date(datetime_format()) }}
+                    - {% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</option>
+            {% endfor %}
+        </select>
 
-    <button class="btn btn-primary" type="button">Compare</button>
+        <button class="btn btn-primary" type="button">Compare</button>
 </div>
+{% endif %}
 
 <table class="table table-striped">
     <thead>
@@ -44,7 +46,7 @@
     </tr>
     </thead>
     <tbody>
-    {% set newest = page.snapshots[0].timestamp %}
+    {% set newest = page.snapshots[0].timestamp|default(null) %}
     {% for index, snapshot in page.snapshots %}
         <tr>
             <td>
@@ -61,7 +63,7 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="3" class="text-center">No page screenshots here.</td>
+            <td colspan="4" class="text-center">No page screenshots here.</td>
         </tr>
     {% endfor %}
     </tbody>

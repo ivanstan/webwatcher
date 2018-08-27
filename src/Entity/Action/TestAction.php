@@ -23,11 +23,11 @@ class TestAction extends AbstractAction
     protected $asserts;
 
     /**
-     * @var TestResult[]|Collection
+     * @var TestResult
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\TestResult", mappedBy="test", cascade={"persist"}, fetch="EAGER")
+     * @ORM\OneToOne(targetEntity="App\Entity\TestResult", mappedBy="test", cascade={"persist"}, fetch="EAGER")
      */
-    protected $results;
+    protected $result;
 
     /**
      * @return AbstractAssert[]|Collection
@@ -45,19 +45,13 @@ class TestAction extends AbstractAction
         $this->asserts = $asserts;
     }
 
-    /**
-     * @return TestResult[]|Collection
-     */
-    public function getResults()
+    public function getResult(): ?TestResult
     {
-        return $this->results;
+        return $this->result;
     }
 
-    /**
-     * @param TestResult[]|Collection $results
-     */
-    public function setResults(array $results): void
+    public function setResult(?TestResult $results): void
     {
-        $this->results = $results;
+        $this->result = $results;
     }
 }

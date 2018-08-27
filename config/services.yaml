@@ -47,3 +47,8 @@ services:
 
     App\Service\Selenium\Engine:
         arguments: ['%env(SELENIUM_HUB)%']
+
+    App\Service\Assert\AssertService:
+        calls:
+          - {method: setService, arguments: ['App\Entity\Assert\AssertHttpCode', '@App\Service\Assert\AssertHttpCodeService']}
+          - {method: setService, arguments: ['App\Entity\Assert\AssertHtmlElementExists', '@App\Service\Assert\AssertHtmlElementExistsService']}

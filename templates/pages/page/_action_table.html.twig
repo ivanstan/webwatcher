@@ -71,7 +71,9 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for result in action.results %}
+                                    {% set result = action.result|default(null) %}
+
+                                    {% if result %}
                                         <tr>
                                             <td>
                                                 <a href="{{ path('page_snapshot_show', {'project': result.snapshot.page.project.id, 'page': result.snapshot.page.id, 'snapshot': result.snapshot.id}) }}">{{ result.snapshot.timestamp|date(datetime_format()) }}</a>
@@ -88,7 +90,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    {% endfor %}
+                                    {% endif %}
                                     </tbody>
                                 </table>
                             {% endif %}

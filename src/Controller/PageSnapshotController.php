@@ -6,6 +6,7 @@ use App\Entity\AbstractSnapshot;
 use App\Entity\Action\TestAction;
 use App\Entity\Page;
 use App\Entity\PageSnapshot;
+use App\Entity\TestResult;
 use App\Service\Snapshot\PageSnapshotService;
 use App\Service\TestRunner;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -42,10 +43,17 @@ class PageSnapshotController extends Controller
                 }
             }
         }
+
+        return $this->redirectToRoute('page_snapshot_show', [
+            'project' => $snapshot->getPage()->getProject()->getId(),
+            'page' => $snapshot->getPage()->getId(),
+            'snapshot' => $snapshot->getId(),
+            '_fragment' => 'actions',
+        ]);
     }
 
     /**
-     * @Route("/new", name="snapshot_page_new", methods="GET|POST")
+     * @Route("/new", name="page_snapshot_new", methods="GET|POST")
      * @Security("has_role('ROLE_MANAGER')")
      */
     public function new(Page $page, PageSnapshotService $service)
@@ -74,6 +82,17 @@ class PageSnapshotController extends Controller
         return $this->redirectToRoute('page_show', [
             'project' => $page->getProject()->getId(),
             'page' => $page->getId(),
+        ]);
+    }
+
+    /**
+     * @Route("/{snapshot}/result/{result}", name="page_snapshot_test_result", methods="GET|POST")
+     */
+    public function result(TestResult $result)
+    {
+
+        return $this->render('pages/test/result.html.twig', [
+            'result' => $result
         ]);
     }
 

@@ -38,4 +38,53 @@
     {% include 'pages/page_snapshot/_response.html.twig' with {response: response, snapshot: snapshot} only %}
     {% include 'pages/page_snapshot/_request.html.twig' with {request: request} only %}
 
+    {% if snapshot.result is not empty %}
+
+        <h2>Test Runs</h2>
+
+        <table class="table mt-3 mb-0">
+            <thead>
+            <tr>
+                <td>Snapshot</td>
+                <td>Result</td>
+                <td colspan="2">Run on</td>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% set result = snapshot.result|default(null) %}
+
+            {% if result %}
+                <tr>
+                    <td>
+                        <a href="{{ path('page_snapshot_show', {'project': result.snapshot.page.project.id, 'page': result.snapshot.page.id, 'snapshot': result.snapshot.id}) }}">{{ result.snapshot.timestamp|date(datetime_format()) }}</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('page_snapshot_test_result', {
+                            'project': result.snapshot.page.project.id,
+                            'page': result.snapshot.page.id,
+                            'snapshot': result.snapshot.id,
+                            'result': result.id
+                        }) }}">
+
+                            {{ result.test.id }}
+
+
+                            {{ result.id }}</a>
+                    </td>
+                    <td>
+                        {{ result.timestamp|date(datetime_format()) }}
+                    </td>
+                    <td>
+                        <div class="float-right">
+                            {{ include('components/passed-indicator.html.twig', {'passed': result.passed}) }}
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+
+    {% endif %}
+
 {% endblock %}

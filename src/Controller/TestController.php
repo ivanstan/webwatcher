@@ -5,10 +5,8 @@ namespace App\Controller;
 use App\Entity\AbstractResource;
 use App\Entity\Action\TestAction;
 use App\Entity\Assert\AbstractAssert;
-use App\Entity\Assert\HTTP\AssertHttpCode;
-use App\Entity\Page;
 use App\Form\Assert\AssertSelectType;
-use App\Form\FormFactory;
+use App\Service\Assert\AssertService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TestController extends Controller
 {
+    private $service;
+
+    public function __construct(AssertService $service)
+    {
+        $this->service = $service;
+    }
 
     /**
      * @Route("/new/{type}", name="test_new_assert", methods="GET|POST")
@@ -43,7 +47,7 @@ class TestController extends Controller
     /**
      * @Route("/action/{action}", name="test_edit", methods="GET|POST")
      */
-    public function list(Request $request, AbstractResource $resource, TestAction $action, FormFactory $factory): Response
+    public function list(Request $request, AbstractResource $resource, TestAction $action): Response
     {
         $form = $this->createForm(AssertSelectType::class, $resource);
         $form->handleRequest($request);
@@ -55,10 +59,6 @@ class TestController extends Controller
 
             if (!$assert instanceof AbstractAssert) {
                 throw new NotFoundHttpException(\sprintf('Invalid assert class: ' . $type));
-            }
-
-            if ($assert instanceof AssertHttpCode) {
-                $assert->setCode(200);
             }
 
             $assert->setTest($action);
@@ -77,7 +77,7 @@ class TestController extends Controller
         $formViews = [];
 
         foreach ($action->getAsserts() as $key => $assert) {
-            $forms[$key] = $factory->create($assert);
+            $forms[$key] = $this->service->getForm($assert);
             $forms[$key]->handleRequest($request);
 
             $formViews[$key] = $forms[$key]->createView();

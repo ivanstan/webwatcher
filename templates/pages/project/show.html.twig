@@ -35,9 +35,7 @@
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" data-toggle="tab" href="#pages" role="tab">Pages</a>
-            {% if project.snapshots is not empty %}
-                <a class="nav-item nav-link" data-toggle="tab" href="#snapshots" role="tab">Snapshots</a>
-            {% endif %}
+            <a class="nav-item nav-link" data-toggle="tab" href="#snapshots" role="tab">Snapshots</a>
         </div>
     </nav>
     <div class="tab-content">
@@ -124,23 +122,24 @@
             </table>
         </div>
         <div class="tab-pane fade" id="snapshots" role="tab" aria-labelledby="nav-profile-tab">
-            {% if project.snapshots is not empty %}
-                <div class="row mb-3 mt-3">
-                    <div class="col-10">
-                        <h2>Snapshots</h2>
-                    </div>
-                    <div class="col-2">
-                        {% if project.pages|length > 0 %}
-                            <a data-toggle="tooltip"
-                               data-placement="left"
-                               title="Create project snapshot"
-                               class="btn btn-primary mt-1 mr-1 float-right"
-                               href="{{ path('project_snapshot_new', {"project": project.id}) }}">
-                                <i class="fa fa-camera"></i>
-                            </a>
-                        {% endif %}
-                    </div>
+            <div class="row mb-3 mt-3">
+                <div class="col-10">
+                    <h2>Snapshots</h2>
                 </div>
+                <div class="col-2">
+                    {% if project.pages|length > 0 %}
+                        <a data-toggle="tooltip"
+                           data-placement="left"
+                           title="Create project snapshot"
+                           class="btn btn-primary mt-1 mr-1 float-right"
+                           href="{{ path('project_snapshot_new', {"project": project.id}) }}">
+                            <i class="fa fa-camera"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if project.snapshots|length > 0 %}
                 <div class="compare-selector compare-project-snapshots-selector mb-3"
                      data-path="{{ path('compare_project_snapshot', {'snapshot1': 'snapshot1', 'snapshot2': 'snapshot2'}) }}">
                     <select class="custom-select" name="snapshot1">
@@ -161,31 +160,31 @@
 
                     <button class="btn btn-primary" type="button">Compare</button>
                 </div>
-
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Timestamp</th>
-                        <th>Delta Time</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% set newest = project.snapshots[0].timestamp %}
-                    {% for index, snapshot in project.snapshots %}
-                        <tr>
-                            <td>
-                                <a href="{{ path('project_snapshot_show', {"project": project.id, "snapshot": snapshot.id}) }}">{{ snapshot.timestamp|date(datetime_format()) }}</a>
-                            </td>
-                            <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="3" class="text-center">No snapshots here.</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
             {% endif %}
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Delta Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set newest = project.snapshots[0].timestamp|default(null) %}
+                {% for index, snapshot in project.snapshots %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('project_snapshot_show', {"project": project.id, "snapshot": snapshot.id}) }}">{{ snapshot.timestamp|date(datetime_format()) }}</a>
+                        </td>
+                        <td>{% if index == 0 %}Newest{% else %}{{ snapshot.timestamp|time_diff(newest) }}{% endif %}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">No snapshots here.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 

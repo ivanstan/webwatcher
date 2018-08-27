@@ -1,0 +1,33 @@
+{% extends 'content.html.twig' %}
+
+{% block title %}Test Result | {{ parent() }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-10">
+            <h1>Test Result</h1>
+        </div>
+    </div>
+
+    {{ breadcrumbs(result)|raw }}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <td>Comment</td>
+            <td>Result</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for assert in result.asserts %}
+            <tr class="{% if assert.passed %}table-success{% else %}table-danger{% endif %}">
+                <td>{% if assert.comment %}{{ assert.comment|raw }}{% else %}-{% endif %}</td>
+                <td>
+                    {% include 'components/passed-indicator.html.twig' with {passed: assert.passed} only %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

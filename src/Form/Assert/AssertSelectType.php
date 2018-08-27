@@ -2,7 +2,7 @@
 
 namespace App\Form\Assert;
 
-use App\Service\Assert\AssertCollection;
+use App\Service\Assert\AssertService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,7 +14,7 @@ class AssertSelectType extends AbstractType
         $builder->add('type', ChoiceType::class, [
             'mapped' => false,
             'label' => 'Assert type',
-            'choices' => AssertCollection::get($options['data'])
+            'choices' => AssertService::getList($options['data'])
         ]);
     }
 }

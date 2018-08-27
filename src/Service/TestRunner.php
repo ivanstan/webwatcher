@@ -5,48 +5,43 @@ namespace App\Service;
 use App\Entity\AbstractSnapshot;
 use App\Entity\Action\TestAction;
 use App\Entity\Assert\AssertResult;
-use App\Entity\Assert\HTTP\AssertHttpCode;
-use App\Entity\PageSnapshot;
 use App\Entity\TestResult;
+use App\Service\Assert\AssertService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TestRunner
 {
     private $manager;
+    private $service;
 
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager, AssertService $service)
     {
         $this->manager = $manager;
+        $this->service = $service;
     }
 
     public function execute(AbstractSnapshot $snapshot, TestAction $test)
     {
+        if ($snapshot->getResult()) {
+            $this->manager->remove($snapshot->getResult());
+            $this->manager->flush();
+        }
+
         $result = new TestResult();
         $result->setTimestamp(time());
         $result->setSnapshot($snapshot);
         $result->setTest($test);
+        $snapshot->setResult($result);
 
         foreach ($test->getAsserts() as $assert) {
-            $passed = false;
-
-            if ($assert instanceof AssertHttpCode && $snapshot instanceof PageSnapshot) {
-                $passed = $assert->getCode() === $snapshot->getStatus();
-            }
-
-            $comment = null;
-            if (!$passed) {
-                $comment = \sprintf(
-                    'Failed asserting HTTP status code %s equals expected %s',
-                    $snapshot->getStatus(),
-                    $assert->getCode()
-                );
-            }
+            $service = $this->service->getService($assert);
+            $passed = $service->assert($snapshot, $assert);
 
             $assertResult = new AssertResult();
             $assertResult->setAssert($assert);
             $assertResult->setResult($result);
             $assertResult->setPassed($passed);
-            $assertResult->setComment($comment);
+            $assertResult->setComment($service->getComment($passed, $snapshot, $assert));
 
             $this->manager->persist($assertResult);
         }

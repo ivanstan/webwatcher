@@ -3,7 +3,6 @@
 namespace App\Entity\Assert;
 
 use App\Entity\Action\TestAction;
-use App\Entity\Assert\HTTP\AssertHttpCode;
 use App\Property\Id;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *     AssertHttpCode::TYPE = "App\Entity\Assert\HTTP\AssertHttpCode",
+ *     AssertHttpCode::TYPE = "App\Entity\Assert\AssertHttpCode",
+ *     AssertHtmlElementExists::TYPE = "App\Entity\Assert\AssertHtmlElementExists",
  * })
  */
 abstract class AbstractAssert

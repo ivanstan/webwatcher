@@ -25,10 +25,18 @@
                     <td>HTTP Version</td>
                     <td>{{ request.httpVersion }}</td>
                 </tr>
-                <tr>
-                    <td>Headers size</td>
-                    <td>{{ request.headersSize }} bytes</td>
-                </tr>
+                {% if request.headerSize is defined %}
+                    <tr>
+                        <td>Header size</td>
+                        <td>{{ request.headerSize }} bytes</td>
+                    </tr>
+                {% endif %}
+                {% if request.headersSize is defined %}
+                    <tr>
+                        <td>Headers size</td>
+                        <td>{{ request.headersSize }} bytes</td>
+                    </tr>
+                {% endif %}
                 <tr>
                     <td>Body Size</td>
                     <td>{{ request.bodySize }} bytes</td>

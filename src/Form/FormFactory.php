@@ -31,9 +31,6 @@ class FormFactory
             case HttpBasicAuthenticator::class:
                 $type = HttpBasicAuthenticatorType::class;
                 break;
-            case AssertHttpCode::class:
-                $type = AssertHttpCodeType::class;
-                break;
             case ActionGroup::class:
                 $type = ActionGroupType::class;
                 break;

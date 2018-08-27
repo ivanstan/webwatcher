@@ -14,21 +14,27 @@
 
     {{ breadcrumbs(action)|raw }}
 
-    {{ include('pages/test/_form.html.twig') }}
+    <div class="mb-4">
+        {{ include('pages/test/_form.html.twig') }}
+    </div>
 
     {% if forms is defined and form is not empty %}
-        <hr>
-
-        <div>
+        <table class="table">
             {% for form in forms %}
+                <tr>
+                    {% if form.vars.name == 'assert_http_code' %}
+                        <td>Assert HTTP status code equals</td>
+                        <td>{{ include('pages/test/asserts/http_status.html.twig') }}</td>
+                    {% endif %}
 
-                {% if form.vars.name == 'assert_http_code' %}
-                    {{ include('pages/test/asserts/http_code.html.twig') }}
-                {% endif %}
+                    {% if form.vars.name == 'assert_html_element_exists' %}
+                        <td>Assert HTML element exists</td>
+                        <td>{{ include('pages/test/asserts/html_element_exists.html.twig') }}</td>
+                    {% endif %}
 
+                    <td width="50px">{{ include('pages/assert/_delete_form.html.twig', {'assert': form.vars.data }) }}</td>
+                </tr>
             {% endfor %}
-        </div>
+        </table>
     {% endif %}
-
-    {#{{ include('pages/test/_delete_form.html.twig') }}#}
 {% endblock %}

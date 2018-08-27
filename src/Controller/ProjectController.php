@@ -31,31 +31,7 @@ class ProjectController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-            if ($request->get('name') === null && parse_url($project->getDomain(), PHP_URL_HOST)) {
-                $project->setName(parse_url($project->getDomain(), PHP_URL_HOST));
-            }
-
-            $protocol = parse_url($project->getDomain(), PHP_URL_SCHEME);
-            $path = parse_url($project->getDomain(), PHP_URL_PATH);
-
-            $page = new Page();
-            if ($protocol && $path) {
-                $page->setProtocol($protocol);
-                $page->setPath(rtrim($path, '/'));
-                $page->setName(rtrim($path, '/'));
-            } else {
-                $page->setPath('/');
-                $page->setName('Home');
-            }
-
-            $page->setProject($project);
-            $project->setPages([$page]);
-
-            $domain = parse_url($project->getDomain(), PHP_URL_HOST);
-
-            if ($domain) {
-                $project->setDomain($domain);
-            }
+            $project = $this->projectSetup($project);
 
             $em->persist($project->getPages()[0]);
             $em->flush();
@@ -119,5 +95,39 @@ class ProjectController extends Controller
         }
 
         return $this->redirectToRoute('project_index');
+    }
+
+    public function projectSetup(Project $project): Project
+    {
+        $url = $project->getDomain();
+
+        $domain = parse_url($url, PHP_URL_HOST);
+        if ($domain) {
+            $project->setDomain($domain);
+        }
+
+        if (!$project->getName() && $domain) {
+            $project->setName($domain);
+        } elseif (!$project->getName()) {
+            $project->setName($url);
+        }
+
+        $page = new Page();
+        $page->setPath('/');
+        $page->setName('Home');
+        $page->setProtocol('https');
+
+        $protocol = parse_url($url, PHP_URL_SCHEME);
+        $path = parse_url($url, PHP_URL_PATH);
+        if ($protocol && $path) {
+            $path = rtrim($path, '/');
+            $page->setProtocol($protocol);
+            $page->setPath(rtrim($path, '/'));
+            $page->setName(rtrim($path, '/'));
+        }
+
+        $project->setPages([$page]);
+
+        return $project;
     }
 }

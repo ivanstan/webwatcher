@@ -69,6 +69,7 @@ class PageController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $page = $this->pageSetup($page);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('page_edit', [

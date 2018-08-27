@@ -30,6 +30,7 @@ class PageController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $page = $this->pageSetup($page);
             $em->persist($page);
             $em->flush();
 
@@ -98,5 +99,32 @@ class PageController extends Controller
         }
 
         return $this->redirectToRoute('project_show', ['project' => $page->getProject()->getId()]);
+    }
+
+    public function pageSetup(Page $page): Page
+    {
+        $url = $page->getPath();
+
+        $path = parse_url($url, PHP_URL_PATH);
+        if ($path) {
+            $parsed = parse_url($url);
+            unset($parsed['scheme']);
+            unset($parsed['host']);
+
+            $page->setPath(\GuzzleHttp\Psr7\Uri::fromParts($parsed));
+        }
+
+        if (!$page->getName() && $path) {
+            $page->setName($path);
+        } elseif (!$page->getName()) {
+            $page->setName($url);
+        }
+
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        if ($scheme) {
+            $page->setProtocol($scheme);
+        }
+
+        return $page;
     }
 }

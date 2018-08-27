@@ -16,7 +16,7 @@ class PageType extends AbstractType
         $page = $builder->getData();
 
         $builder
-            ->add('name', null, ['required' => true])
+            ->add('name')
             ->add('path')
             ->add('protocol', ChoiceType::class, [
                 'choices'  => [

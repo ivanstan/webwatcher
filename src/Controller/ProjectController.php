@@ -126,6 +126,7 @@ class ProjectController extends Controller
             $page->setName(rtrim($path, '/'));
         }
 
+        $page->setProject($project);
         $project->setPages([$page]);
 
         return $project;

@@ -11,11 +11,6 @@ trait Path
      *
      * @ORM\Column(name="path", type="string", nullable=false)
      * @Assert\NotBlank()
-     * @Assert\Regex(
-     *     pattern="/^\/+?/",
-     *     match=true,
-     *     message="Path must begin with '/'"
-     * )
      */
     protected $path;
 
